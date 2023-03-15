@@ -1,5 +1,6 @@
 package com.techeer.checkIt.domain.book.entity;
 
+import com.techeer.checkIt.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -8,10 +9,10 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Book {
+public class Book extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "book_id")
-    private Long id;
+    private Long 성id;
     @Column(name = "title")
     private String title;
     @Column(name = "author")
