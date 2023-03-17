@@ -22,7 +22,7 @@ public class Reading extends BaseEntity {
     private Date date;
     @Column(name = "last_page")
     private int lastPage;
-    private ReadingStatus status;
+    private ReadingStatus status; // 책의 상태 [UNREAD,READING,READ]
 
     @Builder
 
