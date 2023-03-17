@@ -1,4 +1,4 @@
-package com.techeer.checkIt.domain.book.entity;
+package com.techeer.checkIt.domain.reading.entity;
 
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -18,13 +19,14 @@ public class Reading extends BaseEntity {
     @Column(name = "Reading_id")
     private Long id;
     @Column(name = "date")
-    private String date;
+    private Date date;
     @Column(name = "last_page")
     private int lastPage;
+    private ReadingStatus status;
 
     @Builder
 
-    public Reading(String date, int lastPage) {
+    public Reading(Date date, int lastPage) {
         this.date = date;
         this.lastPage = lastPage;
     }
