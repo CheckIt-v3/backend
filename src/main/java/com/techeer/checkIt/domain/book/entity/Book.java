@@ -1,18 +1,22 @@
 package com.techeer.checkIt.domain.book.entity;
 
+import com.techeer.checkIt.domain.reading.entity.Reading;
+import com.techeer.checkIt.domain.review.entity.Review;
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Table(name = "BOOKS")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Book extends BaseEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
-    private Long 성id;
+    private Long id;
     @Column(name = "title")
     private String title;
     @Column(name = "author")
@@ -20,7 +24,7 @@ public class Book extends BaseEntity {
     @Column(name = "publisher")
     private String publisher;
     @Column(name = "cover_image_url")
-    private String cover_image_url;
+    private String coverImageUrl;
     @Column(name = "pages")
     private int pages;
     @Column(name = "height")
@@ -33,13 +37,16 @@ public class Book extends BaseEntity {
     private String category;
     @Column(name = "status")
     private String status;
-
+    @OneToMany(mappedBy = "book")
+    private List<Reading> readingList;
+    @OneToMany(mappedBy = "book")
+    private List<Review> reviewList;
     @Builder
-    public Book(String title, String author, String publisher, String cover_image_url, int pages, int height, int width, int thickness, String category) {
+    public Book(String title, String author, String publisher, String coverImageUrl, int pages, int height, int width, int thickness, String category) {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
-        this.cover_image_url = cover_image_url;
+        this.coverImageUrl = coverImageUrl;
         this.pages = pages;
         this.height = height;
         this.width = width;
