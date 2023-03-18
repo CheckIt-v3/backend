@@ -19,4 +19,6 @@ spring:
     url: "jdbc:mysql://localhost:3306/checkit"
     username: "root"
     password: "0000"
-
+  config:
+    import:
+      - classpath:/security/application.yml
