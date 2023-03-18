@@ -10,9 +10,10 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Table(name = "BOOKS")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Book extends BaseEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
     private Long id;
     @Column(name = "title")

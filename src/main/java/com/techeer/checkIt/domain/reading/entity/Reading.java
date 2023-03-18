@@ -2,6 +2,7 @@ package com.techeer.checkIt.domain.reading.entity;
 
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.entity.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +12,10 @@ import java.util.Date;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Table(name = "Readings")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reading extends BaseEntity {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reading_id")
     private Long id;
     @Column(name = "date")
@@ -22,7 +24,7 @@ public class Reading extends BaseEntity {
     private int lastPage;
     private ReadingStatus status; // 책의 상태 [UNREAD,READING,READ]
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 
