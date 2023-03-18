@@ -1,10 +1,12 @@
 package com.techeer.checkIt.domain.book.entity;
 
+import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,7 +14,7 @@ import javax.persistence.*;
 public class Book extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "book_id")
-    private Long 성id;
+    private Long id;
     @Column(name = "title")
     private String title;
     @Column(name = "author")
@@ -33,6 +35,8 @@ public class Book extends BaseEntity {
     private String category;
     @Column(name = "status")
     private String status;
+    @OneToMany(mappedBy = "reading_id")
+    private List<Reading> readingList;
 
     @Builder
     public Book(String title, String author, String publisher, String cover_image_url, int pages, int height, int width, int thickness, String category) {
