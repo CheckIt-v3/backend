@@ -23,7 +23,7 @@ public class Book extends BaseEntity {
     @Column(name = "publisher")
     private String publisher;
     @Column(name = "cover_image_url")
-    private String cover_image_url;
+    private String coverImageUrl;
     @Column(name = "pages")
     private int pages;
     @Column(name = "height")
@@ -36,15 +36,15 @@ public class Book extends BaseEntity {
     private String category;
     @Column(name = "status")
     private String status;
-    @OneToMany(mappedBy = "reading_id")
+    @OneToMany(mappedBy = "book")
     private List<Reading> readingList;
 
     @Builder
-    public Book(String title, String author, String publisher, String cover_image_url, int pages, int height, int width, int thickness, String category) {
+    public Book(String title, String author, String publisher, String coverImageUrl, int pages, int height, int width, int thickness, String category) {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
-        this.cover_image_url = cover_image_url;
+        this.coverImageUrl = coverImageUrl;
         this.pages = pages;
         this.height = height;
         this.width = width;
