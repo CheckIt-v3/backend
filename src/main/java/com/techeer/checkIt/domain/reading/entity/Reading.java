@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity
 @Getter
-@Table(name = "Readings")
+@Table(name = "READINGS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reading extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
