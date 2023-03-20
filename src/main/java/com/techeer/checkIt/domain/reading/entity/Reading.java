@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.reading.entity;
 
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,6 +29,9 @@ public class Reading extends BaseEntity {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @Builder
 
     public Reading(Date date, int lastPage) {
