@@ -34,8 +34,9 @@ public class Reading extends BaseEntity {
     private User user;
     @Builder
 
-    public Reading(Date date, int lastPage) {
+    public Reading(Date date, int lastPage, ReadingStatus status) {
         this.date = date;
         this.lastPage = lastPage;
+        this.status = status;
     }
 }
