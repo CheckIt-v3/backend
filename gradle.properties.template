@@ -1,0 +1,3 @@
+DOCKER_ID=도커 아이디
+DOCKER_IMAGE_NAME=checkit-backend
+DOCKER_PASSWORD=도커 비밀번호

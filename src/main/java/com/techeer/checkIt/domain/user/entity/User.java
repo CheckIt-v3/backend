@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.user.entity;
 
-import com.techeer.checkIt.domain.book.entity.Reading;
+import com.techeer.checkIt.domain.reading.entity.Reading;
+import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.review.entity.Review;
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.*;
@@ -25,4 +26,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Review> reviewList = new ArrayList<>();
 
+    @Builder
+    private User(String name) {
+    }
 }
