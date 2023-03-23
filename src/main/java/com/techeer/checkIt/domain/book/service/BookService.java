@@ -25,6 +25,11 @@ public class BookService {
 
     }
 
+    public BookResponse findBookById(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow();
+        return toDto(book);
+    }
+
     public BookResponse toDto(Book book) {
         return BookResponse.builder()
                 .title(book.getTitle())
