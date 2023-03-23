@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,12 +36,12 @@ public class Book extends BaseEntity {
     private int thickness;
     @Column(name = "category")
     private String category;
-    @Column(name = "status")
-    private String status;
+//    @Column(name = "status")
+//    private String status;
     @OneToMany(mappedBy = "book")
-    private List<Reading> readingList;
+    private List<Reading> readingList = new ArrayList<>();
     @OneToMany(mappedBy = "book")
-    private List<Review> reviewList;
+    private List<Review> reviewList = new ArrayList<>();
     @Builder
     public Book(String title, String author, String publisher, String coverImageUrl, int pages, int height, int width, int thickness, String category) {
         this.title = title;
@@ -53,7 +54,7 @@ public class Book extends BaseEntity {
         this.thickness = thickness;
         this.category = category;
     }
-    public void updateBookStatus(String status) {
-        this.status = status;
-    }
+//    public void updateBookStatus(String status) {
+//        this.status = status;
+//    }
 }
