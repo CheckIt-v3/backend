@@ -26,7 +26,7 @@ public class BookController {
     @ApiOperation(value = "책 검색 API")
     @GetMapping("/search")
     public ResponseEntity<List<BookResponse>> searchTitle(@RequestParam(defaultValue = "") String title) {
-        List<BookResponse> bookList = bookService.getBookWithTitle(title);
+        List<BookResponse> bookList = bookService.findBookByTitle(title);
         return ResponseEntity.ok(bookList);
     }
 }
