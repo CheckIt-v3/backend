@@ -33,8 +33,9 @@ public class Reading extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @Builder
-
-    public Reading(Date date, int lastPage, ReadingStatus status) {
+    public Reading(User user, Book book, Date date, int lastPage, ReadingStatus status) {
+        this.user = user;
+        this.book = book;
         this.date = date;
         this.lastPage = lastPage;
         this.status = status;
