@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.user.service;
 
 import com.techeer.checkIt.domain.user.entity.User;
+import com.techeer.checkIt.domain.user.exception.UserNotFoundException;
 import com.techeer.checkIt.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class UserService {
     }
 
     public User findUserById(Long uid) {
-        User user = userRepository.findById(uid).orElseThrow(null);
+        User user = userRepository.findById(uid).orElseThrow(UserNotFoundException::new);
         return user;
     }
 
