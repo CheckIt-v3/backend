@@ -10,5 +10,4 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book,Long> {
     @Query("select b from Book b where b.isDeleted is false and b.title like %:title%")
     List<Book> findByTitle(@Param("title") String title);
-
 }

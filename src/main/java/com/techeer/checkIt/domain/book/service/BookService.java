@@ -1,6 +1,5 @@
 package com.techeer.checkIt.domain.book.service;
 
-
 import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.repository.BookRepository;
@@ -24,6 +23,10 @@ public class BookService {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+    
+    public Book findById(Long bid) {
+        return bookRepository.findById(bid).orElseThrow(null); // 오류코드를 아직 작성하지 않았으니 일단은 null
+    }
 
     public BookResponse toDto(Book book) {
         return BookResponse.builder()
@@ -34,4 +37,3 @@ public class BookService {
                 .build();
     }
 }
-
