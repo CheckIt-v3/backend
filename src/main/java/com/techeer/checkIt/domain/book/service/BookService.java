@@ -23,10 +23,6 @@ public class BookService {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
-    
-    public Book findById(Long bid) {
-        return bookRepository.findById(bid).orElseThrow(null); // 오류코드를 아직 작성하지 않았으니 일단은 null
-    }
 
     public BookResponse findBookById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow();
