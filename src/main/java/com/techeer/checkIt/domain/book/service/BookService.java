@@ -2,6 +2,7 @@ package com.techeer.checkIt.domain.book.service;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.book.exception.BookNotFoundException;
 import com.techeer.checkIt.domain.book.repository.BookRepository;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class BookService {
     }
 
     public BookResponse findBookById(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow();
+        Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         return toDto(book);
     }
 
