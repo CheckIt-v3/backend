@@ -25,6 +25,6 @@ public class ReadingController {
     public void createReading(@PathVariable Long uid, @RequestBody CreateReadingRequest.CreateReading readingDto) {
         User user = userService.findById(uid);
         Book book = bookService.findById(readingDto.getBookId());
-        readingService.registorReading(user, book, readingDto);
+        readingService.registerReading(user, book, readingDto);
     }
 }
