@@ -18,14 +18,18 @@ import java.util.Date;
 public class ReadingService {
     private final ReadingRepository readingRepository;
 
-    public void registorReading(User user, Book book, CreateReadingRequest.CreateReading createRequest){
+    public void registerReading(User user, Book book, CreateReadingRequest.CreateReading createRequest){
         Date date = new Date();
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
+        int lastPage = 0;
+        if(status == ReadingStatus.READING) lastPage = createRequest.getLastPage();
+        else if(status == ReadingStatus.READ) lastPage = book.getPages();
+
         Reading reading = Reading.builder()
                 .user(user)
                 .book(book)
                 .date(date)
-                .lastPage(createRequest.getLastPage())
+                .lastPage(lastPage)
                 .status(status)
                 .build();
         readingRepository.save(reading);
