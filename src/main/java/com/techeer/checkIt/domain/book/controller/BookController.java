@@ -1,9 +1,7 @@
 package com.techeer.checkIt.domain.book.controller;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
-import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
-import com.techeer.checkIt.domain.review.entity.Review;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AccessLevel;
