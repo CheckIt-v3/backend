@@ -36,8 +36,6 @@ public class Book extends BaseEntity {
     private int thickness;
     @Column(name = "category")
     private String category;
-//    @Column(name = "status")
-//    private String status;
     @OneToMany(mappedBy = "book")
     private List<Reading> readingList = new ArrayList<>();
     @OneToMany(mappedBy = "book")
@@ -54,7 +52,4 @@ public class Book extends BaseEntity {
         this.thickness = thickness;
         this.category = category;
     }
-//    public void updateBookStatus(String status) {
-//        this.status = status;
-//    }
 }
