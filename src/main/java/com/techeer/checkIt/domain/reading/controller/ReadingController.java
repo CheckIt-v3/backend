@@ -23,7 +23,7 @@ public class ReadingController {
 
     @PostMapping("/{uid}")
     public void createReading(@PathVariable Long uid, @RequestBody CreateReadingRequest readingDto) {
-        User user = userService.findById(uid);
+        User user = userService.findUserById(uid);
         Book book = bookService.findById(readingDto.getBookId());
         readingService.registerReading(user, book, readingDto);
     }
