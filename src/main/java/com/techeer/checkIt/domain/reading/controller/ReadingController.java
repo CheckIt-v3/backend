@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "독서현황 API")
 @RestController
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @RequestMapping("/api/v1/readings")
 public class ReadingController {
     private final ReadingService readingService;
