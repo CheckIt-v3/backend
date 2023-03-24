@@ -6,20 +6,22 @@ import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
 import com.techeer.checkIt.domain.user.entity.User;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadingService {
     private final ReadingRepository readingRepository;
 
     public void registerReading(User user, Book book, CreateReadingRequest createRequest){
-        Date date = new Date();
+        LocalDateTime date = LocalDateTime.now();
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
         int lastPage = 0;
         if(status == ReadingStatus.READING) lastPage = createRequest.getLastPage();
