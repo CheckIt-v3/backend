@@ -18,7 +18,7 @@ import java.util.Date;
 public class ReadingService {
     private final ReadingRepository readingRepository;
 
-    public void registerReading(User user, Book book, CreateReadingRequest.CreateReading createRequest){
+    public void registerReading(User user, Book book, CreateReadingRequest createRequest){
         Date date = new Date();
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
         int lastPage = 0;
