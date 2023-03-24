@@ -17,4 +17,10 @@ public class UserService {
         User user = User.builder().build();
         userRepository.save(user);
     }
+
+    public User findUserById(Long uid) {
+        User user = userRepository.findById(uid).orElseThrow(null);
+        return user;
+    }
+
 }
