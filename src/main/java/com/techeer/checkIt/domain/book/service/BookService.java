@@ -29,6 +29,9 @@ public class BookService {
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         return toDto(book);
     }
+    public Book findById(Long bid) {
+        return bookRepository.findById(bid).orElseThrow(BookNotFoundException::new); // 오류코드를 아직 작성하지 않았으니 일단은 null
+    }
 
     public BookResponse toDto(Book book) {
         return BookResponse.builder()
