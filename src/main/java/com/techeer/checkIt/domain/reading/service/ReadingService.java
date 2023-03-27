@@ -16,7 +16,7 @@ import java.util.Date;
 
 @Service
 @Transactional
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReadingService {
     private final ReadingRepository readingRepository;
 
