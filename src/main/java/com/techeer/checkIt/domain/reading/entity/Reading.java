@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -24,6 +23,7 @@ public class Reading extends BaseEntity {
     private LocalDateTime date;
     @Column(name = "last_page")
     private int lastPage;
+
     private ReadingStatus status; // 책의 상태 [UNREAD,READING,READ]
 
     @ManyToOne(fetch = FetchType.LAZY)
