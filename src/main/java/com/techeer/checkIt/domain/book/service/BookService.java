@@ -24,10 +24,18 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
+    // id별 조회할 때
     public BookResponse findBookById(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow();
+        Book book = bookRepository.findByBookId(id).orElseThrow();
         return toDto(book);
     }
+
+    // 책 판별용
+    public Book findById(Long id) {
+        return bookRepository.findById(id).orElseThrow(null);
+    }
+
+
 
     public BookResponse toDto(Book book) {
         return BookResponse.builder()

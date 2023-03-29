@@ -13,5 +13,5 @@ public interface BookRepository extends JpaRepository<Book,Long> {
     List<Book> findByTitle(@Param("title") String title);
 
     @Query("select b from Book b where b.id = :id AND b.isDeleted = false")
-    Optional<Book> findById(@Param("id") Long id);
+    Optional<Book> findByBookId(@Param("id") Long id);
 }
