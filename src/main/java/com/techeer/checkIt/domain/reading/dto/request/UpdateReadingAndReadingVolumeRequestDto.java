@@ -1,4 +1,4 @@
-package com.techeer.checkIt.domain.user.dto.request;
+package com.techeer.checkIt.domain.reading.dto.request;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UpdateReadingRequestDto {
+public class UpdateReadingAndReadingVolumeRequestDto {
     private Long bookId;
-    private int lastPages;
+    private int lastPage;
+
 }
