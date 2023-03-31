@@ -18,7 +18,15 @@ public enum ErrorCode {
     USER_USERNAME_DUPLICATED(409, "U004", "회원 아이디 중복"),
 
     // Book 도메인
-    BOOK_NOT_FOUND_ERROR(400, "B002","책을 찾을 수 없음");
+    BOOK_NOT_FOUND_ERROR(400, "B001","책을 찾을 수 없음"),
+
+    // Reading 도메인
+    READING_NOT_FOUND_ERROR(400,"R001","독서정보를 찾을 수 없음"),
+
+    // ReadingVolume 도메인
+    READING_VOLUME_NOT_FOUND_ERROR(400, "RV001", "독서추세를 찾을 수 없음"),
+
+    ;
 
     private final int status;
     private final String code;
