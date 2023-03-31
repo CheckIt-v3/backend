@@ -17,14 +17,14 @@ import java.time.LocalDate;
 public class ReadingVolumeService {
     private final ReadingVolumeRepository readingVolumeRepository;
 
-    public void registerReadingVolume(User user, int pages){
+    public ReadingVolume registerReadingVolume(User user, int pages){
         LocalDate date = LocalDate.now();
         ReadingVolume readingVolume = ReadingVolume.builder()
                 .user(user)
                 .date(date)
                 .todayPages(pages)
                 .build();
-        readingVolumeRepository.save(readingVolume);
+        return readingVolumeRepository.save(readingVolume);
     }
 
     public ReadingVolume findReadingVolumeByUserAndDate(User user, LocalDate date) {
