@@ -9,6 +9,8 @@ import com.techeer.checkIt.domain.reading.service.ReadingService;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.domain.user.service.UserService;
+import com.techeer.checkIt.global.result.ResultCode;
+import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +36,10 @@ public class ReadingController {
     }
 
     @PostMapping("/{uid}")
-    public void createReading(@PathVariable Long uid, @RequestBody CreateReadingRequest readingDto) {
+    public ResponseEntity<ResultResponse> createReading(@PathVariable Long uid, @RequestBody CreateReadingRequest readingDto) {
         User user = userService.findUserById(uid);
         Book book = bookService.findById(readingDto.getBookId());
         readingService.registerReading(user, book, readingDto);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_CREATE_SUCCESS));
     }
 }
