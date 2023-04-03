@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -20,8 +18,6 @@ public class Reading extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reading_id")
     private Long id;
-    @Column(name = "date")
-    private LocalDateTime date;
     @Column(name = "last_page")
     private int lastPage;
     private ReadingStatus status; // 책의 상태 [UNREAD,READING,READ]
@@ -34,11 +30,17 @@ public class Reading extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @Builder
-    public Reading(User user, Book book, LocalDateTime date, int lastPage, ReadingStatus status) {
+    public Reading(User user, Book book, int lastPage, ReadingStatus status) {
         this.user = user;
         this.book = book;
-        this.date = date;
         this.lastPage = lastPage;
         this.status = status;
+    }
+
+    public void updateStatus(ReadingStatus status) {
+        this.status = status;
+    }
+    public void updateLastPage(int lastPage) {
+        this.lastPage = lastPage;
     }
 }
