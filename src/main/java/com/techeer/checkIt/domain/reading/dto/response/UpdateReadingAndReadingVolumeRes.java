@@ -11,12 +11,5 @@ import lombok.*;
 public class UpdateReadingAndReadingVolumeRes {
     private int lastPage;
     private int pages;
-
-    public static UpdateReadingAndReadingVolumeRes of(UpdateReadingAndReadingVolumeReq body, ReadingVolume readingVolume) {
-        return UpdateReadingAndReadingVolumeRes.builder()
-                .lastPage(body.getLastPage())
-                .pages(readingVolume.getTodayPages())
-                .build();
-    }
 }
 
