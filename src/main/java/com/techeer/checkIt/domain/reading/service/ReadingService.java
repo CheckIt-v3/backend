@@ -1,10 +1,12 @@
 package com.techeer.checkIt.domain.reading.service;
 
+import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
+import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
 import com.techeer.checkIt.domain.reading.exception.ReadingNotFoundException;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.time.LocalDate;
 
 @Service
@@ -22,6 +25,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReadingService {
     private final ReadingRepository readingRepository;
+    private final ReadingMapper readingMapper;
     private final ReadingVolumeService readingVolumeService;
 
     public void registerReading(User user, Book book, CreateReadingReq createRequest){
@@ -39,6 +43,11 @@ public class ReadingService {
         readingRepository.save(reading);
     }
 
+    public List<BookResponse> findReadingByStatus(Long userId, ReadingStatus status) {
+        List<Reading> readings =readingRepository.findByUserIdAndStatus(userId ,status);
+        return readingMapper.toDtoList(readings);
+    }
+    
     public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq dto) {
         ReadingVolume readingVolume = ReadingVolume.builder().build(); // readingVolume 생성용
         LocalDate date = LocalDate.now();

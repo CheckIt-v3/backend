@@ -1,7 +1,9 @@
 package com.techeer.checkIt.domain.reading.controller;
 
+import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
+import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
@@ -12,10 +14,13 @@ import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Api(tags = "독서현황 API")
@@ -41,5 +46,13 @@ public class ReadingController {
         Book book = bookService.findById(readingDto.getBookId());
         readingService.registerReading(user, book, readingDto);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_CREATE_SUCCESS));
+    }
+
+    @ApiOperation(value = "상태 별 책 목록 API")
+    @GetMapping("/{uid}")
+    public ResponseEntity<List<BookResponse>> getReadingByStatus(@PathVariable Long uid, @RequestParam(defaultValue = "") ReadingStatus status) {
+        User user = userService.findUserById(uid);
+        List<BookResponse> readingList = readingService.findReadingByStatus(user.getId(), status);
+        return ResponseEntity.ok(readingList);
     }
 }
