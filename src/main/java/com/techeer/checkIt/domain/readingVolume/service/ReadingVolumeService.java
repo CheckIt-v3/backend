@@ -27,22 +27,18 @@ public class ReadingVolumeService {
         LocalDate end = LocalDate.now();
         LocalDate start = end.minusDays(6);
         List<ReadingVolume> readingVolumeList =
-                readingVolumeRepository.findReadingVolumesByUserAndDateBetween(user,start,end);
+                readingVolumeRepository.findByUserAndDateBetween(user,start,end);
         return readingVolumeMapper.toDtoList(readingVolumeList);
     }
 
     public ReadingVolume registerReadingVolume(User user, int pages){
         LocalDate date = LocalDate.now();
-        ReadingVolume readingVolume = ReadingVolume.builder()
-                .user(user)
-                .date(date)
-                .todayPages(pages)
-                .build();
+        ReadingVolume readingVolume = readingVolumeMapper.toEntity(user,date,pages);
         return readingVolumeRepository.save(readingVolume);
     }
 
     public ReadingVolume findReadingVolumeByUserAndDate(User user, LocalDate date) {
-        return readingVolumeRepository.findReadingVolumeByUserAndDate(user, date).orElseThrow(ReadingVolumeNotFoundException::new);
+        return readingVolumeRepository.findByUserAndDate(user, date).orElseThrow(ReadingVolumeNotFoundException::new);
     }
 
     public boolean existsUserAndDate(User user, LocalDate date) {
