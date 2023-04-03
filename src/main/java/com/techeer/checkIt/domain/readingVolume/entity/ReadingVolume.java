@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.readingVolume.entity;
 
 import com.techeer.checkIt.domain.user.entity.User;
+import com.techeer.checkIt.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Table(name = "READING_VOLUMES")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReadingVolume {
+public class ReadingVolume extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reading_volume_id")
     private Long id;
