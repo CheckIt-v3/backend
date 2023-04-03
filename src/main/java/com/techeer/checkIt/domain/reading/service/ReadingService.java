@@ -8,7 +8,6 @@ import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
 import com.techeer.checkIt.domain.reading.exception.ReadingNotFoundException;
-import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.readingVolume.mapper.ReadingVolumeMapper;
@@ -29,7 +28,6 @@ public class ReadingService {
     private final ReadingRepository readingRepository;
     private final ReadingMapper readingMapper;
     private final ReadingVolumeService readingVolumeService;
-    private final ReadingMapper readingMapper;
     private final ReadingVolumeMapper readingVolumeMapper;
 
     public void registerReading(User user, Book book, CreateReadingReq createRequest){
