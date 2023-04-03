@@ -4,7 +4,6 @@ import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingRequest;
-import com.techeer.checkIt.domain.reading.dto.response.ReadingResponse;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
@@ -42,25 +41,20 @@ public class ReadingService {
         readingRepository.save(reading);
     }
 
-    public List<ReadingResponse> findReadingByStatus(Long userId, ReadingStatus status) {
+    public List<BookResponse> findReadingByStatus(Long userId, ReadingStatus status) {
         List<Reading> readings =readingRepository.findByUserIdAndStatus(userId ,status);
 
         return readings.stream().map(this::toDto).collect(Collectors.toList());
     }
-
-
-    public ReadingResponse toDto(Reading reading) {
-        return ReadingResponse.builder()
-                .book(toBookDto(reading))
-                .status(reading.getStatus())
-                .build();
-    }
-    public BookResponse toBookDto(Reading reading) {
+    public BookResponse toDto(Reading reading) {
         return BookResponse.builder()
                 .title(reading.getBook().getTitle())
                 .author(reading.getBook().getAuthor())
                 .publisher(reading.getBook().getPublisher())
                 .coverImageUrl(reading.getBook().getCoverImageUrl())
+                .height(reading.getBook().getHeight())
+                .width(reading.getBook().getWidth())
+                .thickness(reading.getBook().getThickness())
                 .build();
     }
 }

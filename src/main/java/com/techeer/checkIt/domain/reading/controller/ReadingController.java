@@ -1,9 +1,9 @@
 package com.techeer.checkIt.domain.reading.controller;
 
+import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingRequest;
-import com.techeer.checkIt.domain.reading.dto.response.ReadingResponse;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.service.ReadingService;
 import com.techeer.checkIt.domain.user.entity.User;
@@ -36,9 +36,9 @@ public class ReadingController {
 
     @ApiOperation(value = "상태 별 책 목록 API")
     @GetMapping("/{uid}")
-    public ResponseEntity<List<ReadingResponse>> getReadingByStatus(@PathVariable Long uid, @RequestParam(defaultValue = "") ReadingStatus status) {
+    public ResponseEntity<List<BookResponse>> getReadingByStatus(@PathVariable Long uid, @RequestParam(defaultValue = "") ReadingStatus status) {
         User user = userService.findUserById(uid);
-        List<ReadingResponse> readingList = readingService.findReadingByStatus(user.getId(), status);
+        List<BookResponse> readingList = readingService.findReadingByStatus(user.getId(), status);
         return ResponseEntity.ok(readingList);
     }
 }
