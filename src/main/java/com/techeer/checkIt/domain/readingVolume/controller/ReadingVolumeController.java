@@ -27,7 +27,7 @@ public class ReadingVolumeController {
     private final UserService userService;
 
     @GetMapping("/{uid}")
-    public ResponseEntity<ResultResponse>a(@PathVariable Long uid) {
+    public ResponseEntity<ResultResponse> searchReadingVolumes(@PathVariable Long uid) {
         User user = userService.findUserById(uid);
         List<SearchReadingVolumesRes> readingVolumeList = readingVolumeService.findReadingVolumesByUserAndDateBetween(user);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_READING_VOLUMES_SUCCESS,readingVolumeList));
