@@ -20,6 +20,7 @@ public class Reading extends BaseEntity {
     private Long id;
     @Column(name = "last_page")
     private int lastPage;
+
     private ReadingStatus status; // 책의 상태 [UNREAD,READING,READ]
 
     @ManyToOne(fetch = FetchType.LAZY)
