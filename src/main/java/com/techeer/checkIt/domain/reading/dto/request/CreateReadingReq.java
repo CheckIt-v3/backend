@@ -5,7 +5,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CreateReadingRequest {
+public class CreateReadingReq {
         private Long bookId;
         private int lastPage;
         private String status;

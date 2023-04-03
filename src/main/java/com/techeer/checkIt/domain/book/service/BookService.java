@@ -3,6 +3,7 @@ package com.techeer.checkIt.domain.book.service;
 import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.mapper.BookMapper;
+import com.techeer.checkIt.domain.book.exception.BookNotFoundException;
 import com.techeer.checkIt.domain.book.repository.BookRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,11 @@ public class BookService {
 
     // id별 조회할 때
     public BookResponse findBookById(Long id) {
-        Book book = bookRepository.findByBookId(id).orElseThrow();
+        Book book = bookRepository.findByBookId(id).orElseThrow(BookNotFoundException::new);
         return bookMapper.toDto(book);
     }
-
     // 책 판별용
-    public Book findById(Long id) {
-        return bookRepository.findById(id).orElseThrow(null);
+    public Book findById(Long bid) {
+        return bookRepository.findById(bid).orElseThrow(BookNotFoundException::new); 
     }
 }
