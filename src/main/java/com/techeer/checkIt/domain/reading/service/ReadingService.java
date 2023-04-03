@@ -2,10 +2,10 @@ package com.techeer.checkIt.domain.reading.service;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
 import com.techeer.checkIt.domain.book.entity.Book;
-import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingRequest;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
+import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
 import com.techeer.checkIt.domain.user.entity.User;
 import lombok.AccessLevel;
@@ -15,14 +15,13 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReadingService {
     private final ReadingRepository readingRepository;
-    private final BookService bookService;
+    private final ReadingMapper readingMapper;
 
     public void registerReading(User user, Book book, CreateReadingRequest createRequest){
         LocalDateTime date = LocalDateTime.now();
@@ -43,18 +42,6 @@ public class ReadingService {
 
     public List<BookResponse> findReadingByStatus(Long userId, ReadingStatus status) {
         List<Reading> readings =readingRepository.findByUserIdAndStatus(userId ,status);
-
-        return readings.stream().map(this::toDto).collect(Collectors.toList());
-    }
-    public BookResponse toDto(Reading reading) {
-        return BookResponse.builder()
-                .title(reading.getBook().getTitle())
-                .author(reading.getBook().getAuthor())
-                .publisher(reading.getBook().getPublisher())
-                .coverImageUrl(reading.getBook().getCoverImageUrl())
-                .height(reading.getBook().getHeight())
-                .width(reading.getBook().getWidth())
-                .thickness(reading.getBook().getThickness())
-                .build();
+        return readingMapper.toDtoList(readings);
     }
 }
