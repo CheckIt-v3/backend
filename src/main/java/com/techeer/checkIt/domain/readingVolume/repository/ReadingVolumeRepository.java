@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReadingVolumeRepository extends JpaRepository<ReadingVolume,Long> {
-    List<ReadingVolume> findReadingVolumesByUserAndDateBetween(User user,LocalDate start, LocalDate end);
-    Optional<ReadingVolume> findReadingVolumeByUserAndDate(User user, LocalDate date);
+    List<ReadingVolume> findByUserAndDateBetween(User user,LocalDate start, LocalDate end);
+    Optional<ReadingVolume> findByUserAndDate(User user, LocalDate date);
     boolean existsByUserAndDate(User user, LocalDate date);
 }
