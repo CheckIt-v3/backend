@@ -21,6 +21,10 @@ public enum ResultCode {
     // Reading
     READING_CREATE_SUCCESS("R001", "독서정보 생성 성공"),
 
+    // ReadingVolume
+    GET_READING_VOLUMES_SUCCESS("RV001", "독서추세 조회 성공"),
+
+
     ;
 
     private final String code;
