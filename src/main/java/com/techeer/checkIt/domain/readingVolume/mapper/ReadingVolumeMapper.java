@@ -9,7 +9,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class ReadingVolumeMapper {
-    private SearchReadingVolumesRes toDto(ReadingVolume readingVolume) {
+
+    public ReadingVolume toEmptyEntity() {
+        return ReadingVolume.builder().build();
+    }
+
+    public SearchReadingVolumesRes toDto(ReadingVolume readingVolume) {
         return SearchReadingVolumesRes.builder()
                 .date(readingVolume.getDate())
                 .page(readingVolume.getTodayPages())
