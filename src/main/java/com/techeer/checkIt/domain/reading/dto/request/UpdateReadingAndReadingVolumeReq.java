@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UpdateReadingAndReadingVolumeRequestDto {
+public class UpdateReadingAndReadingVolumeReq {
     private Long bookId;
     private int lastPage;
 

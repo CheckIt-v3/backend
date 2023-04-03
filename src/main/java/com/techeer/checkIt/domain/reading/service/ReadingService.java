@@ -1,8 +1,8 @@
 package com.techeer.checkIt.domain.reading.service;
 
 import com.techeer.checkIt.domain.book.entity.Book;
-import com.techeer.checkIt.domain.reading.dto.request.CreateReadingRequest;
-import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeRequestDto;
+import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
+import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.exception.ReadingNotFoundException;
@@ -24,7 +24,7 @@ public class ReadingService {
     private final ReadingRepository readingRepository;
     private final ReadingVolumeService readingVolumeService;
 
-    public void registerReading(User user, Book book, CreateReadingRequest createRequest){
+    public void registerReading(User user, Book book, CreateReadingReq createRequest){
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
         int lastPage = 0;
         if(status == ReadingStatus.READING) lastPage = createRequest.getLastPage();
@@ -39,7 +39,7 @@ public class ReadingService {
         readingRepository.save(reading);
     }
 
-    public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeRequestDto dto) {
+    public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq dto) {
         ReadingVolume readingVolume = ReadingVolume.builder().build(); // readingVolume 생성용
         LocalDate date = LocalDate.now();
         Reading reading = readingRepository.findLastPageByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
