@@ -22,6 +22,7 @@ public enum ErrorCode {
 
     // Reading 도메인
     READING_NOT_FOUND_ERROR(400,"R001","독서정보를 찾을 수 없음"),
+    READING_STATUS_NOT_FOUND_ERROR(400,"R002","상태가 올바르지 않음"),
 
     // ReadingVolume 도메인
     READING_VOLUME_NOT_FOUND_ERROR(400, "RV001", "독서추세를 찾을 수 없음"),

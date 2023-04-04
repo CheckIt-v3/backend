@@ -1,5 +1,7 @@
 package com.techeer.checkIt.domain.reading.entity;
 
+import com.techeer.checkIt.domain.reading.exception.StatusNotFoundException;
+
 public enum ReadingStatus {
     UNREAD,READING,READ;
     public static ReadingStatus convert(String s) {
@@ -10,7 +12,8 @@ public enum ReadingStatus {
                 return ReadingStatus.READING;
             case "READ":
                 return ReadingStatus.READ;
+            default:
+                throw new StatusNotFoundException();
         }
-        return null;
     }
 }
