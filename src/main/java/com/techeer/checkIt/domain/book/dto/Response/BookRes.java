@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class BookResponse {
+public class BookRes {
     private String title;
     private String author;
     private String publisher;

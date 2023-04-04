@@ -1,6 +1,6 @@
 package com.techeer.checkIt.domain.reading.mapper;
 
-import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
+import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class ReadingMapper {
-    public BookResponse toDto(Reading reading) {
-        return BookResponse.builder()
+    public BookRes toDto(Reading reading) {
+        return BookRes.builder()
                 .title(reading.getBook().getTitle())
                 .author(reading.getBook().getAuthor())
                 .publisher(reading.getBook().getPublisher())
@@ -20,7 +20,7 @@ public class ReadingMapper {
                 .thickness(reading.getBook().getThickness())
                 .build();
     }
-    public List<BookResponse> toDtoList(List<Reading> readings) {
+    public List<BookRes> toDtoList(List<Reading> readings) {
         return readings.stream().map(this::toDto).collect(Collectors.toList());
     }
 }
