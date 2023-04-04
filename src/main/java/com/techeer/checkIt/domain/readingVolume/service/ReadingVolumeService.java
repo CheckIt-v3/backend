@@ -26,9 +26,9 @@ public class ReadingVolumeService {
     public List<SearchReadingVolumesRes> findReadingVolumesByUserAndDateBetween(User user) {
         LocalDate end = LocalDate.now();
         LocalDate start = end.minusDays(6);
-        List<ReadingVolume> readingVolumeList =
+        List<ReadingVolume> readingVolumes =
                 readingVolumeRepository.findByUserAndDateBetween(user,start,end);
-        return readingVolumeMapper.toDtoList(readingVolumeList);
+        return readingVolumeMapper.toDtoList(readingVolumes);
     }
 
     public ReadingVolume registerReadingVolume(User user, int pages){
