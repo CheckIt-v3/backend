@@ -30,7 +30,7 @@ public class ReadingVolumeMapper {
                 .page(readingVolume.getTodayPages())
                 .build();
     }
-    public List<SearchReadingVolumesRes> toDtoList(List<ReadingVolume> readingVolumeList){
-        return readingVolumeList.stream().map(this::toDto).collect(Collectors.toList());
+    public List<SearchReadingVolumesRes> toDtoList(List<ReadingVolume> readingVolumes){
+        return readingVolumes.stream().map(this::toDto).collect(Collectors.toList());
     }
 }
