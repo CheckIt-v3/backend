@@ -1,6 +1,6 @@
 package com.techeer.checkIt.domain.reading.controller;
 
-import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
+import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
@@ -41,18 +41,18 @@ public class ReadingController {
     }
 
     @PostMapping("/{uid}")
-    public ResponseEntity<ResultResponse> createReading(@PathVariable Long uid, @RequestBody CreateReadingReq readingDto) {
+    public ResponseEntity<ResultResponse> createReading(@PathVariable Long uid, @RequestBody CreateReadingReq createRequest) {
         User user = userService.findUserById(uid);
-        Book book = bookService.findById(readingDto.getBookId());
-        readingService.registerReading(user, book, readingDto);
+        Book book = bookService.findById(createRequest.getBookId());
+        readingService.registerReading(user, book, createRequest);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_CREATE_SUCCESS));
     }
 
     @ApiOperation(value = "상태 별 책 목록 API")
     @GetMapping("/{uid}")
-    public ResponseEntity<List<BookResponse>> getReadingByStatus(@PathVariable Long uid, @RequestParam(defaultValue = "") ReadingStatus status) {
+    public ResponseEntity<List<BookRes>> getReadingByStatus(@PathVariable Long uid, @RequestParam(defaultValue = "") ReadingStatus status) {
         User user = userService.findUserById(uid);
-        List<BookResponse> readingList = readingService.findReadingByStatus(user.getId(), status);
+        List<BookRes> readingList = readingService.findReadingByStatus(user.getId(), status);
         return ResponseEntity.ok(readingList);
     }
 }

@@ -1,6 +1,6 @@
 package com.techeer.checkIt.domain.reading.service;
 
-import com.techeer.checkIt.domain.book.dto.Response.BookResponse;
+import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
@@ -39,8 +39,9 @@ public class ReadingService {
         readingRepository.save(reading);
     }
 
-    public List<BookResponse> findReadingByStatus(Long userId, ReadingStatus status) {
+    public List<BookRes> findReadingByStatus(Long userId, ReadingStatus status) {
         List<Reading> readings =readingRepository.findByUserIdAndStatus(userId ,status);
+
         return readingMapper.toDtoList(readings);
     }
     
@@ -48,7 +49,7 @@ public class ReadingService {
         ReadingVolume readingVolume = readingVolumeMapper.toEmptyEntity();
         LocalDate date = LocalDate.now();
         Reading reading = readingRepository.findLastPageByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
-        int nPage = dto.getLastPage() - reading.getLastPage(); // 책A 읽은 페이지, newPage
+        int nPage = updateRequest.getLastPage() - reading.getLastPage(); // 책A 읽은 페이지, newPage
         if(readingVolumeService.existsUserAndDate(user,date)) { // 오늘 데이터가 있다면
             readingVolume = readingVolumeService.findReadingVolumeByUserAndDate(user, date);
             readingVolume.sumTodayPages(nPage); // 오늘 데이터에 더하기
@@ -57,7 +58,7 @@ public class ReadingService {
             readingVolume = readingVolumeService.registerReadingVolume(user, nPage); // 새로 생성
         }
         reading.updateStatus(ReadingStatus.READING);
-        reading.updateLastPage(dto.getLastPage()); // reading의 lastpages 갱신
+        reading.updateLastPage(updateRequest.getLastPage()); // reading의 lastpages 갱신
         return readingVolume;
     }
 }
