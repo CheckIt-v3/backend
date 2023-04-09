@@ -33,11 +33,11 @@ public class ReadingController {
     private final BookService bookService;
 
     @PutMapping("/readings/{uid}")
-    public ResponseEntity<UpdateReadingAndReadingVolumeRes> updateReadingAndReadingVolume(@PathVariable Long uid, @RequestBody UpdateReadingAndReadingVolumeReq updateRequest) {
+    public ResponseEntity<ResultResponse> updateReadingAndReadingVolume(@PathVariable Long uid, @RequestBody UpdateReadingAndReadingVolumeReq body) {
         User user = userService.findUserById(uid);
-        Book book = bookService.findById(updateRequest.getBookId());
-        ReadingVolume readingVolume = readingService.updateReadingAndReadingVolume(user,book,updateRequest);
-        return ResponseEntity.ok(UpdateReadingAndReadingVolumeRes.of(updateRequest,readingVolume));
+        Book book = bookService.findById(body.getBookId());
+        ReadingVolume readingVolume = readingService.updateReadingAndReadingVolume(user,book,body);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_UPDATE_SUCCESS, readingVolume));
     }
 
     @PostMapping("/{uid}")

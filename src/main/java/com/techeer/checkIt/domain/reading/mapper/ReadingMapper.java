@@ -1,7 +1,11 @@
 package com.techeer.checkIt.domain.reading.mapper;
 
+import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
+
 import com.techeer.checkIt.domain.reading.entity.Reading;
+import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
+import com.techeer.checkIt.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,6 +13,15 @@ import java.util.stream.Collectors;
 
 @Component
 public class ReadingMapper {
+
+    public Reading toEntity(User user, Book book, int lastPage, ReadingStatus status) {
+        return Reading.builder()
+                .user(user)
+                .book(book)
+                .lastPage(lastPage)
+                .status(status)
+                .build();
+    }
     public BookRes toDto(Reading reading) {
         return BookRes.builder()
                 .title(reading.getBook().getTitle())

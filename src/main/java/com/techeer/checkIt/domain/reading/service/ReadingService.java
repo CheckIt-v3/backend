@@ -10,6 +10,7 @@ import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
 import com.techeer.checkIt.domain.reading.exception.ReadingNotFoundException;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
+import com.techeer.checkIt.domain.readingVolume.mapper.ReadingVolumeMapper;
 import com.techeer.checkIt.domain.readingVolume.service.ReadingVolumeService;
 import com.techeer.checkIt.domain.user.entity.User;
 import lombok.AccessLevel;
@@ -27,19 +28,14 @@ public class ReadingService {
     private final ReadingRepository readingRepository;
     private final ReadingMapper readingMapper;
     private final ReadingVolumeService readingVolumeService;
+    private final ReadingVolumeMapper readingVolumeMapper;
 
     public void registerReading(User user, Book book, CreateReadingReq createRequest){
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
         int lastPage = 0;
         if(status == ReadingStatus.READING) lastPage = createRequest.getLastPage();
         else if(status == ReadingStatus.READ) lastPage = book.getPages();
-
-        Reading reading = Reading.builder()
-                .user(user)
-                .book(book)
-                .lastPage(lastPage)
-                .status(status)
-                .build();
+        Reading reading = readingMapper.toEntity(user,book,lastPage,status);
         readingRepository.save(reading);
     }
 
@@ -49,8 +45,8 @@ public class ReadingService {
         return readingMapper.toDtoList(readings);
     }
     
-    public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq updateRequest) {
-        ReadingVolume readingVolume = ReadingVolume.builder().build(); // readingVolume 생성용
+    public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq dto) {
+        ReadingVolume readingVolume = readingVolumeMapper.toEmptyEntity();
         LocalDate date = LocalDate.now();
         Reading reading = readingRepository.findLastPageByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
         int nPage = updateRequest.getLastPage() - reading.getLastPage(); // 책A 읽은 페이지, newPage
