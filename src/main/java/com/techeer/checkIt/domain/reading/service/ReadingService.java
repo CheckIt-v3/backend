@@ -45,7 +45,7 @@ public class ReadingService {
         return readingMapper.toDtoList(readings);
     }
     
-    public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq dto) {
+    public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq updateRequest) {
         ReadingVolume readingVolume = readingVolumeMapper.toEmptyEntity();
         LocalDate date = LocalDate.now();
         Reading reading = readingRepository.findLastPageByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
