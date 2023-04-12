@@ -24,6 +24,7 @@ public class ReadingMapper {
     }
     public BookRes toDto(Reading reading) {
         return BookRes.builder()
+                .id(reading.getBook().getId())
                 .title(reading.getBook().getTitle())
                 .author(reading.getBook().getAuthor())
                 .publisher(reading.getBook().getPublisher())

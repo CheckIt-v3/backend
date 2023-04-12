@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookRes {
+    private long id;
     private String title;
     private String author;
     private String publisher;
