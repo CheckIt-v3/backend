@@ -60,6 +60,6 @@ public class ReadingController {
         User user = userService.findUserById(uid);
         Book book = bookService.findById(bid);
         double percentage = readingService.findReadingByUserAndBook(user, book);
-        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_UPDATE_SUCCESS,percentage));
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_PERCENTAGE_SUCCESS,percentage));
     }
 }
