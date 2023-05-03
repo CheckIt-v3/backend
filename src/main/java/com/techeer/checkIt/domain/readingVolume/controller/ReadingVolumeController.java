@@ -8,6 +8,7 @@ import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class ReadingVolumeController {
     private final ReadingVolumeService readingVolumeService;
     private final UserService userService;
 
+    @ApiOperation(value = "독서량 조회 API")
     @GetMapping("/{uid}")
     public ResponseEntity<ResultResponse> searchReadingVolumes(@PathVariable Long uid) {
         User user = userService.findUserById(uid);
