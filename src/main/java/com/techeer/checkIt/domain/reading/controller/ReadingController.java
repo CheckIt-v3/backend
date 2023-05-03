@@ -3,10 +3,11 @@ package com.techeer.checkIt.domain.reading.controller;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
+import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
+import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
-import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.service.ReadingService;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.user.entity.User;
@@ -32,14 +33,7 @@ public class ReadingController {
     private final UserService userService;
     private final BookService bookService;
 
-    @PutMapping("/readings/{uid}")
-    public ResponseEntity<ResultResponse> updateReadingAndReadingVolume(@PathVariable Long uid, @RequestBody UpdateReadingAndReadingVolumeReq body) {
-        User user = userService.findUserById(uid);
-        Book book = bookService.findById(body.getBookId());
-        ReadingVolume readingVolume = readingService.updateReadingAndReadingVolume(user,book,body);
-        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_UPDATE_SUCCESS, readingVolume));
-    }
-
+    @ApiOperation(value = "내 서재 책 등록 API")
     @PostMapping("/{uid}")
     public ResponseEntity<ResultResponse> createReading(@PathVariable Long uid, @RequestBody CreateReadingReq createRequest) {
         User user = userService.findUserById(uid);
@@ -54,5 +48,23 @@ public class ReadingController {
         User user = userService.findUserById(uid);
         List<BookRes> readingList = readingService.findReadingByStatus(user.getId(), status);
         return ResponseEntity.ok(readingList);
+    }
+
+    @ApiOperation(value = "마지막 페이지 갱신 API")
+    @PutMapping("/{uid}")
+    public ResponseEntity<ResultResponse> updateReadingAndReadingVolume(@PathVariable Long uid, @RequestBody UpdateReadingAndReadingVolumeReq body) {
+        User user = userService.findUserById(uid);
+        Book book = bookService.findById(body.getBookId());
+        ReadingVolume readingVolume = readingService.updateReadingAndReadingVolume(user, book, body);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_UPDATE_SUCCESS, readingVolume));
+    }
+
+    @ApiOperation(value = "독서 상태 변경 API")
+    @PutMapping("status/{uid}")
+    public ResponseEntity<ResultResponse> updateReadingStatus(@PathVariable Long uid, @RequestParam(defaultValue = "") ReadingStatus status, @RequestBody UpdateReadingStatusReq updateStatus) {
+        User user = userService.findUserById(uid);
+        Book book = bookService.findById(updateStatus.getBookId());
+        readingService.updateReadingStatus(user.getId(), book.getId(), status, updateStatus);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_STATUS_UPDATE_SUCCESS));
     }
 }

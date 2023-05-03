@@ -4,6 +4,7 @@ import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
+import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
@@ -43,6 +44,11 @@ public class ReadingService {
         List<Reading> readings =readingRepository.findByUserIdAndStatus(userId ,status);
 
         return readingMapper.toDtoList(readings);
+    }
+
+    public void updateReadingStatus(Long userId, Long bookId, ReadingStatus status, UpdateReadingStatusReq updateStatus) {
+        Reading reading = readingRepository.findByUserIdAndBookIdAndStatus(userId, bookId, status).orElseThrow(ReadingNotFoundException::new);
+        reading.updateStatus(updateStatus.getStatus());
     }
     
     public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq updateRequest) {
