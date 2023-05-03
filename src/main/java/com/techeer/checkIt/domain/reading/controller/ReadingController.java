@@ -6,7 +6,6 @@ import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
-import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.service.ReadingService;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.user.entity.User;
@@ -54,5 +53,13 @@ public class ReadingController {
         User user = userService.findUserById(uid);
         List<BookRes> readingList = readingService.findReadingByStatus(user.getId(), status);
         return ResponseEntity.ok(readingList);
+    }
+    @ApiOperation(value = "읽은 퍼센트 API")
+    @GetMapping("/percentages/{uid}")
+    public ResponseEntity<ResultResponse> getPercentage(@PathVariable Long uid, @RequestParam(defaultValue = "") Long bid) {
+        User user = userService.findUserById(uid);
+        Book book = bookService.findById(bid);
+        double percentage = readingService.findReadingByUserAndBook(user, book);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_UPDATE_SUCCESS,percentage));
     }
 }
