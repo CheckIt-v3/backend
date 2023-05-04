@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateReadingStatusReq {
     private Long bookId;
+    private int lastPage;
     private ReadingStatus status;
 }

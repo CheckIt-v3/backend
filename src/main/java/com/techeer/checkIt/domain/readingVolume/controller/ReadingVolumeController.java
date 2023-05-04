@@ -27,7 +27,7 @@ public class ReadingVolumeController {
     private final ReadingVolumeService readingVolumeService;
     private final UserService userService;
 
-    @ApiOperation(value = "독서량 조회 API")
+    @ApiOperation(value = "일주일 독서량 조회 API")
     @GetMapping("/{uid}")
     public ResponseEntity<ResultResponse> searchReadingVolumes(@PathVariable Long uid) {
         User user = userService.findUserById(uid);

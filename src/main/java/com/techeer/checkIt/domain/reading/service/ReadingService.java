@@ -36,7 +36,7 @@ public class ReadingService {
         int lastPage = 0;
         if(status == ReadingStatus.READING) lastPage = createRequest.getLastPage();
         else if(status == ReadingStatus.READ) lastPage = book.getPages();
-        Reading reading = readingMapper.toEntity(user,book,lastPage,status);
+        Reading reading = readingMapper.toEntity(user, book, lastPage, status);
         readingRepository.save(reading);
     }
 
@@ -49,6 +49,12 @@ public class ReadingService {
     public void updateReadingStatus(Long userId, Long bookId, ReadingStatus status, UpdateReadingStatusReq updateStatus) {
         Reading reading = readingRepository.findByUserIdAndBookIdAndStatus(userId, bookId, status).orElseThrow(ReadingNotFoundException::new);
         reading.updateStatus(updateStatus.getStatus());
+        if(updateStatus.getStatus() == ReadingStatus.READING)
+            reading.updateLastPage(updateStatus.getLastPage());
+        else if(updateStatus.getStatus() == ReadingStatus.READ)
+            reading.updateLastPage(reading.getBook().getPages());
+        else
+            reading.updateLastPage(0);
     }
     
     public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq updateRequest) {
