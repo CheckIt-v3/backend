@@ -14,5 +14,5 @@ import java.util.Optional;
 public interface ReadingRepository extends JpaRepository<Reading,Long> {
     List<Reading> findByUserIdAndStatus(@Param("userId") Long userId, @Param("status") ReadingStatus status);
     Optional<Reading> findByUserIdAndBookIdAndStatus(Long userId, Long bookId, ReadingStatus status);
-    Optional<Reading> findLastPageByUserAndBook(User user, Book book);
+    Optional<Reading> findByUserAndBook(User user, Book book);
 }

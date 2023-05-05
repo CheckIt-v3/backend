@@ -60,7 +60,7 @@ public class ReadingService {
     public ReadingVolume updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq updateRequest) {
         ReadingVolume readingVolume = readingVolumeMapper.toEmptyEntity();
         LocalDate date = LocalDate.now();
-        Reading reading = readingRepository.findLastPageByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
+        Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
         int nPage = updateRequest.getLastPage() - reading.getLastPage(); // 책A 읽은 페이지, newPage
         if(readingVolumeService.existsUserAndDate(user,date)) { // 오늘 데이터가 있다면
             readingVolume = readingVolumeService.findReadingVolumeByUserAndDate(user, date);
@@ -72,5 +72,11 @@ public class ReadingService {
         reading.updateStatus(ReadingStatus.READING);
         reading.updateLastPage(updateRequest.getLastPage()); // reading의 lastpages 갱신
         return readingVolume;
+    }
+
+    public double findReadingByUserAndBook(User user, Book book) {
+        Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
+        double percentage = Math.round(book.getPages() / (double) reading.getLastPage() * 100.0) / 100.0;
+        return percentage;
     }
 }
