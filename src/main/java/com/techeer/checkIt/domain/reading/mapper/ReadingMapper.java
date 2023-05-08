@@ -3,8 +3,10 @@ package com.techeer.checkIt.domain.reading.mapper;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 
+import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
+import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -37,4 +39,11 @@ public class ReadingMapper {
     public List<BookRes> toDtoList(List<Reading> readings) {
         return readings.stream().map(this::toDto).collect(Collectors.toList());
     }
-}
+
+    public UpdateReadingAndReadingVolumeRes toUpdateReadingAndReadingVolumeResDto(Reading reading,ReadingVolume readingVolume){
+        return UpdateReadingAndReadingVolumeRes.builder()
+                .pages(readingVolume.getTodayPages())
+                .lastPage(reading.getLastPage())
+                .build();
+    }
+ }
