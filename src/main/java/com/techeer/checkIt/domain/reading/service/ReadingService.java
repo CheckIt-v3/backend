@@ -68,9 +68,9 @@ public class ReadingService {
     public UpdateReadingAndReadingVolumeRes updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq updateRequest) {
         ReadingVolume readingVolume = readingVolumeMapper.toEmptyEntity();
         LocalDate date = LocalDate.now();
-        Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
+        Reading reading = readingRepository.findByUserAndBook(user, book).orElseThrow(ReadingNotFoundException::new);
         int nPage = pageValidation(updateRequest, reading, book); // 페이지 유효값 확인
-        if(readingVolumeService.existsUserAndDate(user,date)) { // 오늘 데이터가 있다면
+        if(readingVolumeService.existsUserAndDate(user, date)) { // 오늘 데이터가 있다면
             readingVolume = readingVolumeService.findReadingVolumeByUserAndDate(user, date);
             readingVolume.sumTodayPages(nPage); // 오늘 데이터에 더하기
         }
@@ -79,15 +79,13 @@ public class ReadingService {
         }
         reading.updateStatus(ReadingStatus.READING);
         reading.updateLastPage(updateRequest.getLastPage()); // reading의 lastpages 갱신
-        UpdateReadingAndReadingVolumeRes updateReadingAndReadingVolumeRes = readingMapper
-                .toUpdateReadingAndReadingVolumeResDto(reading,readingVolume);
-        return updateReadingAndReadingVolumeRes;
+        return readingMapper
+                .toUpdateReadingAndReadingVolumeResDto(reading, readingVolume);
     }
 
     public double findReadingByUserAndBook(User user, Book book) {
         Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
-        double percentage = Math.round(reading.getLastPage() / (double) (book.getPages() / 100) * 100.0) / 100.0;
-        return percentage;
+        return Math.round(reading.getLastPage() / (double) (book.getPages() / 100) * 100.0) / 100.0;
     }
 
     /**
