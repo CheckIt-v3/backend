@@ -1,7 +1,6 @@
 package com.techeer.checkIt.domain.user.entity;
 
 import com.techeer.checkIt.domain.reading.entity.Reading;
-import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.review.entity.Review;
 import com.techeer.checkIt.entity.BaseEntity;
@@ -31,6 +30,7 @@ public class User extends BaseEntity {
     private List<ReadingVolume> readingVolumeList = new ArrayList<>();
 
     @Builder
-    private User(String name) {
+    private User(Long id) {
+        this.id = id;
     }
 }

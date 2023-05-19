@@ -4,6 +4,7 @@ import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.review.entity.Review;
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.*;
+import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -42,6 +43,21 @@ public class Book extends BaseEntity {
     private List<Review> reviewList = new ArrayList<>();
     @Builder
     public Book(String title, String author, String publisher, String coverImageUrl, int pages, int height, int width, int thickness, String category) {
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.coverImageUrl = coverImageUrl;
+        this.pages = pages;
+        this.height = height;
+        this.width = width;
+        this.thickness = thickness;
+        this.category = category;
+    }
+
+    @Builder(builderMethodName = "entityBuilder")
+    public Book(Long id, String title, String author, String publisher, String coverImageUrl, int pages, int height, int width, int thickness, String category) {
+        Assert.hasText(Long.toString(id), "id must not be empty");
+        this.id = id;
         this.title = title;
         this.author = author;
         this.publisher = publisher;
