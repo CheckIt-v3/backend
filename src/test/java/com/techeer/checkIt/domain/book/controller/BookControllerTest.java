@@ -49,25 +49,24 @@ class BookControllerTest {
     }
 
     @Test
-    @DisplayName("책 제목으로 전체 책 검색")
+    @DisplayName("Controller) 책 제목으로 전체 책 검색")
     void searchTitle() throws Exception {
         List<BookRes> books = new ArrayList<>();
         books.add(TEST_BOOK);
 
-        String title = "책";
+        String title = "원";
 
         when(bookService.findBookByTitle(title)).thenReturn(books);
 
         mockMvc.perform(get("/api/v1/books/search")
                         .queryParam("title",title))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("재미있는 책"))
+                .andExpect(jsonPath("$[0].title").value("원씽"))
                 .andDo(print());
-
     }
 
     @Test
-    @DisplayName("책 id로 조회")
+    @DisplayName("Controller) 책 id로 조회")
     void getBookById() throws Exception {
 
         when(bookService.findBookById(1L)).thenReturn(TEST_BOOK);
