@@ -5,6 +5,6 @@ import com.techeer.checkIt.domain.user.entity.User;
 public class UserFixtures {
     public static final User TEST_USER =
             User.builder()
-                    .name("테스트")
+                    .id(1L)
                     .build();
 }

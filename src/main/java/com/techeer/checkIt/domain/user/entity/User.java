@@ -31,6 +31,7 @@ public class User extends BaseEntity {
     private List<ReadingVolume> readingVolumeList = new ArrayList<>();
 
     @Builder
-    private User(String name) {
+    private User(Long id) {
+        this.id = id;
     }
 }
