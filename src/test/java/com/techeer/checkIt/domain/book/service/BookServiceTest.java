@@ -4,8 +4,6 @@ import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.mapper.BookMapper;
 import com.techeer.checkIt.domain.book.repository.BookRepository;
-import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
-import com.techeer.checkIt.domain.reading.service.ReadingService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,9 +17,7 @@ import java.util.Optional;
 
 import static com.techeer.checkIt.fixture.BookFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
@@ -34,7 +30,7 @@ class BookServiceTest {
 
     @Mock
     private BookMapper bookMapper;
-//    private final Book book = BOOK_ENT;
+
     @Test
     @DisplayName("Service) 책 제목으로 검색")
     void findBookByTitle() {
@@ -67,7 +63,7 @@ class BookServiceTest {
         given(bookRepository.findByBookId(1L)).willReturn(Optional.ofNullable(BOOK_ENT));
         when(bookMapper.toDto(BOOK_ENT)).thenReturn(bookRes);
 
-        // given
+        // when
         bookRes = bookService.findBookById(1L);
 
         // then
@@ -77,7 +73,7 @@ class BookServiceTest {
     @Test
     @DisplayName("Service) id별 판별")
     void findById() {
-
+        // given
         given(bookRepository.findById(1L)).willReturn(Optional.ofNullable(BOOK_ENT));
 
         // when
