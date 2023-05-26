@@ -53,19 +53,4 @@ public class Book extends BaseEntity {
         this.thickness = thickness;
         this.category = category;
     }
-
-    @Builder(builderMethodName = "entityBuilder")
-    public Book(Long id, String title, String author, String publisher, String coverImageUrl, int pages, int height, int width, int thickness, String category) {
-        Assert.hasText(Long.toString(id), "id must not be empty");
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.coverImageUrl = coverImageUrl;
-        this.pages = pages;
-        this.height = height;
-        this.width = width;
-        this.thickness = thickness;
-        this.category = category;
-    }
 }

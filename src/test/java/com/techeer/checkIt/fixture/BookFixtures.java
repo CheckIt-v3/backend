@@ -16,8 +16,7 @@ public class BookFixtures {
                     .publisher("데이원")
                     .build();
     public static final Book TEST_BOOKENT =
-            Book.entityBuilder()
-                    .id(1L)
+            Book.builder()
                     .author("세이노")
                     .title("재미있는 책")
                     .coverImageUrl("http://image.yes24.com/goods/117014613/XL")
@@ -31,8 +30,7 @@ public class BookFixtures {
                     .build();
 
     public static final Book TEST_BOOKENT2 =
-            Book.entityBuilder()
-                    .id(2L)
+            Book.builder()
                     .author("김미경")
                     .title("김미경의 마흔 수업")
                     .coverImageUrl("http://image.yes24.com/goods/117188090/XL")

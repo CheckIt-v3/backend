@@ -93,12 +93,11 @@ public class ReadingControllerTest {
         when(bookService.findById(1L)).thenReturn(TEST_BOOKENT);
         when(userService.findUserById(2L)).thenReturn(TEST_USER2);
         when(bookService.findById(2L)).thenReturn(TEST_BOOKENT2);
-        when(readingService.findReadingByUserAndBook(TEST_USER,TEST_BOOKENT)).thenReturn(TEST_READINGVOLUME);
-        when(readingService.findReadingByUserAndBook(TEST_USER2,TEST_BOOKENT2)).thenReturn(TEST_READINGVOLUME2);
+        when(readingService.findReadingByUserAndBook(any(),any())).thenReturn(TEST_READINGVOLUME);
         mockMvc
                 .perform(
                         MockMvcRequestBuilders.get("/api/v1/readings/percentages/{uid}",1L)
-                                .param("bookId","1"))
+                                .param("bid","1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(toJsonString(ResultResponse.of(READING_PERCENTAGE_SUCCESS, TEST_READINGVOLUME))))
                 .andDo(print());

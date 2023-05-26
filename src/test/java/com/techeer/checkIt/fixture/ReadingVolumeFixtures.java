@@ -2,6 +2,7 @@ package com.techeer.checkIt.fixture;
 
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
+import com.techeer.checkIt.domain.readingVolume.dto.response.SearchReadingVolumesRes;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 
 import java.time.LocalDate;
@@ -32,5 +33,11 @@ public class ReadingVolumeFixtures {
             UpdateReadingAndReadingVolumeRes.builder()
                     .lastPage(82)
                     .pages(10)
+                    .build();
+
+    public static final SearchReadingVolumesRes TEST_SEARCH_READINGVOLUME_RES =
+            SearchReadingVolumesRes.builder()
+                    .date(LocalDate.now())
+                    .page(30)
                     .build();
 }

@@ -69,9 +69,9 @@ public class ReadingController {
 
     @ApiOperation(value = "읽은 퍼센트 API")
     @GetMapping("/percentages/{uid}")
-    public ResponseEntity<ResultResponse> getPercentage(@PathVariable Long uid, @RequestParam(defaultValue = "") Long bookId) {
+    public ResponseEntity<ResultResponse> getPercentage(@PathVariable Long uid, @RequestParam(defaultValue = "") Long bid) {
         User user = userService.findUserById(uid);
-        Book book = bookService.findById(bookId);
+        Book book = bookService.findById(bid);
         double percentage = readingService.findReadingByUserAndBook(user, book);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_PERCENTAGE_SUCCESS,percentage));
     }
