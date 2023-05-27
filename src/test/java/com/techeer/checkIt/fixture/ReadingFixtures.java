@@ -21,5 +21,13 @@ public class ReadingFixtures {
                     .status(ReadingStatus.READING)
                     .lastPage(81)
                     .build();
+    public static final Reading TEST_READING2 =
+            Reading.entityBuilder()
+                    .id(1L)
+                    .user(TEST_USER)
+                    .book(TEST_BOOKENT)
+                    .status(ReadingStatus.READING)
+                    .lastPage(81)
+                    .build();
 }
 

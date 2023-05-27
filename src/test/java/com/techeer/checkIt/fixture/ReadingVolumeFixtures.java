@@ -29,6 +29,19 @@ public class ReadingVolumeFixtures {
                     .lastPage(82)
                     .build();
 
+    public static final UpdateReadingAndReadingVolumeReq TEST_READINGVOLUME_UPDATE_REQ_OUT_OF_PAGE =
+            UpdateReadingAndReadingVolumeReq.builder()
+                    .bookId(1L)
+                    .lastPage(800)
+                    .build();
+
+    public static final UpdateReadingAndReadingVolumeReq TEST_READINGVOLUME_UPDATE_REQ_NEGATIVE_VALUE =
+            UpdateReadingAndReadingVolumeReq.builder()
+                    .bookId(1L)
+                    .lastPage(20)
+                    .build();
+
+
     public static final UpdateReadingAndReadingVolumeRes TEST_READINGVOLUME_UPDATE_RES =
             UpdateReadingAndReadingVolumeRes.builder()
                     .lastPage(82)
