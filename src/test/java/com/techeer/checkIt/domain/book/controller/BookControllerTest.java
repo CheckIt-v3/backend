@@ -48,14 +48,14 @@ class BookControllerTest {
         List<BookRes> books = new ArrayList<>();
         books.add(TEST_BOOK);
 
-        String title = "원";
+        String title = "세이노";
 
         when(bookService.findBookByTitle(title)).thenReturn(books);
 
         mockMvc.perform(get("/api/v1/books/search")
                         .queryParam("title",title))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("원씽"))
+                .andExpect(jsonPath("$[0].title").value("세이노의 가르침"))
                 .andDo(print());
     }
 

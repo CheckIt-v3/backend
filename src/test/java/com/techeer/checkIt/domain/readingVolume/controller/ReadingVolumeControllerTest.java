@@ -22,10 +22,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static com.techeer.checkIt.fixture.ReadingVolumeFixtures.TEST_SEARCH_READINGVOLUME_RES;
-import static com.techeer.checkIt.fixture.UserFixtures.TEST_USER;
-import static com.techeer.checkIt.fixture.UserFixtures.TEST_USER2;
-import static com.techeer.checkIt.global.result.ResultCode.GET_READING_VOLUMES_SUCCESS;
+import static com.techeer.checkIt.fixture.ReadingVolumeFixtures.*;
+import static com.techeer.checkIt.fixture.UserFixtures.*;
+import static com.techeer.checkIt.global.result.ResultCode.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,12 +41,9 @@ class ReadingVolumeControllerTest {
     private UserService userService;
     @MockBean
     private BookService bookService;
-
     @MockBean
     private ReadingService readingService;
-
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
 

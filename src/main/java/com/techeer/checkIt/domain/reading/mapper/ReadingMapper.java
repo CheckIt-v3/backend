@@ -40,7 +40,7 @@ public class ReadingMapper {
         return readings.stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    public UpdateReadingAndReadingVolumeRes toUpdateReadingAndReadingVolumeResDto(Reading reading,ReadingVolume readingVolume){
+    public UpdateReadingAndReadingVolumeRes toUpdateReadingAndReadingVolumeResDto(Reading reading, ReadingVolume readingVolume){
         return UpdateReadingAndReadingVolumeRes.builder()
                 .pages(readingVolume.getTodayPages())
                 .lastPage(reading.getLastPage())

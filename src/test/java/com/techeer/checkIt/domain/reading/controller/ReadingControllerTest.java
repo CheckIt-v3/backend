@@ -20,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.*;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -29,14 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import static com.techeer.checkIt.fixture.ReadingFixtures.TEST_READINGREQ;
+import static com.techeer.checkIt.fixture.ReadingFixtures.*;
 import static com.techeer.checkIt.fixture.ReadingVolumeFixtures.*;
-import static com.techeer.checkIt.fixture.UserFixtures.TEST_USER;
-import static com.techeer.checkIt.fixture.UserFixtures.TEST_USER2;
+import static com.techeer.checkIt.fixture.UserFixtures.*;
 import static com.techeer.checkIt.global.result.ResultCode.*;
-import static com.techeer.checkIt.domain.reading.entity.ReadingStatus.READING;
+import static com.techeer.checkIt.domain.reading.entity.ReadingStatus.*;
 import static com.techeer.checkIt.fixture.BookFixtures.*;
-import static com.techeer.checkIt.fixture.ReadingFixtures.TEST_UPDATE_READ_REQ;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -51,12 +50,11 @@ public class ReadingControllerTest {
     private UserService userService;
     @MockBean
     private ReadingService readingService;
-
     @MockBean
     private ReadingVolumeService readingVolumeService;
     @MockBean
     private ReadingRepository readingRepository;
-  
+
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
@@ -86,12 +84,12 @@ public class ReadingControllerTest {
                 .perform(
                         MockMvcRequestBuilders.post("/api/v1/readings/{uid}",1L)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(toJsonString(TEST_READINGREQ)))
+                                .content(toJsonString(TEST_READING_REQ)))
                 .andExpect(status().isOk())
-                .andExpect(content().string(toJsonString(readingList)))
+                .andExpect(content().string(toJsonString(ResultResponse.of(READING_CREATE_SUCCESS))))
                 .andDo(print());
     }
-  
+
     @Test
     @DisplayName("Controller) 상태 별 책 조회한다.")
     void getReadingByStatus() throws Exception {
@@ -115,10 +113,10 @@ public class ReadingControllerTest {
     @DisplayName("책을 얼만큼 읽었는지 퍼센트를 계산해준다.")
     void getPercentage() throws Exception {
         when(userService.findUserById(1L)).thenReturn(TEST_USER);
-        when(bookService.findById(1L)).thenReturn(TEST_BOOKENT);
+        when(bookService.findById(1L)).thenReturn(TEST_BOOK_ENT);
         when(userService.findUserById(2L)).thenReturn(TEST_USER2);
-        when(bookService.findById(2L)).thenReturn(TEST_BOOKENT2);
-        when(readingService.findReadingByUserAndBook(any(),any())).thenReturn(TEST_READINGVOLUME);
+        when(bookService.findById(2L)).thenReturn(TEST_BOOK_ENT2);
+        when(readingService.findReadingByUserAndBook(any(), any())).thenReturn(TEST_READINGVOLUME);
         mockMvc
                 .perform(
                         MockMvcRequestBuilders.get("/api/v1/readings/percentages/{uid}",1L)
@@ -132,7 +130,7 @@ public class ReadingControllerTest {
     @DisplayName("마지막으로 읽은 페이지를 수정해준다.")
     void updateReadingAndReadingVolume() throws Exception {
         when(userService.findUserById(1L)).thenReturn(TEST_USER);
-        when(bookService.findById(TEST_READINGVOLUME_UPDATE_REQ.getBookId())).thenReturn(TEST_BOOKENT);
+        when(bookService.findById(TEST_READINGVOLUME_UPDATE_REQ.getBookId())).thenReturn(TEST_BOOK_ENT);
         when(readingService.updateReadingAndReadingVolume(any(), any(), any())).thenReturn(TEST_READINGVOLUME_UPDATE_RES);
         mockMvc
                 .perform(
@@ -146,10 +144,10 @@ public class ReadingControllerTest {
 
     @Test
     @DisplayName("Controller) 독서 상태 변경한다.")
-    void createReading() throws Exception {
+    void updateReadingStatus() throws Exception {
         // when
         when(userService.findUserById(1L)).thenReturn(TEST_USER);
-        when(bookService.findById(1L)).thenReturn(BOOK_ENT);
+        when(bookService.findById(1L)).thenReturn(TEST_BOOK_ENT);
 
         // then
         mockMvc.perform(put("/api/v1/readings/status/{uid}", 1L)

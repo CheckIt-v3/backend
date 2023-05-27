@@ -37,15 +37,6 @@ public class Reading extends BaseEntity {
         this.lastPage = lastPage;
         this.status = status;
     }
-    @Builder(builderMethodName = "entityBuilder")
-    public Reading(Long id,User user, Book book, int lastPage, ReadingStatus status) {
-        this.id = id;
-        this.user = user;
-        this.book = book;
-        this.lastPage = lastPage;
-        this.status = status;
-    }
-
     public void updateStatus(ReadingStatus status) {
         this.status = status;
     }

@@ -36,11 +36,11 @@ class BookServiceTest {
     void findBookByTitle() {
         // given
         List<Book> books = new ArrayList<>();
-        books.add(BOOK_ENT); // 원씽
+        books.add(TEST_BOOK_ENT); // 세이노
 
         List<BookRes> bookList = new ArrayList<>();
         bookList.add(TEST_BOOK);
-        String title = "원";
+        String title = "세이노";
 
         given(bookRepository.findByTitle(any())).willReturn(books);
         when(bookMapper.toDtoList(books)).thenReturn(bookList);
@@ -60,26 +60,26 @@ class BookServiceTest {
         // given
         BookRes bookRes = TEST_BOOK;
 
-        given(bookRepository.findByBookId(1L)).willReturn(Optional.ofNullable(BOOK_ENT));
-        when(bookMapper.toDto(BOOK_ENT)).thenReturn(bookRes);
+        given(bookRepository.findByBookId(1L)).willReturn(Optional.ofNullable(TEST_BOOK_ENT));
+        when(bookMapper.toDto(TEST_BOOK_ENT)).thenReturn(bookRes);
 
         // when
         bookRes = bookService.findBookById(1L);
 
         // then
-        assertThat(bookRes.getTitle()).isEqualTo(BOOK_ENT.getTitle());
+        assertThat(bookRes.getTitle()).isEqualTo(TEST_BOOK_ENT.getTitle());
     }
 
     @Test
     @DisplayName("Service) id별 판별")
     void findById() {
         // given
-        given(bookRepository.findById(1L)).willReturn(Optional.ofNullable(BOOK_ENT));
+        given(bookRepository.findById(1L)).willReturn(Optional.ofNullable(TEST_BOOK_ENT));
 
         // when
         Book book = bookService.findById(1L);
 
         // then
-        assertThat(book.getTitle()).isEqualTo(BOOK_ENT.getTitle());
+        assertThat(book.getTitle()).isEqualTo(TEST_BOOK_ENT.getTitle());
     }
 }

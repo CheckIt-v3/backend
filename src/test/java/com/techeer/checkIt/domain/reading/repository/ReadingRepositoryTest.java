@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static com.techeer.checkIt.fixture.BookFixtures.TEST_BOOKENT;
+import static com.techeer.checkIt.fixture.BookFixtures.*;
 import static com.techeer.checkIt.fixture.UserFixtures.TEST_USER;
 
 @DataJpaTest
@@ -26,15 +26,12 @@ public class  ReadingRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
-    private User user = TEST_USER;
-    private Book book = TEST_BOOKENT;
-
 
     @Test
     @DisplayName("user와 book으로 원하는 reading을 불러올 수 있는지 확인한다.")
     void findByUserAndBook() {
-        userRepository.save(user);
-        bookRepository.save(book);
+        User user = userRepository.save(TEST_USER);
+        Book book = bookRepository.save(TEST_BOOK_ENT);
 
         Reading reading = Reading.builder()
                 .user(user)
@@ -43,7 +40,7 @@ public class  ReadingRepositoryTest {
                 .status(ReadingStatus.READING)
                 .build();
         readingRepository.save(reading);
-        Reading test = readingRepository.findByUserAndBook(user,book).orElseThrow(null);
+        Reading test = readingRepository.findByUserAndBook(user, book).orElseThrow(null);
         Assertions.assertThat(reading).isEqualTo(test);
   }
 }
