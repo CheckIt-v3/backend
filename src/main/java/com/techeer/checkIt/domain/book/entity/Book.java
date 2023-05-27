@@ -4,6 +4,7 @@ import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.review.entity.Review;
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.*;
+import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
 import javax.persistence.*;

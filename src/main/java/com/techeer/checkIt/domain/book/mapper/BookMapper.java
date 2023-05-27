@@ -26,4 +26,5 @@ public class BookMapper {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+
 }

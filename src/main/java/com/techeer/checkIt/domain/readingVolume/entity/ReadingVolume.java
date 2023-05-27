@@ -34,6 +34,14 @@ public class ReadingVolume extends BaseEntity {
         this.user = user;
     }
 
+    @Builder(builderMethodName="entityBuilder")
+    public ReadingVolume(Long id, int todayPages, LocalDate date, User user) {
+        this.id = id;
+        this.todayPages = todayPages;
+        this.date = date;
+        this.user = user;
+    }
+
     public void sumTodayPages(int todayPages){
         this.todayPages += todayPages;
     }

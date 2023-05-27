@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.9'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'com.google.cloud.tools.jib' version '3.2.1'
+	id 'jacoco'
 }
 
 group = 'com.techeer'
@@ -51,6 +52,49 @@ jib {
 	}
 }
 
+jacoco {
+	toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled true
+		html.enabled true
+
+		xml.destination file("${buildDir}/jacoco/index.xml")
+		csv.destination file("${buildDir}/jacoco/index.csv")
+		html.destination file("${buildDir}/jacoco/index.html")
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = true
+			element = 'CLASS'
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.80
+			}
+		}
+		rule {
+			// 규칙을 여러개 추가할 수 있습니다.
+		}
+	}
+}
+
+
+test {
+	finalizedBy 'jacocoTestReport'
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jacocoTestReport {
+	finalizedBy 'jacocoTestCoverageVerification'
 }
