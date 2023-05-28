@@ -133,16 +133,17 @@ class ReadingServiceTest{
         assertEquals(pageValidationException.getErrorCode(), ErrorCode.PAGE_VALIDATION_NEGATIVE_VALUE);
     }
 
-//    @Test
-//    @DisplayName("페이지 유효값 확인, 마지막으로 읽은 페이지보다 낮은값이 입력된 경우")
-//    void registerReading() {
-//        given(readingRepository.save(any())).willReturn(TEST_READING);
-//
-//        when(readingMapper.toEntity(any(),any(),any(),any())).thenReturn(TEST_READING2);
-//        Long id = readingService.registerReading(TEST_USER, TEST_BOOKENT, TEST_READING_REQ);
-//
-//        assertEquals(TEST_READING2.getId(), id);
-//    }
+    @Test
+    @DisplayName("reading 저장, status = READING")
+    void registerReadingReading() {
+        readingService.registerReading(TEST_USER, TEST_BOOK_ENT, TEST_READING_REQ);
+    }
+
+    @Test
+    @DisplayName("reading 저장, status = READ")
+    void registerReadingRead() {
+        readingService.registerReading(TEST_USER, TEST_BOOK_ENT, TEST_READING_REQ2);
+    }
 
     @Test
     @DisplayName("Service) 상태 별 책 조회")

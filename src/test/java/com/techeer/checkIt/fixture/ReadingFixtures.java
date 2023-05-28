@@ -14,6 +14,12 @@ public class ReadingFixtures {
                     .lastPage(0)
                     .status("READING")
                     .build();
+    public static final CreateReadingReq TEST_READING_REQ2 =
+            CreateReadingReq.builder()
+                    .bookId(1L)
+                    .lastPage(0)
+                    .status("READ")
+                    .build();
     public static final UpdateReadingStatusReq TEST_UPDATE_READ_REQ =
             UpdateReadingStatusReq.builder()
                     .bookId(1L)
