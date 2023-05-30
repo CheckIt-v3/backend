@@ -66,9 +66,33 @@ jacocoTestReport {
 		csv.destination file("${buildDir}/jacoco/index.csv")
 		html.destination file("${buildDir}/jacoco/index.html")
 	}
+	def Qdomains = []
+	for (qPattern in '**/QA'..'**/QZ') {
+		Qdomains.add(qPattern + '*')
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(
+				files(classDirectories.files.collect {
+					fileTree(dir: it, excludes: [
+							"**/*Application*",
+							"**/*Mapper*",
+							"**/entity/",
+							"**/*StatusNotFoundException*",
+							"**/*User*",
+					] + Qdomains)
+				})
+		)
+	}
+	finalizedBy 'jacocoTestCoverageVerification'
 }
 
 jacocoTestCoverageVerification {
+	def Qdomains = []
+	for (qPattern in '*.QA'..'*.QZ') {
+		Qdomains.add(qPattern + '*')
+	}
+
 	violationRules {
 		rule {
 			enabled = true
@@ -79,10 +103,16 @@ jacocoTestCoverageVerification {
 				value = 'COVEREDRATIO'
 				minimum = 0.80
 			}
+			excludes = [
+					'**.*Application',
+					'**.*Mapper',
+					'**.*Entity',
+					'**.*StatusNotFoundException',
+					'**.User',
+					// ...
+			] + Qdomains
 		}
-		rule {
-			// 규칙을 여러개 추가할 수 있습니다.
-		}
+
 	}
 }
 
@@ -93,8 +123,9 @@ test {
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-jacocoTestReport {
+	finalizedBy 'jacocoTestReport'
 	finalizedBy 'jacocoTestCoverageVerification'
 }
+
+
+
