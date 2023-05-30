@@ -5,6 +5,7 @@ import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVol
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.exception.PageValidationException;
+import com.techeer.checkIt.domain.reading.exception.ReadingNotFoundException;
 import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -186,6 +188,14 @@ class ReadingServiceTest{
         assertThat(updateStatusToRead.getLastPage()).isEqualTo(TEST_READING.getBook().getPages());
         assertThat(updateStatusToReading.getLastPage()).isEqualTo(130);
         assertThat(updateStatusToUnread.getLastPage()).isEqualTo(0);
+    }
+    @Test
+    @DisplayName("사용자의 내서재에 책이 없는 경우")
+    void bookNotFoundException() {
+        Mockito.lenient().when(readingRepository.findByUserIdAndBookIdAndStatus(1L, 2L, READING)).thenThrow(new ReadingNotFoundException());
 
+        assertThrows(ReadingNotFoundException.class, () -> {
+            readingRepository.findByUserIdAndBookIdAndStatus(1L, 2L, READING);
+        }, "내 서재에 책이 있습니다.");
     }
 }
