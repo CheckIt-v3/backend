@@ -33,7 +33,7 @@ public class ReadingMapper {
                 .coverImageUrl(reading.getBook().getCoverImageUrl())
                 .height(reading.getBook().getHeight())
                 .width(reading.getBook().getWidth())
-                .thickness(reading.getBook().getThickness())
+                .pages(reading.getBook().getPages())
                 .build();
     }
     public List<BookRes> toDtoList(List<Reading> readings) {
