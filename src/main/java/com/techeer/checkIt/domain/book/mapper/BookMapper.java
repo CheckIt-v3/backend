@@ -18,7 +18,7 @@ public class BookMapper {
                 .coverImageUrl(book.getCoverImageUrl())
                 .height(book.getHeight())
                 .width(book.getWidth())
-                .thickness(book.getThickness())
+                .pages(book.getPages())
                 .build();
     }
     public List<BookRes> toDtoList(List<Book> books){
