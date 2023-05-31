@@ -123,7 +123,7 @@ class ReadingServiceTest{
         PageValidationException pageValidationException = assertThrows(PageValidationException.class, () -> {
             readingService.pageValidation(TEST_READINGVOLUME_UPDATE_REQ_OUT_OF_PAGE, TEST_READING, TEST_BOOK_ENT);
         });
-        assertEquals(pageValidationException.getErrorCode(), ErrorCode.PAGE_VALIDATION_OUT_OF_PAGE);
+        assertEquals(ErrorCode.PAGE_VALIDATION_OUT_OF_PAGE, pageValidationException.getErrorCode());
     }
 
     @Test
@@ -132,19 +132,23 @@ class ReadingServiceTest{
         PageValidationException pageValidationException = assertThrows(PageValidationException.class, () -> {
             readingService.pageValidation(TEST_READINGVOLUME_UPDATE_REQ_NEGATIVE_VALUE, TEST_READING, TEST_BOOK_ENT);
         });
-        assertEquals(pageValidationException.getErrorCode(), ErrorCode.PAGE_VALIDATION_NEGATIVE_VALUE);
+        assertEquals(ErrorCode.PAGE_VALIDATION_NEGATIVE_VALUE, pageValidationException.getErrorCode());
     }
 
-//    @Test
-//    @DisplayName("페이지 유효값 확인, 마지막으로 읽은 페이지보다 낮은값이 입력된 경우")
-//    void registerReading() {
-//        given(readingRepository.save(any())).willReturn(TEST_READING);
-//
-//        when(readingMapper.toEntity(any(),any(),any(),any())).thenReturn(TEST_READING2);
-//        Long id = readingService.registerReading(TEST_USER, TEST_BOOKENT, TEST_READING_REQ);
-//
-//        assertEquals(TEST_READING2.getId(), id);
-//    }
+    @Test
+    @DisplayName("reading 저장")
+    void registerReadingReading() {
+        given(readingRepository.save(any())).willReturn(TEST_READING);
+
+        int reading = readingService.registerReading(TEST_USER, TEST_BOOK_ENT, TEST_READING_REQ);
+        int read = readingService.registerReading(TEST_USER, TEST_BOOK_ENT, TEST_READING_REQ2);
+        int unread = readingService.registerReading(TEST_USER, TEST_BOOK_ENT, TEST_READING_REQ3);
+
+
+        assertEquals(TEST_READING_REQ.getLastPage(), reading);
+        assertEquals(TEST_BOOK_ENT.getPages(), read);
+        assertEquals(0, unread);
+    }
 
     @Test
     @DisplayName("Service) 상태 별 책 조회")

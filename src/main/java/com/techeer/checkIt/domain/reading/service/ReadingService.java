@@ -33,14 +33,14 @@ public class ReadingService {
     private final ReadingVolumeService readingVolumeService;
     private final ReadingVolumeMapper readingVolumeMapper;
 
-    public Long registerReading(User user, Book book, CreateReadingReq createRequest){
+    public int registerReading(User user, Book book, CreateReadingReq createRequest){
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
-        int lastPage = 0;
+        int lastPage = 0; // status가 UNREAD라면 lastPage가 0으로 들어감, 즉 UNREAD 조건 불필요
         if(status == ReadingStatus.READING) lastPage = createRequest.getLastPage();
         else if(status == ReadingStatus.READ) lastPage = book.getPages();
         Reading reading = readingMapper.toEntity(user, book, lastPage, status);
         readingRepository.save(reading);
-        return reading.getId();
+        return lastPage;
     }
 
     public List<BookRes> findReadingByStatus(Long userId, ReadingStatus status) {
