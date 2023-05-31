@@ -1,5 +1,7 @@
 package com.techeer.checkIt.domain.readingVolume.service;
 
+
+import com.techeer.checkIt.domain.readingVolume.exception.ReadingVolumeNotFoundException;
 import com.techeer.checkIt.domain.readingVolume.dto.response.SearchReadingVolumesRes;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.readingVolume.mapper.ReadingVolumeMapper;
@@ -9,16 +11,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.techeer.checkIt.fixture.ReadingVolumeFixtures.*;
 import static com.techeer.checkIt.fixture.UserFixtures.TEST_USER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
@@ -83,4 +86,14 @@ class ReadingVolumeServiceTest {
         assertEquals(true, flag1);
     }
 
+    @Test
+    @DisplayName("해당 날짜의 독서추세를 찾을 수 없는 경우")
+    void readingVolumeNotFoundException() {
+        LocalDate date = LocalDate.now();
+        Mockito.lenient().when(readingVolumeRepository.findByUserAndDate(TEST_USER, date)).thenThrow(new ReadingVolumeNotFoundException());
+
+        assertThrows(ReadingVolumeNotFoundException.class, () -> {
+            readingVolumeRepository.findByUserAndDate(TEST_USER, date);
+        }, "해당 날짜의 독서이력이 있습니다.");
+    }
 }
