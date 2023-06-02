@@ -37,6 +37,9 @@ jobs:
       - name: Gradle 명령 실행을 위한 권한을 부여
         run: chmod +x gradlew
 
+      - name: mysql 서버 시작
+        run: mysql.server start
+
       - name: Gradle build 수행
         run: ./gradlew build -P DOCKER_ID=${{ secrets.DOCKER_ID }} -P DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -P DOCKER_IMAGE_NAME=${{ secrets.DOCKER_IMAGE_NAME }}
 
