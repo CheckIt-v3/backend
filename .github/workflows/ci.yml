@@ -27,7 +27,6 @@ jobs:
         with:
           token: ${{ secrets.SUBMODULE_TOKEN }}
           submodules: recursive
-          path: backend # 백엔드 디렉토리로 경로 지정
 
       - name: Copy application.yml
         run: cp backend/src/main/resources/application.yml application.yml
