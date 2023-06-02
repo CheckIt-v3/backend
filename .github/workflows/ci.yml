@@ -43,18 +43,18 @@ jobs:
       - name: Gradle build 수행
         run: ./gradlew build -P DOCKER_ID=${{ secrets.DOCKER_ID }} -P DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -P DOCKER_IMAGE_NAME=${{ secrets.DOCKER_IMAGE_NAME }}
 
-#      - name: 테스트 결과
-#        uses: EnricoMi/publish-unit-test-result-action@v1
-#        if: always()
-#        with:
-#          files: '**/build/test-results/test/TEST-*.xml'
-
       - name: 테스트 결과
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: |
-            test-results/**/*.xml
+          files: '**/build/test-results/test/TEST-*.xml'
+
+#      - name: 테스트 결과
+#        uses: EnricoMi/publish-unit-test-result-action@v2
+#        if: always()
+#        with:
+#          files: |
+#            test-results/**/*.xml
 
       - name: JaCoCo Coverage 결과
         id: jacoco
