@@ -39,9 +39,6 @@ jobs:
       - name: Gradle 명령 실행을 위한 권한을 부여
         run: chmod +x gradlew
 
-#      - name: mysql 서버 시작
-#        run: mysql.server start
-
       - name: Gradle build 수행
         run: ./gradlew build -P DOCKER_ID=${{ secrets.DOCKER_ID }} -P DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -P DOCKER_IMAGE_NAME=${{ secrets.DOCKER_IMAGE_NAME }}
 
@@ -50,13 +47,6 @@ jobs:
         if: always()
         with:
           files: '**/build/test-results/test/TEST-*.xml'
-
-#      - name: 테스트 결과
-#        uses: EnricoMi/publish-unit-test-result-action@v2
-#        if: always()
-#        with:
-#          files: |
-#            test-results/**/*.xml
 
       - name: JaCoCo Coverage 결과
         id: jacoco
