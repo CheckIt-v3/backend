@@ -11,7 +11,7 @@ public class BookFixtures {
                     .coverImageUrl("http://image.yes24.com/goods/117014613/XL")
                     .height(224)
                     .width(153)
-                    .thickness(40)
+                    .pages(400)
                     .publisher("데이원")
                     .build();
     public static final BookRes TEST_BOOK2 =
@@ -21,7 +21,7 @@ public class BookFixtures {
                     .coverImageUrl("https://image.yes24.com/goods/117188090/XL")
                     .height(210)
                     .width(145)
-                    .thickness(17)
+                    .pages(170)
                     .publisher("어웨이크북스")
                     .build();
     public static final Book TEST_BOOK_ENT =
