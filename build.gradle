@@ -80,6 +80,7 @@ jacocoTestReport {
 							"**/entity/",
 							"**/*StatusNotFoundException*",
 							"**/*User*",
+							"**/config",
 					] + Qdomains)
 				})
 		)
@@ -96,9 +97,20 @@ jacocoTestCoverageVerification {
 			limit {
 				counter = 'LINE'
 				value = 'COVEREDRATIO'
-//				minimum = 0.30
+				minimum = 0.40
 			}
+			excludes = [
+					"*.*Application*",
+					"*.*Mapper*",
+					"*.entity.*",
+					"*.reading.exception.StatusNotFoundException*",
+					"*.user.*",
+					"*.global.config.*",
+					"*.global.error.ErrorResponse*",
+					"*.global.error.GlobalExceptionHandler",
+			]
 		}
+
 	}
 }
 
@@ -113,5 +125,14 @@ tasks.named('test') {
 	finalizedBy 'jacocoTestCoverageVerification'
 }
 
-
+tasks.named("bootBuildImage") { // ./gradlew bootBuildImage 시 docker hub로 배포
+	imageName = project.USERNAME + "/" + "checkitbackendonly"
+	publish = true
+	docker {
+		publishRegistry {
+			username = project.USERNAME
+			password = project.DOCKER_PASSWORD
+		}
+	}
+}
 
