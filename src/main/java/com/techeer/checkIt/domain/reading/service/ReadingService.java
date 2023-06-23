@@ -81,7 +81,7 @@ public class ReadingService {
 
     public double findReadingByUserAndBook(User user, Book book) {
         Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
-        double percentage = Math.round(reading.getLastPage() / (double) (book.getPages() / 100) * 100.0) / 100.0;
+        double percentage = Math.round((double) reading.getLastPage() / book.getPages() * 100 * 100.0) / 100.0;
         return percentage;
     }
 
