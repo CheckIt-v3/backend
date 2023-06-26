@@ -25,6 +25,7 @@ public enum ErrorCode {
     READING_STATUS_NOT_FOUND_ERROR(400,"R002","상태가 올바르지 않음"),
     PAGE_VALIDATION_NEGATIVE_VALUE(400, "R003", "입력한 값이 작아 음수가 반횐됨"),
     PAGE_VALIDATION_OUT_OF_PAGE(400 ,"R004", "책의 페이지 범위를 벗어남"),
+    READING_DUPLICATED_ERROR(400 ,"R005", "이미 등록된 책"),
 
     // ReadingVolume 도메인
     READING_VOLUME_NOT_FOUND_ERROR(400, "RV001", "독서추세를 찾을 수 없음"),

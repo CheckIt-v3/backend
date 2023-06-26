@@ -10,6 +10,7 @@ import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVo
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.exception.PageValidationException;
+import com.techeer.checkIt.domain.reading.exception.ReadingDuplicatedException;
 import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
 import com.techeer.checkIt.domain.reading.exception.ReadingNotFoundException;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
@@ -36,12 +37,16 @@ public class ReadingService {
 
     public int registerReading(User user, Book book, CreateReadingReq createRequest){
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
-        int lastPage = 0; // status가 UNREAD라면 lastPage가 0으로 들어감, 즉 UNREAD 조건 불필요
-        if(status == ReadingStatus.READING) lastPage = createRequest.getLastPage();
-        else if(status == ReadingStatus.READ) lastPage = book.getPages();
-        Reading reading = readingMapper.toEntity(user, book, lastPage, status);
-        readingRepository.save(reading);
-        return lastPage;
+        boolean flag = readingRepository.existsByUserAndBook(user, book);   // 등록된 책이 이미 있는지 판단
+        if (!flag) {
+            int lastPage = 0;
+            if(status == ReadingStatus.READING) lastPage = createRequest.getLastPage();
+            else if(status == ReadingStatus.READ) lastPage = book.getPages();
+            Reading reading = readingMapper.toEntity(user, book, lastPage, status);
+            readingRepository.save(reading);
+        }
+        else
+            throw  new ReadingDuplicatedException();
     }
 
     public List<BookRes> findReadingByStatus(Long userId, ReadingStatus status) {
@@ -64,9 +69,9 @@ public class ReadingService {
     public UpdateReadingAndReadingVolumeRes updateReadingAndReadingVolume(User user, Book book, UpdateReadingAndReadingVolumeReq updateRequest) {
         ReadingVolume readingVolume = readingVolumeMapper.toEmptyEntity();
         LocalDate date = LocalDate.now();
-        Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
-        int nPage = pageValidation(updateRequest,reading,book); // 페이지 유효값 확인
-        if(readingVolumeService.existsUserAndDate(user,date)) { // 오늘 데이터가 있다면
+        Reading reading = readingRepository.findByUserAndBook(user, book).orElseThrow(ReadingNotFoundException::new);
+        int nPage = pageValidation(updateRequest, reading, book); // 페이지 유효값 확인
+        if(readingVolumeService.existsUserAndDate(user, date)) { // 오늘 데이터가 있다면
             readingVolume = readingVolumeService.findReadingVolumeByUserAndDate(user, date);
             readingVolume.sumTodayPages(nPage); // 오늘 데이터에 더하기
         }
@@ -75,9 +80,8 @@ public class ReadingService {
         }
         reading.updateStatus(ReadingStatus.READING);
         reading.updateLastPage(updateRequest.getLastPage()); // reading의 lastpages 갱신
-        UpdateReadingAndReadingVolumeRes updateReadingAndReadingVolumeRes = readingMapper
-                .toUpdateReadingAndReadingVolumeResDto(reading,readingVolume);
-        return updateReadingAndReadingVolumeRes;
+        return readingMapper
+                .toUpdateReadingAndReadingVolumeResDto(reading, readingVolume);
     }
 
     public UpdateLastPageAndPercentageRes findReadingByUserAndBook(User user, Book book) {
