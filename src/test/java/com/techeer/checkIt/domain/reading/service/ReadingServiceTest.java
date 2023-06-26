@@ -2,9 +2,11 @@ package com.techeer.checkIt.domain.reading.service;
 
 
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
+import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.exception.PageValidationException;
+import com.techeer.checkIt.domain.reading.exception.ReadingDuplicatedException;
 import com.techeer.checkIt.domain.reading.exception.ReadingNotFoundException;
 import com.techeer.checkIt.domain.reading.mapper.ReadingMapper;
 import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
@@ -55,14 +57,27 @@ class ReadingServiceTest{
     private ReadingVolumeMapper readingVolumeMapper;
 
     @Test
-    @DisplayName("user와 book을 입력받아 전체의 몇 퍼센트를 읽었는지 알려준다.")
+    @DisplayName("마지막 페이지 가져오기 및 퍼센트 계산")
     void findReadingByUserAndBook() {
         when(readingRepository.findByUserAndBook(any(), any())).thenReturn(Optional.of(TEST_READING));
 
-        double percentage = readingService.findReadingByUserAndBook(TEST_USER, TEST_BOOK_ENT);
-        double newPercentage = Math.round(TEST_READING.getLastPage() / (double) (TEST_BOOK_ENT.getPages() / 100) * 100.0) / 100.0;
+        double percentage = readingService.calcPercentage(TEST_READING.getLastPage(), TEST_BOOK_ENT.getPages());
+
+        UpdateLastPageAndPercentageRes updateLastPageAndPercentageRes = readingMapper
+                .toUpdateLastPageAndPercentageResDto(TEST_READING, percentage);
+
+        UpdateLastPageAndPercentageRes newUpdateLastPageAndPercentageRes = readingService.findReadingByUserAndBook(TEST_USER, TEST_BOOK_ENT);
+
+        assertEquals(updateLastPageAndPercentageRes, newUpdateLastPageAndPercentageRes);
+    }
+
+    @Test
+    @DisplayName("reading의 lastPage와 book의 pages을 입력받아 전체의 몇 퍼센트를 읽었는지 알려준다.")
+    void calcPercentage() {
+        double percentage = readingService.calcPercentage(TEST_READING.getLastPage(), TEST_BOOK_ENT.getPages());
+        double newPercentage = Math.round((double) TEST_READING.getLastPage() / TEST_BOOK_ENT.getPages() * 100 * 100.0) / 100.0;
         assertEquals(
-        percentage, newPercentage);
+                percentage, newPercentage);
     }
 
     @Test
@@ -148,6 +163,18 @@ class ReadingServiceTest{
         assertEquals(TEST_READING_REQ.getLastPage(), reading);
         assertEquals(TEST_BOOK_ENT.getPages(), read);
         assertEquals(0, unread);
+    }
+
+    @Test
+    @DisplayName("reading 저장, 중복 확인")
+    void registerReadingReadingDuplicate() {
+        given(readingRepository.existsByUserAndBook(any(), any())).willReturn(true);
+
+        ReadingDuplicatedException readingDuplicatedException = assertThrows(ReadingDuplicatedException.class, () -> {
+            readingService.registerReading(TEST_USER, TEST_BOOK_ENT, TEST_READING_REQ);
+        });
+        assertEquals(ErrorCode.READING_DUPLICATED_ERROR, readingDuplicatedException.getErrorCode());
+
     }
 
     @Test

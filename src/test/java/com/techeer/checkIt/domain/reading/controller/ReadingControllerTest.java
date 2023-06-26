@@ -71,7 +71,7 @@ public class ReadingControllerTest {
                         .build();
         user = userService.findUserById(1L);
         book = bookService.findById(1L);
-        percentage = readingService.findReadingByUserAndBook(user, book);
+        percentage = readingService.calcPercentage(TEST_READING.getLastPage(), TEST_BOOK_ENT.getPages());
     }
     private String toJsonString(Object object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
