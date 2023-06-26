@@ -44,6 +44,7 @@ public class ReadingService {
             else if(status == ReadingStatus.READ) lastPage = book.getPages();
             Reading reading = readingMapper.toEntity(user, book, lastPage, status);
             readingRepository.save(reading);
+            return lastPage;
         }
         else
             throw  new ReadingDuplicatedException();
