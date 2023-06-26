@@ -5,6 +5,7 @@ import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
+import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
@@ -79,10 +80,12 @@ public class ReadingService {
         return updateReadingAndReadingVolumeRes;
     }
 
-    public double findReadingByUserAndBook(User user, Book book) {
+    public UpdateLastPageAndPercentageRes findReadingByUserAndBook(User user, Book book) {
         Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
         double percentage = Math.round((double) reading.getLastPage() / book.getPages() * 100 * 100.0) / 100.0;
-        return percentage;
+        UpdateLastPageAndPercentageRes updateLastPageAndPercentageRes = readingMapper
+                .toUpdateLastPageAndPercentageResDto(reading, percentage);
+        return updateLastPageAndPercentageRes;
     }
 
     /**
