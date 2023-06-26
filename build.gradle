@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.9'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'com.google.cloud.tools.jib' version '3.2.1'
+	id 'jacoco'
 }
 
 group = 'com.techeer'
@@ -51,6 +52,87 @@ jib {
 	}
 }
 
+jacoco {
+	toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled true
+		html.enabled true
+
+		xml.destination file("${buildDir}/jacoco/index.xml")
+		csv.destination file("${buildDir}/jacoco/index.csv")
+		html.destination file("${buildDir}/jacoco/index.html")
+	}
+	def Qdomains = []
+	for (qPattern in '**/QA'..'**/QZ') {
+		Qdomains.add(qPattern + '*')
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(
+				files(classDirectories.files.collect {
+					fileTree(dir: it, excludes: [
+							"**/*Application*",
+							"**/*Mapper*",
+							"**/entity/",
+							"**/*StatusNotFoundException*",
+							"**/*User*",
+							"**/config",
+					] + Qdomains)
+				})
+		)
+	}
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = true
+			element = 'CLASS'
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.40
+			}
+			excludes = [
+					"*.*Application*",
+					"*.*Mapper*",
+					"*.entity.*",
+					"*.reading.exception.StatusNotFoundException*",
+					"*.user.*",
+					"*.global.config.*",
+					"*.global.error.ErrorResponse*",
+					"*.global.error.GlobalExceptionHandler",
+			]
+		}
+
+	}
+}
+
+
+test {
+	finalizedBy 'jacocoTestReport'
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'
+	finalizedBy 'jacocoTestCoverageVerification'
 }
+
+tasks.named("bootBuildImage") { // ./gradlew bootBuildImage 시 docker hub로 배포
+	imageName = project.USERNAME + "/" + "checkitbackendonly"
+	publish = true
+	docker {
+		publishRegistry {
+			username = project.USERNAME
+			password = project.DOCKER_PASSWORD
+		}
+	}
+}
+

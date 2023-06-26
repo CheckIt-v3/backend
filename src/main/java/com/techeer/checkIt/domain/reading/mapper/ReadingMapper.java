@@ -3,6 +3,7 @@ package com.techeer.checkIt.domain.reading.mapper;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 
+import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
@@ -33,17 +34,24 @@ public class ReadingMapper {
                 .coverImageUrl(reading.getBook().getCoverImageUrl())
                 .height(reading.getBook().getHeight())
                 .width(reading.getBook().getWidth())
-                .thickness(reading.getBook().getThickness())
+                .pages(reading.getBook().getPages())
                 .build();
     }
     public List<BookRes> toDtoList(List<Reading> readings) {
         return readings.stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    public UpdateReadingAndReadingVolumeRes toUpdateReadingAndReadingVolumeResDto(Reading reading,ReadingVolume readingVolume){
+    public UpdateReadingAndReadingVolumeRes toUpdateReadingAndReadingVolumeResDto(Reading reading, ReadingVolume readingVolume){
         return UpdateReadingAndReadingVolumeRes.builder()
                 .pages(readingVolume.getTodayPages())
                 .lastPage(reading.getLastPage())
+                .build();
+    }
+
+    public UpdateLastPageAndPercentageRes toUpdateLastPageAndPercentageResDto(Reading reading, double percentage) {
+        return UpdateLastPageAndPercentageRes.builder()
+                .lastPage(reading.getLastPage())
+                .percentage(percentage)
                 .build();
     }
  }

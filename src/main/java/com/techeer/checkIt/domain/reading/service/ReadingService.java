@@ -5,6 +5,7 @@ import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
+import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
@@ -34,7 +35,7 @@ public class ReadingService {
     private final ReadingVolumeService readingVolumeService;
     private final ReadingVolumeMapper readingVolumeMapper;
 
-    public void registerReading(User user, Book book, CreateReadingReq createRequest){
+    public int registerReading(User user, Book book, CreateReadingReq createRequest){
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
         boolean flag = readingRepository.existsByUserAndBook(user, book);   // 등록된 책이 이미 있는지 판단
         if (!flag) {
@@ -83,9 +84,12 @@ public class ReadingService {
                 .toUpdateReadingAndReadingVolumeResDto(reading, readingVolume);
     }
 
-    public double findReadingByUserAndBook(User user, Book book) {
+    public UpdateLastPageAndPercentageRes findReadingByUserAndBook(User user, Book book) {
         Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
-        return Math.round(reading.getLastPage() / (double) (book.getPages() / 100) * 100.0) / 100.0;
+        double percentage = Math.round((double) reading.getLastPage() / book.getPages() * 100 * 100.0) / 100.0;
+        UpdateLastPageAndPercentageRes updateLastPageAndPercentageRes = readingMapper
+                .toUpdateLastPageAndPercentageResDto(reading, percentage);
+        return updateLastPageAndPercentageRes;
     }
 
     /**

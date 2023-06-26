@@ -4,13 +4,12 @@ import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
+import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
-import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.service.ReadingService;
-import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultCode;
@@ -74,7 +73,7 @@ public class ReadingController {
     public ResponseEntity<ResultResponse> getPercentage(@PathVariable Long uid, @RequestParam(defaultValue = "") Long bid) {
         User user = userService.findUserById(uid);
         Book book = bookService.findById(bid);
-        double percentage = readingService.findReadingByUserAndBook(user, book);
-        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_PERCENTAGE_SUCCESS,percentage));
+        UpdateLastPageAndPercentageRes updateLastPageAndPercentageRes = readingService.findReadingByUserAndBook(user, book);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_PERCENTAGE_SUCCESS, updateLastPageAndPercentageRes));
     }
 }

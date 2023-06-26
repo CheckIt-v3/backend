@@ -17,5 +17,5 @@ public class BookRes {
     private String coverImageUrl;
     private int height;
     private int width;
-    private int thickness;
+    private int pages;
 }

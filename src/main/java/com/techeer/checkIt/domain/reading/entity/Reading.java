@@ -37,7 +37,6 @@ public class Reading extends BaseEntity {
         this.lastPage = lastPage;
         this.status = status;
     }
-
     public void updateStatus(ReadingStatus status) {
         this.status = status;
     }
