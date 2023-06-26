@@ -3,6 +3,7 @@ package com.techeer.checkIt.domain.reading.mapper;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 
+import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
@@ -44,6 +45,13 @@ public class ReadingMapper {
         return UpdateReadingAndReadingVolumeRes.builder()
                 .pages(readingVolume.getTodayPages())
                 .lastPage(reading.getLastPage())
+                .build();
+    }
+
+    public UpdateLastPageAndPercentageRes toUpdateLastPageAndPercentageResDto(Reading reading, double percentage) {
+        return UpdateLastPageAndPercentageRes.builder()
+                .lastPage(reading.getLastPage())
+                .percentage(percentage)
                 .build();
     }
  }
