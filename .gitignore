@@ -38,3 +38,7 @@ out/
 .DS_Store
 
 gradle.properties
+.env
+data
+elasticsearch
+mongodb
