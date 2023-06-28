@@ -87,7 +87,7 @@ public class ReadingService {
 
     public UpdateLastPageAndPercentageRes findReadingByUserAndBook(User user, Book book) {
         Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
-        double percentage = Math.round((double) reading.getLastPage() / book.getPages() * 100 * 100.0) / 100.0;
+        double percentage = calcPercentage(reading.getLastPage(), book.getPages());
         UpdateLastPageAndPercentageRes updateLastPageAndPercentageRes = readingMapper
                 .toUpdateLastPageAndPercentageResDto(reading, percentage);
         return updateLastPageAndPercentageRes;
@@ -109,5 +109,9 @@ public class ReadingService {
             throw new PageValidationException(flag);
         }
         return result;
+    }
+
+    public double calcPercentage(int readPage, int lastPage) {
+        return Math.round((double) readPage / lastPage * 100 * 100.0) / 100.0;
     }
 }

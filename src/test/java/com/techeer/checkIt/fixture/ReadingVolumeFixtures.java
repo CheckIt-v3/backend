@@ -1,6 +1,7 @@
 package com.techeer.checkIt.fixture;
 
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
+import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.readingVolume.dto.response.SearchReadingVolumesRes;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
@@ -10,8 +11,11 @@ import java.time.LocalDate;
 import static com.techeer.checkIt.fixture.UserFixtures.TEST_USER;
 
 public class ReadingVolumeFixtures {
-    public static final double TEST_READINGVOLUME =
-            10.0;
+    public static final UpdateLastPageAndPercentageRes TEST_READINGVOLUME = UpdateLastPageAndPercentageRes.builder()
+            .percentage(11.0)
+            .lastPage(81)
+            .build();
+
     public static final double TEST_READINGVOLUME2 =
             15.0;
 
