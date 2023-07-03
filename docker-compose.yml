@@ -1,0 +1,92 @@
+version: "3"
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./data:/var/lib/mysql
+    command:
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
+    ports:
+      - "3307:3306"
+    networks:
+      - default_bridge
+
+  backend:
+    container_name: backend
+    image: ${SPRING_BOOT_IMAGE}
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: ${MYSQL_URL}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - mysql
+    networks:
+      default_bridge:
+        ipv4_address: 172.16.1.5
+
+  elasticsearch:
+    restart: always
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - ES_JAVA_OPTS=-Xms2048m -Xmx2048m
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    networks:
+      - default_bridge
+
+  kibana:
+    restart: always
+    image: docker.elastic.co/kibana/kibana:8.8.1
+    expose:
+      - 5601
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    environment:
+      - SERVER_PORT=5601
+      - SERVER_NAME=kibana.example.org
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - default_bridge
+
+  monstache:
+    restart: always
+    image: rwynn/monstache:rel6
+    command: -f ./config.toml &
+    volumes:
+      - ./config/config.toml:/config.toml
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    ports:
+      - "8081:8081"
+    networks:
+      - default_bridge
+
+networks:
+  default_bridge:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.1.0/24

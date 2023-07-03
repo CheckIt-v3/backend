@@ -1,0 +1,28 @@
+mongo-url = "MongoDB Atlas 주소"
+elasticsearch-urls = ["http://elasticsearch:9200"]
+direct-read-namespaces = ["database_name.collection_name"]
+dropped-collections = false
+dropped-databases = false
+elasticsearch-max-conns = 4
+elasticsearch-max-seconds = 5
+elasticsearch-max-bytes = 800000
+verbose = true
+namespace-regex = "^database_name"
+
+[[mapping]]
+namespace = "database_name.collection_name"
+index = "book"
+
+[[script]]    # ES index명 설정
+namespace = "database_name.collection_name"
+script = """
+module.exports = function(doc) {
+    var newdoc = {
+        title : doc.title,
+        author : doc.author,
+        publisher : doc.publisher,
+        category : doc.category,
+    }
+    return newdoc;
+}
+"""
