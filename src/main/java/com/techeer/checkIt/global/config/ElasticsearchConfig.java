@@ -1,7 +1,6 @@
 package com.techeer.checkIt.global.config;
 
 import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
-import com.techeer.checkIt.domain.book.repository.BookSearchRepository;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
