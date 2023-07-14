@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.book.controller;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
+import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,8 +21,8 @@ public class BookController {
 
     @ApiOperation(value = "책 검색 API")
     @GetMapping("/search")
-    public ResponseEntity<List<BookRes>> searchTitle(@RequestParam(defaultValue = "") String title) {
-        List<BookRes> bookList = bookService.findBookByTitle(title);
+    public ResponseEntity<List<BookSearchRes>> searchTitle(@RequestParam(defaultValue = "") String title) {
+        List<BookSearchRes> bookList = bookService.findBookByTitle(title);
         return ResponseEntity.ok(bookList);
     }
 
