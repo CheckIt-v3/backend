@@ -22,6 +22,8 @@ module.exports = function(doc) {
         author : doc.author,
         publisher : doc.publisher,
         category : doc.category,
+        coverImageUrl : doc.coverImageUrl,
+        pages : doc.pages,
     }
     return newdoc;
 }
