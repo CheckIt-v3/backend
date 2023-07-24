@@ -1,7 +1,9 @@
 package com.techeer.checkIt.fixture;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
+import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.book.entity.BookDocument;
 
 public class BookFixtures {
     public static final BookRes TEST_BOOK =
@@ -23,6 +25,26 @@ public class BookFixtures {
                     .width(145)
                     .pages(170)
                     .publisher("어웨이크북스")
+                    .build();
+    public static final BookSearchRes TEST_BOOK_SEARCH =
+            BookSearchRes.builder()
+                    .author("세이노")
+                    .title("세이노의 가르침")
+                    .coverImageUrl("https://image.yes24.com/goods/117014613/XL")
+                    .publisher("데이원")
+                    .pages(736)
+                    .category("국내도서 > 자기계발 > 처세술/삶의 자세\n" +
+                            "국내도서 > 자기계발 > 성공학/경력관리")
+                    .build();
+    public static final BookDocument TEST_BOOK_DOCUMENT =
+            BookDocument.builder()
+                    .author("세이노")
+                    .title("세이노의 가르침")
+                    .coverImageUrl("https://image.yes24.com/goods/117014613/XL")
+                    .publisher("데이원")
+                    .pages(736)
+                    .category("국내도서 > 자기계발 > 처세술/삶의 자세\n" +
+                            "국내도서 > 자기계발 > 성공학/경력관리")
                     .build();
     public static final Book TEST_BOOK_ENT =
             Book.builder()
