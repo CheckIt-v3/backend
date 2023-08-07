@@ -4,6 +4,7 @@ import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -51,5 +52,9 @@ public class User extends BaseEntity {
 
     public void inActive() {
         this.isActive = false;
+    }
+
+    public void setEncryptedPassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
     }
 }

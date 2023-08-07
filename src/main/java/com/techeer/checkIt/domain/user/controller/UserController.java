@@ -1,10 +1,18 @@
 package com.techeer.checkIt.domain.user.controller;
 
+import com.techeer.checkIt.domain.user.dto.request.UserJoinReq;
+import com.techeer.checkIt.domain.user.exception.UserDuplicatedException;
+import com.techeer.checkIt.domain.user.mapper.UserMapper;
 import com.techeer.checkIt.domain.user.service.UserService;
+import com.techeer.checkIt.global.result.ResultCode;
+import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import static com.techeer.checkIt.global.result.ResultCode.*;
 
 @Api(tags = "회원 API")
 @RestController
@@ -12,9 +20,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    @PostMapping
-    public void signup() {
-        userService.join();
+    @PostMapping("/join")
+    public ResponseEntity<ResultResponse> join(
+            @RequestBody @Valid UserJoinReq userJoinReq) {
+        if (userService.isDuplicatedUsername(userJoinReq.getUsername())) {
+            throw new UserDuplicatedException();
+        }
+        userService.join(userJoinReq);
+        return ResponseEntity.ok(ResultResponse.of(USER_REGISTRATION_SUCCESS));
+    }
+
+    @GetMapping("/duplicated/{username}")
+    public ResponseEntity<ResultResponse> isDuplicatedUsername(@PathVariable String username) {
+        boolean isDuplicated = userService.isDuplicatedUsername(username);
+
+        if (isDuplicated) {
+            return ResponseEntity.ok(ResultResponse.of(ResultCode.USER_USERNAME_DUPLICATED, true));
+        }
+        return ResponseEntity.ok(ResultResponse.of(USER_USERNAME_NOT_DUPLICATED, false));
     }
 }
