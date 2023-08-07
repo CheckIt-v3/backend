@@ -27,8 +27,8 @@ public class SecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/api/users/login").permitAll() // 회원가입, 로그인 API는 인증 없이 허용
-            .antMatchers("/api/users/join").permitAll()
+            .antMatchers("/api/v1/users/login").permitAll() // 회원가입, 로그인 API는 인증 없이 허용
+            .antMatchers("/api/v1/users/join").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
