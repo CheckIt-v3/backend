@@ -1,9 +1,12 @@
 package com.techeer.checkIt.domain.user.controller;
 
 import com.techeer.checkIt.domain.user.dto.request.UserJoinReq;
+import com.techeer.checkIt.domain.user.dto.request.UserLoginReq;
 import com.techeer.checkIt.domain.user.exception.UserDuplicatedException;
 import com.techeer.checkIt.domain.user.mapper.UserMapper;
+import com.techeer.checkIt.domain.user.service.LoginService;
 import com.techeer.checkIt.domain.user.service.UserService;
+import com.techeer.checkIt.global.jwt.JwtToken;
 import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
@@ -21,6 +24,7 @@ import static com.techeer.checkIt.global.result.ResultCode.*;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final LoginService loginService;
 
     @PostMapping("/join")
     public ResponseEntity<ResultResponse> join(
@@ -40,5 +44,10 @@ public class UserController {
             return ResponseEntity.ok(ResultResponse.of(ResultCode.USER_USERNAME_DUPLICATED, true));
         }
         return ResponseEntity.ok(ResultResponse.of(USER_USERNAME_NOT_DUPLICATED, false));
+    }
+    @PostMapping("/login")
+    public ResponseEntity<ResultResponse> login(@RequestBody UserLoginReq userLoginReq) {
+        JwtToken token = loginService.login(userLoginReq.getUsername(), userLoginReq.getPassword());
+        return ResponseEntity.ok(ResultResponse.of(USER_LOGIN_SUCCESS, token));
     }
 }
