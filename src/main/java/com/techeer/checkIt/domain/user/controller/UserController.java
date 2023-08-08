@@ -45,9 +45,16 @@ public class UserController {
         }
         return ResponseEntity.ok(ResultResponse.of(USER_USERNAME_NOT_DUPLICATED, false));
     }
+
     @PostMapping("/login")
     public ResponseEntity<ResultResponse> login(@RequestBody UserLoginReq userLoginReq) {
         JwtToken token = loginService.login(userLoginReq.getUsername(), userLoginReq.getPassword());
         return ResponseEntity.ok(ResultResponse.of(USER_LOGIN_SUCCESS, token));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ResultResponse> logout(@RequestBody JwtToken token) {
+        loginService.logout(token);
+        return ResponseEntity.ok(ResultResponse.of(USER_LOGOUT_SUCCESS));
     }
 }
