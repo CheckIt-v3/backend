@@ -23,6 +23,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.data:spring-data-elasticsearch:4.4.0'
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	compileOnly 'org.projectlombok:lombok'
@@ -81,6 +82,7 @@ jacocoTestReport {
 							"**/*StatusNotFoundException*",
 							"**/*User*",
 							"**/config",
+							"**/org/elasticsearch/**" // Elasticsearch 관련 클래스 제외
 					] + Qdomains)
 				})
 		)
@@ -135,4 +137,3 @@ tasks.named("bootBuildImage") { // ./gradlew bootBuildImage 시 docker hub로 �
 		}
 	}
 }
-
