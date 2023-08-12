@@ -1,11 +1,9 @@
 package com.techeer.checkIt.global.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +19,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -46,11 +45,11 @@ public class JwtTokenProvider {
 
         // Access Token 생성
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim("auth", authorities)
+                .setSubject(authentication.getName())                            // payload "sub" "name"
+                .claim("auth", authorities)                               // payload "auth" : "ROLE_USER"
                 .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + accessTokenValidTime)) // 토큰 만기
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(new Date(now.getTime() + accessTokenValidTime))  // payload "exp" : 만료기간
+                .signWith(key, SignatureAlgorithm.HS256)                        // header "alg": "HS256"
                 .compact();
 
         // Refresh Token 생성
@@ -63,6 +62,7 @@ public class JwtTokenProvider {
                 .grantType("Bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .refreshTokenExpirationTime(refreshTokenValidTime)
                 .build();
     }
 
@@ -81,8 +81,8 @@ public class JwtTokenProvider {
                         .collect(Collectors.toList());
 
         //UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails userDetails = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     // 복호화
@@ -99,9 +99,16 @@ public class JwtTokenProvider {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (Exception e) {
-            return false;
+        } catch (io.jsonwebtoken.security.SignatureException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
         }
+        return false;
     }
 
     // 만료

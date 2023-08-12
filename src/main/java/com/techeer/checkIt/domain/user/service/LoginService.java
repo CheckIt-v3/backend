@@ -1,7 +1,7 @@
 package com.techeer.checkIt.domain.user.service;
 
 import com.techeer.checkIt.domain.user.entity.User;
-import com.techeer.checkIt.domain.user.exception.UnAuthorizedAccessException;
+import com.techeer.checkIt.domain.user.exception.InValidPasswordException;
 import com.techeer.checkIt.domain.user.exception.UserNotFoundException;
 import com.techeer.checkIt.domain.user.repository.UserRepository;
 import com.techeer.checkIt.global.jwt.JwtToken;
@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -33,7 +34,8 @@ public class LoginService {
                 .orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(password, user.getPassword())){
-            throw new UnAuthorizedAccessException();
+            throw new InValidPasswordException();
+
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -41,15 +43,32 @@ public class LoginService {
         JwtToken jwt = jwtTokenProvider.generateToken(authentication);
 
         //redis에 username을 key로 저장
-        redisTemplate.opsForValue().set("ID: " + user.getUsername(), jwt.getAccessToken(), jwtTokenProvider.getExpiration(jwt.getAccessToken()));
+        redisTemplate.opsForValue().set("ID: " + user.getUsername(), jwt.getRefreshToken(), jwt.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
         return jwt;
     }
 
     public void logout(JwtToken jwtToken) {
-        Authentication authentication = jwtTokenProvider.getAuthentication(jwtToken.getAccessToken());
-        if (redisTemplate.opsForValue().get("ID: " + authentication.getName()) != null) {
-            redisTemplate.delete("ID: " + authentication.getName()); //Token 삭제
+//        Authentication authentication = jwtTokenProvider.getAuthentication(jwtToken.getAccessToken());
+//        if (redisTemplate.opsForValue().get("ID: " + authentication.getName()) != null) {
+//            redisTemplate.delete("ID: " + authentication.getName()); //Token 삭제
+//        }
+        // 로그아웃 하고 싶은 토큰이 유효한 지 먼저 검증하기
+        if (!jwtTokenProvider.validateToken(jwtToken.getAccessToken())){
+            throw new IllegalArgumentException("로그아웃 : 유효하지 않은 토큰입니다.");
         }
+
+        // Access Token에서 User email을 가져온다
+        Authentication authentication = jwtTokenProvider.getAuthentication(jwtToken.getAccessToken());
+
+        // Redis에서 해당 User email로 저장된 Refresh Token 이 있는지 여부를 확인 후에 있을 경우 삭제를 한다.
+        if (redisTemplate.opsForValue().get("ID: "+ authentication.getName()) != null){
+            // Refresh Token을 삭제
+            redisTemplate.delete("ID: " + authentication.getName());
+        }
+
+        // 해당 Access Token 유효시간을 가지고 와서 BlackList에 저장하기
+        Long expiration = jwtTokenProvider.getExpiration(jwtToken.getAccessToken());
+        redisTemplate.opsForValue().set(jwtToken.getAccessToken(),"logout", expiration, TimeUnit.MILLISECONDS);
     }
 }

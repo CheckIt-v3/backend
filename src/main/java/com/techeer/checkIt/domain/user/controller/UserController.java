@@ -23,7 +23,6 @@ import static com.techeer.checkIt.global.result.ResultCode.*;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
-    private final UserMapper userMapper;
     private final LoginService loginService;
 
     @PostMapping("/join")
