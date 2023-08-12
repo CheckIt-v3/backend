@@ -2,8 +2,8 @@ package com.techeer.checkIt.domain.user.controller;
 
 import com.techeer.checkIt.domain.user.dto.request.UserJoinReq;
 import com.techeer.checkIt.domain.user.dto.request.UserLoginReq;
+import com.techeer.checkIt.domain.user.dto.request.UserTokenReq;
 import com.techeer.checkIt.domain.user.exception.UserDuplicatedException;
-import com.techeer.checkIt.domain.user.mapper.UserMapper;
 import com.techeer.checkIt.domain.user.service.LoginService;
 import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.jwt.JwtToken;
@@ -52,8 +52,14 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ResultResponse> logout(@RequestBody JwtToken token) {
-        loginService.logout(token);
+    public ResponseEntity<ResultResponse> logout(@RequestBody UserTokenReq userTokenReq) {
+        loginService.logout(userTokenReq);
         return ResponseEntity.ok(ResultResponse.of(USER_LOGOUT_SUCCESS));
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<ResultResponse> reissue(@RequestBody UserTokenReq userTokenReq) {
+        JwtToken newToken = loginService.reissue(userTokenReq);
+        return ResponseEntity.ok(ResultResponse.of(USER_REISSUE_SUCCESS, newToken));
     }
 }
