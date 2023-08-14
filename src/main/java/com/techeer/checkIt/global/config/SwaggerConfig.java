@@ -1,5 +1,6 @@
 package com.techeer.checkIt.global.config;
 
+import com.techeer.checkIt.domain.user.entity.UserDetail;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -16,7 +17,9 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.*;
 
-// swagger 접속 url -> http://localhost:8080/swagger-ui/index.html#/
+/* swagger 접속 url -> http://localhost:8080/swagger-ui/index.html#/
+    header 에 Bearer {accessToken}
+ */
 
 @Configuration
 @EnableWebMvc
@@ -31,8 +34,9 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
-                .securityContexts(List.of(securityContext())) // 추가
-                .securitySchemes(List.of(apiKey())) // 추가
+                .securityContexts(List.of(securityContext()))
+                .securitySchemes(List.of(apiKey()))
+                .ignoredParameterTypes(UserDetail.class)
                 .apiInfo(swaggerInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.techeer.checkIt"))
@@ -54,14 +58,12 @@ public class SwaggerConfig {
         return produces;
     }
 
-    // 추가
     private SecurityContext securityContext() {
         return SecurityContext.builder()
                 .securityReferences(defaultAuth())
                 .build();
     }
 
-    // 추가
     private List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
@@ -69,7 +71,6 @@ public class SwaggerConfig {
         return List.of(new SecurityReference("Authorization", authorizationScopes));
     }
 
-    // 추가
     private ApiKey apiKey() {
         return new ApiKey("Authorization", "Authorization", "header");
     }

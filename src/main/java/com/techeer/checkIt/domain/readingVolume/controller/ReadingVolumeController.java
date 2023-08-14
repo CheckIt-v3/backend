@@ -1,9 +1,9 @@
 package com.techeer.checkIt.domain.readingVolume.controller;
 
 import com.techeer.checkIt.domain.readingVolume.dto.response.SearchReadingVolumesRes;
-import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.readingVolume.service.ReadingVolumeService;
 import com.techeer.checkIt.domain.user.entity.User;
+import com.techeer.checkIt.domain.user.entity.UserDetail;
 import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
@@ -12,8 +12,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,9 +28,9 @@ public class ReadingVolumeController {
     private final UserService userService;
 
     @ApiOperation(value = "일주일 독서량 조회 API")
-    @GetMapping("/{uid}")
-    public ResponseEntity<ResultResponse> searchReadingVolumes(@PathVariable Long uid) {
-        User user = userService.findUserById(uid);
+    @GetMapping("")
+    public ResponseEntity<ResultResponse> searchReadingVolumes(@AuthenticationPrincipal UserDetail userDetail) {
+        User user = userService.findUserByUsername(userDetail.getUsername());
         List<SearchReadingVolumesRes> readingVolumeList = readingVolumeService.findReadingVolumesByUserAndDateBetween(user);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_READING_VOLUMES_SUCCESS,readingVolumeList));
     }
