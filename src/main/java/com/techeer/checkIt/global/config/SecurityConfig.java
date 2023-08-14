@@ -39,6 +39,7 @@ public class SecurityConfig {
             .and()
             .authorizeRequests()
             .antMatchers("/api/v1/users/**").permitAll() // 회원가입, 로그인, 로그아웃 API는 인증 없이 허용
+            .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate),

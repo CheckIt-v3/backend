@@ -23,7 +23,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -85,8 +85,11 @@ jacocoTestReport {
 							"**/*Application*",
 							"**/*Mapper*",
 							"**/entity/",
+							"**/jwt/",
+							"**/user/exception",
+							"**/user/sevcie/CustomUserDetailService",
 							"**/*StatusNotFoundException*",
-							"**/*User*",
+							"**/*Exception*",
 							"**/config",
 					] + Qdomains)
 				})
@@ -111,7 +114,9 @@ jacocoTestCoverageVerification {
 					"*.*Mapper*",
 					"*.entity.*",
 					"*.reading.exception.StatusNotFoundException*",
-					"*.user.*",
+					"*.user.exception.*",
+					"*.user.service.CustomUserDetailService*",
+					"*.global.jwt.*",
 					"*.global.config.*",
 					"*.global.error.ErrorResponse*",
 					"*.global.error.GlobalExceptionHandler",
