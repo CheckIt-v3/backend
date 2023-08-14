@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
 import javax.transaction.Transactional;
 import java.util.concurrent.TimeUnit;
 
@@ -99,4 +98,6 @@ public class LoginService {
 
         return newJwt;
     }
+
+
 }
