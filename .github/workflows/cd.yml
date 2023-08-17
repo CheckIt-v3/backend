@@ -4,6 +4,7 @@ on: # Event
     types:
       - closed
     branches: [ main, develop ]
+  workflow_dispatch:
 
 jobs: # Job
   cd: # Job 이름
@@ -50,6 +51,6 @@ jobs: # Job
           script: |
             cd Checkit
             git pull
-            sudo docker-compose -f docker-compose.prod.yml down
-            sudo docker-compose -f docker-compose.prod.yml pull
-            sudo docker-compose -f docker-compose.prod.yml up -d
+            sudo docker-compose -f docker-compose.yml down
+            sudo docker-compose -f docker-compose.yml pull
+            sudo docker-compose -f docker-compose.yml up -d
