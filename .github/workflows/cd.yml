@@ -4,6 +4,7 @@ on: # Event
     types:
       - closed
     branches: [ main, develop ]
+  workflow_dispatch:
 
 jobs: # Job
   cd: # Job 이름
