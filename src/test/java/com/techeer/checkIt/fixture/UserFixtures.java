@@ -29,7 +29,7 @@ public class UserFixtures {
 
     public static final User TEST_USER =
             User.builder()
-                    .username("test3")
+                    .username("test")
                     .password("@Test123")
                     .nickname("테스트3")
                     .role(Role.USER)
@@ -37,9 +37,9 @@ public class UserFixtures {
 
     public static final User TEST_USER2 =
             User.builder()
-                    .username("test2")
+                    .username("test3")
                     .password("@Test123")
-                    .nickname("테스트2")
+                    .nickname("테스트3")
                     .role(Role.USER)
                     .build();
 }
