@@ -1,9 +1,9 @@
-name: Django CD  # workflow 이름
+name: Checkit Backend CD  # workflow 이름
 on: # Event
   pull_request:
     types:
       - closed
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs: # Job
   cd: # Job 이름
