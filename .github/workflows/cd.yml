@@ -1,4 +1,4 @@
-name: Django CD  # workflow 이름
+name: Checkit Backend CD  # workflow 이름
 on: # Event
   pull_request:
     types:
