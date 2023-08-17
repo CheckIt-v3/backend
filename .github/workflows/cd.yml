@@ -3,7 +3,7 @@ on: # Event
   pull_request:
     types:
       - closed
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs: # Job
   cd: # Job 이름
