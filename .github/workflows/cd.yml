@@ -30,8 +30,8 @@ jobs: # Job
 
       - name : Setting application.yml
         run: |
-          echo "${{ secrets.APPLICATION_YML }}" >> /src/main/resources/security/application.yml
-          cat /src/main/resources/application.yml 
+          echo "${{ secrets.APPLICATION_YML }}" >> ./src/main/resources/security/application.yml
+          cat ./src/main/resources/application.yml 
 
       # 도커 허브 사용을 위해 도커에 로그인
       - name: Login to DockerHub
