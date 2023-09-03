@@ -28,9 +28,14 @@ jobs: # Job
           echo "${{ secrets.GRADLE_PROPERTIES }}" >> gradle.properties
           cat gradle.properties
 
+      - name: Delete base application.yml
+        run: |
+          rm ./src/main/resources/security/application.yml
+          cat ./src/main/resources/security/application.yml 
+
       - name : Setting application.yml
         run: |
-          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/security/application.yml
+          echo "${{ secrets.APPLICATION_YML }}" >> ./src/main/resources/security/application.yml
           cat ./src/main/resources/security/application.yml 
 
       # 도커 허브 사용을 위해 도커에 로그인
