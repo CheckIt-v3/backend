@@ -27,7 +27,7 @@ jobs: # Job
         run: |
           echo "${{ secrets.GRADLE_PROPERTIES }}" >> gradle.properties
           cat gradle.properties
-
+      # secrets에 base64로 인코딩 되어 있는 application을 디코딩하여 yml파일 생성
       - name : Setting application.yml
         run: |
           echo "${{ secrets.APPLICATION_YML }}" | base64 --decode >> ./src/main/resources/security/application.yml
