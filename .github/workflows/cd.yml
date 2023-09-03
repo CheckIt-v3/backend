@@ -27,11 +27,10 @@ jobs: # Job
         run: |
           echo "${{ secrets.GRADLE_PROPERTIES }}" >> gradle.properties
           cat gradle.properties
-
+      # secrets에 base64로 인코딩 되어 있는 application을 디코딩하여 yml파일 생성
       - name : Setting application.yml
         run: |
           echo "${{ secrets.APPLICATION_YML }}" | base64 --decode >> ./src/main/resources/security/application.yml
-          cat ./src/main/resources/security/application.yml 
 
       # 도커 허브 사용을 위해 도커에 로그인
       - name: Login to DockerHub
