@@ -52,13 +52,13 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ResultResponse> logout(@RequestBody UserTokenReq userTokenReq) {
+    public ResponseEntity<ResultResponse> logout(@RequestBody @Valid UserTokenReq userTokenReq) {
         loginService.logout(userTokenReq);
         return ResponseEntity.ok(ResultResponse.of(USER_LOGOUT_SUCCESS));
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<ResultResponse> reissue(@RequestBody UserTokenReq userTokenReq) {
+    public ResponseEntity<ResultResponse> reissue(@RequestBody @Valid UserTokenReq userTokenReq) {
         JwtToken newToken = loginService.reissue(userTokenReq);
         return ResponseEntity.ok(ResultResponse.of(USER_REISSUE_SUCCESS, newToken));
     }

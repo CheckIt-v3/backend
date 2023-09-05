@@ -18,10 +18,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+
 import java.nio.charset.StandardCharsets;
 
 import static com.techeer.checkIt.fixture.UserFixtures.*;
 import static com.techeer.checkIt.global.result.ResultCode.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,8 +54,10 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller) 회원가입")
     void join() throws Exception {
+        when(userService.isDuplicatedUsername("test")).thenReturn(false);
+
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/join")
-                .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(toJsonString(TEST_USER_JOIN_REQ)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(toJsonString(ResultResponse.of(USER_REGISTRATION_SUCCESS))))
@@ -99,9 +103,22 @@ class UserControllerTest {
     void logout() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/logout")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJsonString(TEST_JWT)))
+                        .content(toJsonString(TEST_TOKEN_REQ)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(toJsonString(ResultResponse.of(USER_LOGOUT_SUCCESS))))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Controller) 토큰 재발급")
+    void reissue() throws Exception {
+        when(loginService.reissue(any())).thenReturn(TEST_NEW_JWT);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/reissue")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJsonString(TEST_TOKEN_REQ)))
+                .andExpect(status().isOk())
+                .andExpect(content().string(toJsonString(ResultResponse.of(USER_REISSUE_SUCCESS, TEST_NEW_JWT))))
                 .andDo(print());
     }
 }
