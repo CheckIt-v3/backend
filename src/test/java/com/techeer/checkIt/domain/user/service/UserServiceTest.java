@@ -60,4 +60,14 @@ class UserServiceTest {
 
         assertThat(user.getNickname()).isEqualTo(TEST_USER.getNickname());
     }
+
+    @Test
+    @DisplayName("Service) username 별 사용자 조회")
+    void findUserByUsername() {
+        when(userRepository.findUserByUsername("test")).thenReturn(Optional.ofNullable(TEST_USER));
+
+        User user = userService.findUserByUsername("test");
+        
+        assertThat(user.getUsername()).isEqualTo(TEST_USER.getUsername());
+    }
 }

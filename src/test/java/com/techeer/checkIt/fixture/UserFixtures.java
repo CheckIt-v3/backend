@@ -2,6 +2,7 @@ package com.techeer.checkIt.fixture;
 
 import com.techeer.checkIt.domain.user.dto.request.UserJoinReq;
 import com.techeer.checkIt.domain.user.dto.request.UserLoginReq;
+import com.techeer.checkIt.domain.user.dto.request.UserTokenReq;
 import com.techeer.checkIt.domain.user.entity.Role;
 import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.global.jwt.JwtToken;
@@ -20,11 +21,26 @@ public class UserFixtures {
                     .password("@Test123")
                     .build();
 
+    public static final UserTokenReq TEST_TOKEN_REQ =
+            UserTokenReq.builder()
+                    .accessToken("access 토큰")
+                    .refreshToken("refresh 토큰")
+                    .build();
+
     public static final JwtToken TEST_JWT =
             JwtToken.builder()
                     .grantType("Bearer")
                     .accessToken("access 토큰")
                     .refreshToken("refresh 토큰")
+                    .refreshTokenExpirationTime(259200000)
+                    .build();
+
+    public static final JwtToken TEST_NEW_JWT =
+            JwtToken.builder()
+                    .grantType("Bearer")
+                    .accessToken("access new 토큰")
+                    .refreshToken("refresh new 토큰")
+                    .refreshTokenExpirationTime(259200000)
                     .build();
 
     public static final User TEST_USER =
