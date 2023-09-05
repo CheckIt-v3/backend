@@ -38,7 +38,7 @@ public class SecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)     // Security는 기본적으로 세션 사용하지만, jwt 사용할 것이기 때문에 STATELESS 로 설정
             .and()
             .authorizeRequests()
-            .antMatchers("/api/v1/users/**").permitAll() // 회원가입, 로그인, 로그아웃 API는 인증 없이 허용
+            .antMatchers("/api/v1/users/**", "/api/v1/books/**").permitAll() // 회원가입, 로그인, 로그아웃 API는 인증 없이 허용
             .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs").permitAll()
             .anyRequest().authenticated()
             .and()
