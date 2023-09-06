@@ -11,14 +11,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.techeer.checkIt.fixture.UserFixtures.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class LoginServiceTest {
+class AuthServiceTest {
     @InjectMocks
-    private LoginService loginService;
+    private AuthService authService;
     @Mock
     private JwtTokenProvider jwtTokenProvider;
     @Mock

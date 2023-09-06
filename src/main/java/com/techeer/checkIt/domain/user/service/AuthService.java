@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class LoginService {
+public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final PasswordEncoder passwordEncoder;

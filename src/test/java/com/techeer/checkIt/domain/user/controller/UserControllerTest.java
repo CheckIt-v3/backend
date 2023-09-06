@@ -2,7 +2,7 @@ package com.techeer.checkIt.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techeer.checkIt.domain.user.service.LoginService;
+import com.techeer.checkIt.domain.user.service.AuthService;
 import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
     @MockBean
-    private LoginService loginService;
+    private AuthService authService;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -88,7 +88,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller) 로그인")
     void login() throws Exception {
-        when(loginService.login("test", "@Test123")).thenReturn(TEST_JWT);
+        when(authService.login("test", "@Test123")).thenReturn(TEST_JWT);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +112,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller) 토큰 재발급")
     void reissue() throws Exception {
-        when(loginService.reissue(any())).thenReturn(TEST_NEW_JWT);
+        when(authService.reissue(any())).thenReturn(TEST_NEW_JWT);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/reissue")
                         .contentType(MediaType.APPLICATION_JSON)
