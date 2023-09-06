@@ -1,10 +1,13 @@
 package com.techeer.checkIt.domain.book.service;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
+import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.book.entity.BookDocument;
 import com.techeer.checkIt.domain.book.exception.BookNotFoundException;
 import com.techeer.checkIt.domain.book.mapper.BookMapper;
-import com.techeer.checkIt.domain.book.repository.BookRepository;
+import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
+import com.techeer.checkIt.domain.book.repository.BookSearchRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +32,9 @@ class BookServiceTest {
     @InjectMocks
     private BookService bookService;
     @Mock
-    private BookRepository bookRepository;
-
+    private BookJpaRepository bookJpaRepository;
+    @Mock
+    private BookSearchRepository bookSearchRepository;
     @Mock
     private BookMapper bookMapper;
 
@@ -38,14 +42,14 @@ class BookServiceTest {
     @DisplayName("Service) 책 제목으로 검색")
     void findBookByTitle() {
         // given
-        List<Book> books = new ArrayList<>();
-        books.add(TEST_BOOK_ENT); // 세이노
+        List<BookDocument> books = new ArrayList<>();
+        books.add(TEST_BOOK_DOCUMENT); // 세이노
 
-        List<BookRes> bookList = new ArrayList<>();
-        bookList.add(TEST_BOOK);
+        List<BookSearchRes> bookList = new ArrayList<>();
+        bookList.add(TEST_BOOK_SEARCH);
         String title = "세이노";
 
-        given(bookRepository.findByTitle(any())).willReturn(books);
+        given(bookSearchRepository.findByTitleContaining(any())).willReturn(books);
         when(bookMapper.toDtoList(books)).thenReturn(bookList);
 
         // when
@@ -54,7 +58,6 @@ class BookServiceTest {
 
         // then
         assertThat(bookList.size()).isEqualTo(1);
-
     }
 
     @Test
@@ -63,7 +66,7 @@ class BookServiceTest {
         // given
         BookRes bookRes = TEST_BOOK;
 
-        given(bookRepository.findByBookId(1L)).willReturn(Optional.ofNullable(TEST_BOOK_ENT));
+        given(bookJpaRepository.findByBookId(1L)).willReturn(Optional.ofNullable(TEST_BOOK_ENT));
         when(bookMapper.toDto(TEST_BOOK_ENT)).thenReturn(bookRes);
 
         // when
@@ -77,7 +80,7 @@ class BookServiceTest {
     @DisplayName("Service) id별 판별")
     void findById() {
         // given
-        given(bookRepository.findById(1L)).willReturn(Optional.ofNullable(TEST_BOOK_ENT));
+        given(bookJpaRepository.findById(1L)).willReturn(Optional.ofNullable(TEST_BOOK_ENT));
 
         // when
         Book book = bookService.findById(1L);
@@ -88,16 +91,16 @@ class BookServiceTest {
     @Test
     @DisplayName("id에 해당하는 책이 없을 경우")
     void bookNotFoundException() {
-        Mockito.lenient().when(bookRepository.findById(1L)).thenThrow(new BookNotFoundException());
-        Mockito.lenient().when(bookRepository.findByBookId(2L)).thenThrow(new BookNotFoundException());
+        Mockito.lenient().when(bookJpaRepository.findById(1L)).thenThrow(new BookNotFoundException());
+        Mockito.lenient().when(bookJpaRepository.findByBookId(2L)).thenThrow(new BookNotFoundException());
 
         assertAll(
                 () -> assertThrows(BookNotFoundException.class, () -> {
-                    bookRepository.findById(1L);
+                    bookJpaRepository.findById(1L);
                 }, "findById() 해당하는 책이 있습니다."),
 
                 () -> assertThrows(BookNotFoundException.class, () -> {
-                    bookRepository.findByBookId(2L);
+                    bookJpaRepository.findByBookId(2L);
                 }, "findByBookId() 해당하는 책이 있습니다.")
         );
     }

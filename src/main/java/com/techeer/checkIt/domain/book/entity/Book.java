@@ -33,7 +33,7 @@ public class Book extends BaseEntity {
     private int width;
     @Column(name = "thickness")
     private int thickness;
-    @Column(name = "category")
+    @Column(name = "category", length = 512)
     private String category;
     @OneToMany(mappedBy = "book")
     private List<Reading> readingList = new ArrayList<>();
