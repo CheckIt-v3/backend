@@ -28,6 +28,11 @@ public class BookService {
         return bookMapper.toDtoList(books);
     }
 
+    public List<BookRes> findBooksByTime() {
+        List<Book> newBooks = bookJpaRepository.findAllByCreatedAt();
+        return bookMapper.toBookResDtoList(newBooks);
+    }
+
     // id별 조회할 때
     public BookRes findBookById(Long id) {
         Book book = bookJpaRepository.findByBookId(id).orElseThrow(BookNotFoundException::new);

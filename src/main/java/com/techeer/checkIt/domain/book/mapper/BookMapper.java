@@ -23,6 +23,12 @@ public class BookMapper {
                 .pages(book.getPages())
                 .build();
     }
+    public List<BookRes> toBookResDtoList(List<Book> books) {
+        return books.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
     public BookSearchRes toBookSearchDto(BookDocument book) {
         return BookSearchRes.builder()
                 .title(book.getTitle())
