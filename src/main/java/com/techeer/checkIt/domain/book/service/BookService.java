@@ -1,10 +1,13 @@
 package com.techeer.checkIt.domain.book.service;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
+import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.book.entity.BookDocument;
 import com.techeer.checkIt.domain.book.mapper.BookMapper;
 import com.techeer.checkIt.domain.book.exception.BookNotFoundException;
-import com.techeer.checkIt.domain.book.repository.BookRepository;
+import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
+import com.techeer.checkIt.domain.book.repository.BookSearchRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,21 +19,22 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookService {
-    private final BookRepository bookRepository;
+    private final BookJpaRepository bookJpaRepository;
+    private final BookSearchRepository bookSearchRepository;
     private final BookMapper bookMapper;
 
-    public List<BookRes> findBookByTitle(String title) {
-        List<Book> books = bookRepository.findByTitle(title);
+    public List<BookSearchRes> findBookByTitle(String title) {
+        List<BookDocument> books = bookSearchRepository.findByTitleContaining(title);
         return bookMapper.toDtoList(books);
     }
 
     // id별 조회할 때
     public BookRes findBookById(Long id) {
-        Book book = bookRepository.findByBookId(id).orElseThrow(BookNotFoundException::new);
+        Book book = bookJpaRepository.findByBookId(id).orElseThrow(BookNotFoundException::new);
         return bookMapper.toDto(book);
     }
     // 책 판별용
     public Book findById(Long id) {
-        return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        return bookJpaRepository.findById(id).orElseThrow(BookNotFoundException::new);
     }
 }

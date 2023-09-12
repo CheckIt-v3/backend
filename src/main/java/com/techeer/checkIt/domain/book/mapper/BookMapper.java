@@ -1,7 +1,9 @@
 package com.techeer.checkIt.domain.book.mapper;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
+import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.book.entity.BookDocument;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,10 +23,19 @@ public class BookMapper {
                 .pages(book.getPages())
                 .build();
     }
-    public List<BookRes> toDtoList(List<Book> books){
+    public BookSearchRes toBookSearchDto(BookDocument book) {
+        return BookSearchRes.builder()
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .publisher(book.getPublisher())
+                .coverImageUrl(book.getCoverImageUrl())
+                .pages(book.getPages())
+                .category(book.getCategory())
+                .build();
+    }
+    public List<BookSearchRes> toDtoList(List<BookDocument> books){
         return books.stream()
-                .map(this::toDto)
+                .map(this::toBookSearchDto)
                 .collect(Collectors.toList());
     }
-
 }
