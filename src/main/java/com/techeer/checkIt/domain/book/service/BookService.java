@@ -4,13 +4,16 @@ import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.entity.BookDocument;
-import com.techeer.checkIt.domain.book.mapper.BookMapper;
 import com.techeer.checkIt.domain.book.exception.BookNotFoundException;
+import com.techeer.checkIt.domain.book.mapper.BookMapper;
 import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
 import com.techeer.checkIt.domain.book.repository.BookSearchRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,9 +31,10 @@ public class BookService {
         return bookMapper.toDtoList(books);
     }
 
-    public List<BookRes> findBooksByTime() {
-        List<Book> newBooks = bookJpaRepository.findAllByCreatedAt();
-        return bookMapper.toBookResDtoList(newBooks);
+    public Page<BookSearchRes> findBooksByTime() {
+        PageRequest pageRequest = PageRequest.of(0,10,Sort.by(Sort.Order.desc("createdAt")));
+        Page<BookDocument> newBooks = bookSearchRepository.findAll(pageRequest);
+        return bookMapper.toPageDtoList(newBooks);
     }
 
     // id별 조회할 때

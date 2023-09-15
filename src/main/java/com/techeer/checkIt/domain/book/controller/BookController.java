@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class BookController {
     @ApiOperation(value = "신규 도서 조회 API")
     @GetMapping("/news")
     public ResponseEntity<ResultResponse> searchNewBooks() {
-        List<BookRes> books = bookService.findBooksByTime();
+        Page<BookSearchRes> books = bookService.findBooksByTime();
         return ResponseEntity.ok(ResultResponse.of(GET_NEW_BOOK_SUCCESS,books));
     }
 
