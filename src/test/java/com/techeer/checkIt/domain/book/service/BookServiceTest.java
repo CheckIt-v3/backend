@@ -67,10 +67,10 @@ class BookServiceTest {
         BookRes bookRes = TEST_BOOK;
 
         given(bookJpaRepository.findByBookId(1L)).willReturn(Optional.ofNullable(TEST_BOOK_ENT));
-        when(bookMapper.toDto(TEST_BOOK_ENT)).thenReturn(bookRes);
+        when(bookMapper.toDto(TEST_BOOK_ENT, 10, true)).thenReturn(bookRes);
 
         // when
-        bookRes = bookService.findBookById(1L);
+        bookRes = bookService.findBookById(6L, 1L);
 
         // then
         assertThat(bookRes.getTitle()).isEqualTo(TEST_BOOK_ENT.getTitle());

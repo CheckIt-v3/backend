@@ -62,8 +62,8 @@ class BookControllerTest {
     @DisplayName("Controller) 책 id로 조회")
     void getBookById() throws Exception {
 
-        when(bookService.findBookById(1L)).thenReturn(TEST_BOOK);
-        when(bookService.findBookById(2L)).thenReturn(TEST_BOOK2);
+        when(bookService.findBookById(1L, 1L)).thenReturn(TEST_BOOK);
+        when(bookService.findBookById(2L, 2L)).thenReturn(TEST_BOOK2);
 
         mockMvc.perform(get("/api/v1/books/{bookId}", 1L))
                 .andExpect(status().isOk())
