@@ -43,6 +43,7 @@ public class SecurityConfig {
             .antMatchers("/api/v1/users/join", "/api/v1/users/login", "/api/v1/users/duplicated/**",
                                     "/api/v1/books/search", "/api/v1/books/like", "/api/v1/books/new").permitAll() // 회원가입, 로그인, 검색 API는 인증 없이 허용
             .antMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs").permitAll()
+            .antMatchers("/chat/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate),
