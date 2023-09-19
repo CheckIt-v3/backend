@@ -31,14 +31,14 @@ public class BookService {
     }
 
     // id별 조회할 때
-    public BookRes findBookById(Long userId, Long id) {
-        Book book = bookJpaRepository.findByBookId(id).orElseThrow(BookNotFoundException::new);
-        String redisKey = "B" + id.toString();
+    public BookRes findBookById(Long userId, Long bookId) {
+        Book book = bookJpaRepository.findByBookId(bookId).orElseThrow(BookNotFoundException::new);
+        String redisKey = "B" + bookId.toString();
         String redisUserKey = "U" + userId.toString();
         String values = (redisDao.getValues(redisKey) == null) ? redisDao.setValues(redisKey,"0") : redisDao.getValues(redisKey);
-        int views = Integer.parseInt(values);
-        boolean like_status = !redisDao.getValuesList(redisUserKey).contains(redisKey.substring(1)) ? false : true;
-        return bookMapper.toDto(book, views, like_status);
+        int likes = Integer.parseInt(values);
+        boolean likeStatus = !redisDao.getValuesList(redisUserKey).contains(redisKey.substring(1)) ? false : true;
+        return bookMapper.toDto(book, likes, likeStatus);
     }
     // 책 판별용
     public Book findById(Long id) {
@@ -50,19 +50,17 @@ public class BookService {
         String redisUserKey = "U" + userId.toString(); // 유저 key
         // redis에 없는 게시글 id가 들어올 경우 : 새롭게 데이터를 만들어주고 좋아요수를 0으로 초기화, 있는 경우 : 현제 좋아요수 반환
         String values = (redisDao.getValues(redisKey) == null) ? redisDao.setValues(redisKey,"0") : redisDao.getValues(redisKey);
-        int views = Integer.parseInt(values);
+        int likes = Integer.parseInt(values);
 
         // 유저를 key로 조회한 게시글 ID List안에 해당 게시글 ID가 포함되어있지 않는다면,
         if (!redisDao.getValuesList(redisUserKey).contains(redisKey.substring(1))) {
             redisDao.setValuesList(redisUserKey, redisKey.substring(1)); // 유저 key로 해당 글 ID를 List 형태로 저장
-            views = Integer.parseInt(values) + 1; // 좋아요 증가
-            redisDao.setValues(redisKey, String.valueOf(views)); // 글ID key로 좋아요 저장
+            likes = Integer.parseInt(values) + 1; // 좋아요 증가
+            redisDao.setValues(redisKey, String.valueOf(likes)); // 글ID key로 좋아요 저장
         } else {
             redisDao.deleteValueList(redisUserKey, redisKey.substring(1)); // 유저 key로 해당 글 ID를 List 형태에서 제거
-            views = Integer.parseInt(values) - 1; // 좋아요 감소
-            redisDao.setValues(redisKey, String.valueOf(views)); // 글ID key로 좋아요 저장
+            likes = Integer.parseInt(values) - 1; // 좋아요 감소
+            redisDao.setValues(redisKey, String.valueOf(likes)); // 글ID key로 좋아요 저장
         }
     }
-
-
 }

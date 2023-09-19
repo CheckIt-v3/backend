@@ -26,14 +26,19 @@ public class BookController {
 
     @ApiOperation(value = "책 검색 API")
     @GetMapping("/search")
-    public ResponseEntity<List<BookSearchRes>> searchTitle(@RequestParam(defaultValue = "") String title) {
+    public ResponseEntity<List<BookSearchRes>> searchTitle(
+        @RequestParam(defaultValue = "") String title
+    ) {
         List<BookSearchRes> bookList = bookService.findBookByTitle(title);
         return ResponseEntity.ok(bookList);
     }
 
     @ApiOperation(value = "책 한 권 조회 API")
     @GetMapping("{bookId}")
-    public ResponseEntity<BookRes> getBookById(@AuthenticationPrincipal UserDetail userDetail, @PathVariable Long bookId){
+    public ResponseEntity<BookRes> getBookById(
+        @AuthenticationPrincipal UserDetail userDetail,
+        @PathVariable Long bookId
+    ) {
         User user = userService.findUserByUsername(userDetail.getUsername());
         BookRes bookResponse = bookService.findBookById(user.getId(), bookId);
         return ResponseEntity.ok(bookResponse);
@@ -41,7 +46,10 @@ public class BookController {
 
     @ApiOperation(value = "책 좋아요 API")
     @GetMapping("/like/{bookId}")
-    public ResponseEntity<BookRes> updateLikeById(@AuthenticationPrincipal UserDetail userDetail, @PathVariable Long bookId){
+    public ResponseEntity<BookRes> updateLikeById(
+        @AuthenticationPrincipal UserDetail userDetail,
+        @PathVariable Long bookId
+    ) {
         User user = userService.findUserByUsername(userDetail.getUsername());
         bookService.updateLike(user.getId(), bookId);
         BookRes bookResponse = bookService.findBookById(user.getId(), bookId);
