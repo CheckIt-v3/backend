@@ -19,6 +19,10 @@ public enum ResultCode {
     USER_REISSUE_SUCCESS("U006", "토큰 재발급 성공"),
     GET_LOGIN_USER_SUCCESS("U007", "로그인 되어있는 회원 조회 성공"),
 
+    // Book
+    GET_NEW_BOOK_SUCCESS("B001","신규 도서 조회 성공"),
+
+
     // Reading
     READING_CREATE_SUCCESS("R001", "독서정보 생성 성공"),
     READING_UPDATE_SUCCESS("R002", "독서정보 갱신 성공"),
