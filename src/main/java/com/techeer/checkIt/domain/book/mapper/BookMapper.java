@@ -43,6 +43,8 @@ public class BookMapper {
     }
 
     public Page<BookSearchRes> toPageDtoList(Page<BookDocument> books) {
-        return new PageImpl<>(books.stream().map(this::toBookSearchDto).collect(Collectors.toList()));
+        return new PageImpl<>(books.stream()
+                .map(this::toBookSearchDto)
+                .collect(Collectors.toList()));
     }
 }

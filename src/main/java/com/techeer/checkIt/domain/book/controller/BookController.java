@@ -38,10 +38,10 @@ public class BookController {
     }
 
     @ApiOperation(value = "신규 도서 조회 API")
-    @GetMapping("/news")
-    public ResponseEntity<ResultResponse> searchNewBooks() {
-        Page<BookSearchRes> books = bookService.findBooksByTime();
-        return ResponseEntity.ok(ResultResponse.of(GET_NEW_BOOK_SUCCESS,books));
+    @GetMapping("/new")
+    public ResponseEntity<ResultResponse> getNewBooksList() {
+        Page<BookSearchRes> books = bookService.sortedBooksByTime();
+        return ResponseEntity.ok(ResultResponse.of(GET_NEW_BOOK_SUCCESS, books));
     }
 
 }

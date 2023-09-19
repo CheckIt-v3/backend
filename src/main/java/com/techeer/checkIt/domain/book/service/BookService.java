@@ -31,8 +31,8 @@ public class BookService {
         return bookMapper.toDtoList(books);
     }
 
-    public Page<BookSearchRes> findBooksByTime() {
-        PageRequest pageRequest = PageRequest.of(0,10,Sort.by(Sort.Order.desc("createdAt")));
+    public Page<BookSearchRes> sortedBooksByTime() {
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Order.desc("createdAt")));
         Page<BookDocument> newBooks = bookSearchRepository.findAll(pageRequest);
         return bookMapper.toPageDtoList(newBooks);
     }
