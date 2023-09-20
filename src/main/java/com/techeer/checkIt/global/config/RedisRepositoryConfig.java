@@ -32,6 +32,7 @@ public class RedisRepositoryConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;
     }
 
@@ -41,6 +42,7 @@ public class RedisRepositoryConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;
     }
 }

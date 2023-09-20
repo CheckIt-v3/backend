@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class BookMapper {
-    public BookRes toDto(Book book, int likes, boolean like_status) {
+    public BookRes toDto(Book book, int likes, boolean likeStatus) {
         return BookRes.builder()
             .id(book.getId())
             .title(book.getTitle())
@@ -24,7 +24,7 @@ public class BookMapper {
             .width(book.getWidth())
             .pages(book.getPages())
             .likes(likes)
-            .like_status(like_status)
+            .likeStatus(likeStatus)
             .build();
     }
     public BookSearchRes toBookSearchDto(BookDocument book) {

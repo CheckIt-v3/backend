@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.techeer.checkIt.global.result.ResultCode.GET_NEW_BOOK_SUCCESS;
+import static com.techeer.checkIt.global.result.ResultCode.UPDATE_BOOK_LIKE_SUCCESS;
+import static com.techeer.checkIt.global.result.ResultCode.GET_ONE_BOOK_SUCCESS;
 
 @Api(tags = "책 API")
 @RequestMapping("/api/v1/books")
@@ -37,10 +39,13 @@ public class BookController {
 
     @ApiOperation(value = "책 한 권 조회 API")
     @GetMapping("{bookId}")
-    public ResponseEntity<BookRes> getBookById(@AuthenticationPrincipal UserDetail userDetail, @PathVariable Long bookId){
+    public ResponseEntity<ResultResponse> getBookById(
+        @AuthenticationPrincipal UserDetail userDetail,
+        @PathVariable Long bookId
+    ){
         User user = userService.findUserByUsername(userDetail.getUsername());
         BookRes bookResponse = bookService.findBookById(user.getId(), bookId);
-        return ResponseEntity.ok(bookResponse);
+        return ResponseEntity.ok(ResultResponse.of(GET_ONE_BOOK_SUCCESS, bookResponse));
     }
 
     @ApiOperation(value = "신규 도서 조회 API")
@@ -52,11 +57,14 @@ public class BookController {
 
     @ApiOperation(value = "책 좋아요 API")
     @GetMapping("/like/{bookId}")
-    public ResponseEntity<BookRes> updateLikeById(@AuthenticationPrincipal UserDetail userDetail, @PathVariable Long bookId){
+    public ResponseEntity<ResultResponse> updateLikeById(
+        @AuthenticationPrincipal UserDetail userDetail,
+        @PathVariable Long bookId
+    ){
         User user = userService.findUserByUsername(userDetail.getUsername());
         bookService.updateLike(user.getId(), bookId);
         BookRes bookResponse = bookService.findBookById(user.getId(), bookId);
-        return ResponseEntity.ok(bookResponse);
+        return ResponseEntity.ok(ResultResponse.of(UPDATE_BOOK_LIKE_SUCCESS ,bookResponse));
     }
 
 }
