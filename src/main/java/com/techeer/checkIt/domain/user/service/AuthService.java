@@ -10,9 +10,13 @@ import com.techeer.checkIt.domain.user.repository.UserRepository;
 import com.techeer.checkIt.global.jwt.JwtToken;
 import com.techeer.checkIt.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,15 +28,15 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class LoginService {
+public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final AuthenticationManager authenticationManager;
 
     public JwtToken login(String username, String password) {
-        // 로그인 시  일치하면 유저 정보 가져오기
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -42,7 +46,7 @@ public class LoginService {
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
         JwtToken jwt = jwtTokenProvider.generateToken(authentication);
 
         //redis 에 username 을 key 로 저장, refresh 토큰을 value 값으로 저장

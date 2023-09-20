@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface BookJpaRepository extends JpaRepository<Book,Long> {
     @Query("select b from Book b where b.id = :id AND b.isDeleted = false")
     Optional<Book> findByBookId(@Param("id") Long id);
+
 }

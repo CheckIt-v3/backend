@@ -5,7 +5,9 @@ import com.techeer.checkIt.domain.user.dto.request.UserLoginReq;
 import com.techeer.checkIt.domain.user.dto.request.UserTokenReq;
 import com.techeer.checkIt.domain.user.entity.Role;
 import com.techeer.checkIt.domain.user.entity.User;
+import com.techeer.checkIt.domain.user.entity.UserDetail;
 import com.techeer.checkIt.global.jwt.JwtToken;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserFixtures {
     public static final UserJoinReq TEST_USER_JOIN_REQ =
@@ -17,8 +19,8 @@ public class UserFixtures {
 
     public static final UserLoginReq TEST_USER_LOGIN_REQ =
             UserLoginReq.builder()
-                    .username("test")
-                    .password("@Test123")
+                    .username("hijwt")
+                    .password("@Asdf123ㅎㅇ")
                     .build();
 
     public static final UserTokenReq TEST_TOKEN_REQ =
@@ -43,6 +45,14 @@ public class UserFixtures {
                     .refreshTokenExpirationTime(259200000)
                     .build();
 
+    public static final User TEST_LOGIN_USER =
+            User.builder()
+                    .username("hijwt")
+                    .password("@Asdf123ㅎㅇ")
+                    .nickname("jwt어려워")
+                    .role(Role.USER)
+                    .build();
+
     public static final User TEST_USER =
             User.builder()
                     .username("test")
@@ -57,5 +67,10 @@ public class UserFixtures {
                     .password("@Test123")
                     .nickname("테스트3")
                     .role(Role.USER)
+                    .build();
+
+    public static final UserDetail TEST_USER_DETAIL =
+            UserDetail.builder()
+                    .user(TEST_USER)
                     .build();
 }

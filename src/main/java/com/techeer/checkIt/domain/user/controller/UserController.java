@@ -4,7 +4,7 @@ import com.techeer.checkIt.domain.user.dto.request.UserJoinReq;
 import com.techeer.checkIt.domain.user.dto.request.UserLoginReq;
 import com.techeer.checkIt.domain.user.dto.request.UserTokenReq;
 import com.techeer.checkIt.domain.user.exception.UserDuplicatedException;
-import com.techeer.checkIt.domain.user.service.LoginService;
+import com.techeer.checkIt.domain.user.service.AuthService;
 import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.jwt.JwtToken;
 import com.techeer.checkIt.global.result.ResultCode;
@@ -23,7 +23,7 @@ import static com.techeer.checkIt.global.result.ResultCode.*;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
-    private final LoginService loginService;
+    private final AuthService authService;
 
     @PostMapping("/join")
     public ResponseEntity<ResultResponse> join(
@@ -47,19 +47,19 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<ResultResponse> login(@RequestBody UserLoginReq userLoginReq) {
-        JwtToken token = loginService.login(userLoginReq.getUsername(), userLoginReq.getPassword());
+        JwtToken token = authService.login(userLoginReq.getUsername(), userLoginReq.getPassword());
         return ResponseEntity.ok(ResultResponse.of(USER_LOGIN_SUCCESS, token));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<ResultResponse> logout(@RequestBody @Valid UserTokenReq userTokenReq) {
-        loginService.logout(userTokenReq);
+        authService.logout(userTokenReq);
         return ResponseEntity.ok(ResultResponse.of(USER_LOGOUT_SUCCESS));
     }
 
     @PostMapping("/reissue")
     public ResponseEntity<ResultResponse> reissue(@RequestBody @Valid UserTokenReq userTokenReq) {
-        JwtToken newToken = loginService.reissue(userTokenReq);
+        JwtToken newToken = authService.reissue(userTokenReq);
         return ResponseEntity.ok(ResultResponse.of(USER_REISSUE_SUCCESS, newToken));
     }
 }

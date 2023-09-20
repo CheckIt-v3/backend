@@ -7,10 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -18,7 +15,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import java.util.*;
 
 /* swagger 접속 url -> http://localhost:8080/swagger-ui/index.html#/
-    header 에 Bearer {accessToken}
+    header 에 {accessToken}
  */
 
 @Configuration
@@ -35,7 +32,7 @@ public class SwaggerConfig {
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
                 .securityContexts(List.of(securityContext()))
-                .securitySchemes(List.of(apiKey()))
+                .securitySchemes(List.of(bearerAuthSecurityScheme()))
                 .ignoredParameterTypes(UserDetail.class)
                 .apiInfo(swaggerInfo())
                 .select()
@@ -71,7 +68,5 @@ public class SwaggerConfig {
         return List.of(new SecurityReference("Authorization", authorizationScopes));
     }
 
-    private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Authorization", "header");
-    }
+    private HttpAuthenticationScheme bearerAuthSecurityScheme() { return HttpAuthenticationScheme.JWT_BEARER_BUILDER .name("Authorization").build(); }
 }
