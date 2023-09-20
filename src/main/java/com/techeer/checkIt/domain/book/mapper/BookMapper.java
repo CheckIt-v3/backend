@@ -13,19 +13,20 @@ import java.util.stream.Collectors;
 
 @Component
 public class BookMapper {
-    public BookRes toDto(Book book) {
+    public BookRes toDto(Book book, int likes, boolean like_status) {
         return BookRes.builder()
-                .id(book.getId())
-                .title(book.getTitle())
-                .author(book.getAuthor())
-                .publisher(book.getPublisher())
-                .coverImageUrl(book.getCoverImageUrl())
-                .height(book.getHeight())
-                .width(book.getWidth())
-                .pages(book.getPages())
-                .build();
+            .id(book.getId())
+            .title(book.getTitle())
+            .author(book.getAuthor())
+            .publisher(book.getPublisher())
+            .coverImageUrl(book.getCoverImageUrl())
+            .height(book.getHeight())
+            .width(book.getWidth())
+            .pages(book.getPages())
+            .likes(likes)
+            .like_status(like_status)
+            .build();
     }
-
     public BookSearchRes toBookSearchDto(BookDocument book) {
         return BookSearchRes.builder()
                 .title(book.getTitle())
@@ -41,7 +42,6 @@ public class BookMapper {
                 .map(this::toBookSearchDto)
                 .collect(Collectors.toList());
     }
-
     public Page<BookSearchRes> toPageDtoList(Page<BookDocument> books) {
         return new PageImpl<>(books.stream()
                 .map(this::toBookSearchDto)
