@@ -19,5 +19,5 @@ public class BookRes {
     private int width;
     private int pages;
     private int likes;
-    private boolean likeStatus;
+    private boolean like_status;
 }
