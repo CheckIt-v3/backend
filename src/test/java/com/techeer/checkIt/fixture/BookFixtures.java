@@ -15,6 +15,8 @@ public class BookFixtures {
                     .width(153)
                     .pages(400)
                     .publisher("데이원")
+                    .likes(10)
+                    .likeStatus(true)
                     .build();
     public static final BookRes TEST_BOOK2 =
             BookRes.builder()
@@ -25,6 +27,8 @@ public class BookFixtures {
                     .width(145)
                     .pages(170)
                     .publisher("어웨이크북스")
+                    .likes(10)
+                    .likeStatus(true)
                     .build();
     public static final BookSearchRes TEST_BOOK_SEARCH =
             BookSearchRes.builder()

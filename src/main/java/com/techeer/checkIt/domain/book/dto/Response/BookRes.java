@@ -18,4 +18,6 @@ public class BookRes {
     private int height;
     private int width;
     private int pages;
+    private int likes;
+    private boolean likeStatus;
 }
