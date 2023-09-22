@@ -32,6 +32,9 @@ public enum ErrorCode {
     // ReadingVolume 도메인
     READING_VOLUME_NOT_FOUND_ERROR(400, "RV001", "독서추세를 찾을 수 없음"),
 
+    // Chat 도메인
+    CHATROOM_NOT_FOUND_ERROR(400,"C001","채팅방을 찾을 수 없음"),
+    CHATROOM_DUPLICATED_ERROR(409, "C002", "이미 생성된 채팅방"),
     ;
 
     private final int status;

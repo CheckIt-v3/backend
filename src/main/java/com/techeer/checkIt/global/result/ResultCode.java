@@ -28,6 +28,9 @@ public enum ResultCode {
     // ReadingVolume
     GET_READING_VOLUMES_SUCCESS("RV001", "독서추세 조회 성공"),
 
+    // chat
+    CHATROOM_CREATE_SUCCESS("C001", "채팅방 생성 성공")
+
 
     ;
 
