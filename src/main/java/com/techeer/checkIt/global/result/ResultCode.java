@@ -39,6 +39,10 @@ public enum ResultCode {
     GET_REVIEW_SUCCESS("RE002", "리뷰 조회 성공"),
     REVIEW_DELETE_SUCCESS("RE003", "리뷰 삭제 성공"),
     REVIEW_UPDATE_SUCCESS("RE004", "리뷰 갱신 성공"),
+    // chat
+    CHATROOM_CREATE_SUCCESS("C001", "채팅방 생성 성공")
+
+
     ;
 
     private final String code;
