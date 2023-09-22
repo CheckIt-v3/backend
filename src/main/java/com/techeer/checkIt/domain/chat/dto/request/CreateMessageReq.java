@@ -8,6 +8,6 @@ import lombok.*;
 @Builder
 public class CreateMessageReq {
     private String content;
-    private String sender;
+    private Long userId;    // sender
 
 }
