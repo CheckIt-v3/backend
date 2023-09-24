@@ -45,6 +45,8 @@ services:
       - "mode=standalone"
     restart: always
     command: redis-server
+    networks:
+      - default_bridge
 
   elasticsearch:
     restart: always
