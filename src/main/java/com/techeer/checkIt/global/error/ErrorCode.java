@@ -34,7 +34,7 @@ public enum ErrorCode {
 
     // Chat 도메인
     CHATROOM_NOT_FOUND_ERROR(400,"C001","채팅방을 찾을 수 없음"),
-    CHATROOM_DUPLICATED_ERROR(409, "C002", "이미 생성된 채팅방"),
+    CHATROOM_DUPLICATED_ERROR(409, "C002", "이미 채팅방에 입장함"),
     ;
 
     private final int status;
