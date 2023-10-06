@@ -6,13 +6,11 @@ import com.techeer.checkIt.domain.chat.entity.ChatMessage;
 import com.techeer.checkIt.domain.chat.entity.ChatRoom;
 import com.techeer.checkIt.domain.chat.entity.UserChatRoom;
 import com.techeer.checkIt.domain.chat.exception.ChatRoomNotFoundException;
-import com.techeer.checkIt.domain.chat.mapper.ChatRoomMapper;
+import com.techeer.checkIt.domain.chat.mapper.ChatMapper;
 import com.techeer.checkIt.domain.chat.repository.ChatMessageRepository;
 import com.techeer.checkIt.domain.chat.repository.ChatRoomRepository;
 import com.techeer.checkIt.domain.chat.repository.UserChatRoomRepository;
 import com.techeer.checkIt.domain.user.entity.User;
-import com.techeer.checkIt.domain.user.exception.UserNotFoundException;
-import com.techeer.checkIt.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +22,7 @@ public class UserChatRoomService {
     private final UserChatRoomRepository userChatRoomRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final UserRepository userRepository;
-    private final ChatRoomMapper chatRoomMapper;
+    private final ChatMapper chatMapper;
 
     @Transactional
     public ChatRoom createChatRoom() {
@@ -38,27 +35,20 @@ public class UserChatRoomService {
     @Transactional
     public UserChatRoom createUserChatRoom(User user, Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(ChatRoomNotFoundException::new);
-        UserChatRoom newUserChatRoom = chatRoomMapper.toUserChatRoom(user, chatRoom);
+        UserChatRoom newUserChatRoom = chatMapper.toUserChatRoom(user, chatRoom);
 
         userChatRoomRepository.save(newUserChatRoom);
-
         return newUserChatRoom;
     }
 
-//    public boolean duplicatedUserChatRoom(UserChatRoom userChatRoom) {
-//        return userChatRoomRepository.existsByUserChatRoom(userChatRoom.getId());
-//    }
+    public boolean duplicatedUserChatRoom(User user) {
+        return userChatRoomRepository.existsByUserId(user.getId());
+    }
 
-
-    //    @Transactional
-    public void save(Long chatId, CreateMessageReq createMessageReq) {
-        User sender = userRepository.findById(createMessageReq.getUserId()).orElseThrow(UserNotFoundException::new);
+    public void saveMessage(User sender, Long chatId, CreateMessageReq createMessageReq) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatId).orElseThrow(ChatRoomNotFoundException::new);
-        ChatMessage message = ChatMessage.builder()
-                .user(sender)
-                .chatRoom(chatRoom)
-                .content(createMessageReq.getContent())
-                .build();
+        ChatMessage message = chatMapper.toChatMessage(sender, chatRoom, createMessageReq);
+
         chatMessageRepository.save(message);
     }
 }
