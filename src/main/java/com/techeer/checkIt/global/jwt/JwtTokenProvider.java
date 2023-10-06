@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -73,7 +74,7 @@ public class JwtTokenProvider {
     }
 
     // 복호화
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
@@ -81,7 +82,13 @@ public class JwtTokenProvider {
         }
     }
 
-    // 토큰의 유효성 + 만료일자 확인
+    // 클레임 추출
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = parseClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    // 토큰의 유효성
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -98,6 +105,22 @@ public class JwtTokenProvider {
         return false;
     }
 
+    public String extractJwt(final StompHeaderAccessor accessor) {
+        String headerValue = accessor.getFirstNativeHeader("Authorization");
+        if (headerValue != null && headerValue.startsWith("Bearer ")) {
+            String token = headerValue.substring(7); // "Bearer " 부분을 제외하고 JWT 토큰만 추출
+            log.info("Extracted JWT token: {}", token);
+            return token;
+        }
+        return null;
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+
+
     // 만료
     public Long getExpiration(String accessToken) {
         // 남은 유효시간
@@ -111,10 +134,4 @@ public class JwtTokenProvider {
         Long now = new Date().getTime();
         return (expiration.getTime() - now);
     }
-
-    public String extractJwt(final StompHeaderAccessor accessor) {
-        return accessor.getFirstNativeHeader("Authorization");
-    }
-
-
 }
