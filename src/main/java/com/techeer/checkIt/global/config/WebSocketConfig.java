@@ -18,7 +18,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.setErrorHandler(stompExceptionHandler)
-                .addEndpoint("/chat").addInterceptors().setAllowedOriginPatterns("*");
+                .addEndpoint("/chat")
+                .setAllowedOriginPatterns("*");
 //                .withSockJS();
     }
 
@@ -30,7 +31,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-
         registration.interceptors(stompHandler);
     }
 }
