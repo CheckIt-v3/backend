@@ -40,4 +40,11 @@ public class ChatRoomController {
         UserChatRoom userChatRoom = userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());
         return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_CREATE_SUCCESS, userChatRoom));
     }
+
+    @ApiOperation(value = "채팅 내역 조회 API")
+    @GetMapping
+    public ResponseEntity<List<ChatMessageRes>> getChatMessage (@AuthenticationPrincipal UserDetail userDetail, Long chatRoomId) {
+        List<ChatMessageRes> chatMessageList = userChatRoomService.findChatMessage(userDetail.getUser(), chatRoomId);
+        return ResponseEntity.ok(chatMessageList);
+    }
 }

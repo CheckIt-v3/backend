@@ -2,6 +2,7 @@ package com.techeer.checkIt.domain.chat.service;
 
 
 import com.techeer.checkIt.domain.chat.dto.request.CreateMessageReq;
+import com.techeer.checkIt.domain.chat.dto.response.ChatMessageRes;
 import com.techeer.checkIt.domain.chat.entity.ChatMessage;
 import com.techeer.checkIt.domain.chat.entity.ChatRoom;
 import com.techeer.checkIt.domain.chat.entity.UserChatRoom;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,5 +52,11 @@ public class UserChatRoomService {
         ChatMessage message = chatMapper.toChatMessage(sender, chatRoom, createMessageReq);
 
         chatMessageRepository.save(message);
+    }
+
+    public List<ChatMessageRes> findChatMessage(User user, Long chatId) {
+        List<ChatMessage> chatMessages = chatMessageRepository.findByUserIdAndChatRoomId(user.getId(), chatId);
+
+        return chatMapper.toChatMessageList(chatMessages);
     }
 }
