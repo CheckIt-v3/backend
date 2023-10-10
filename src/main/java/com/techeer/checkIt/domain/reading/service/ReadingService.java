@@ -1,7 +1,9 @@
 package com.techeer.checkIt.domain.reading.service;
 
+import com.techeer.checkIt.domain.book.dao.RedisDao;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
@@ -18,6 +20,8 @@ import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.readingVolume.mapper.ReadingVolumeMapper;
 import com.techeer.checkIt.domain.readingVolume.service.ReadingVolumeService;
 import com.techeer.checkIt.domain.user.entity.User;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,6 +38,8 @@ public class ReadingService {
     private final ReadingMapper readingMapper;
     private final ReadingVolumeService readingVolumeService;
     private final ReadingVolumeMapper readingVolumeMapper;
+    private final RedisDao redisDao;
+    private final BookJpaRepository bookJpaRepository;
 
     public int registerReading(User user, Book book, CreateReadingReq createRequest){
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
@@ -51,9 +57,20 @@ public class ReadingService {
     }
 
     public List<BookRes> findReadingByStatus(Long userId, ReadingStatus status) {
-        List<Reading> readings =readingRepository.findByUserIdAndStatus(userId ,status);
+        if (status.toString().equals("UNREAD")) {
+            List<Book> readings = new ArrayList<>();
+            String redisUserKey = "U" + userId.toString();
+            List<Long> likeBook = redisDao.getValuesList(redisUserKey).stream()
+                .map(s -> Long.parseLong(s))
+                .collect(Collectors.toList());
+            readings =  bookJpaRepository.findByBookIdIn(likeBook);
+            return readingMapper.toDtoListByBook(readings);
+        } else {
+            List<Reading> readings = new ArrayList<>();
+            readings = readingRepository.findByUserIdAndStatus(userId ,status);
+            return readingMapper.toDtoList(readings);
+        }
 
-        return readingMapper.toDtoList(readings);
     }
 
     public void updateReadingStatus(Long userId, Long bookId, ReadingStatus status, UpdateReadingStatusReq updateStatus) {
@@ -82,14 +99,14 @@ public class ReadingService {
         reading.updateStatus(ReadingStatus.READING);
         reading.updateLastPage(updateRequest.getLastPage()); // reading의 lastpages 갱신
         return readingMapper
-                .toUpdateReadingAndReadingVolumeResDto(reading, readingVolume);
+            .toUpdateReadingAndReadingVolumeResDto(reading, readingVolume);
     }
 
     public UpdateLastPageAndPercentageRes findReadingByUserAndBook(User user, Book book) {
         Reading reading = readingRepository.findByUserAndBook(user,book).orElseThrow(ReadingNotFoundException::new);
         double percentage = calcPercentage(reading.getLastPage(), book.getPages());
         UpdateLastPageAndPercentageRes updateLastPageAndPercentageRes = readingMapper
-                .toUpdateLastPageAndPercentageResDto(reading, percentage);
+            .toUpdateLastPageAndPercentageResDto(reading, percentage);
         return updateLastPageAndPercentageRes;
     }
 
