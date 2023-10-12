@@ -1,51 +1,51 @@
 version: "3"
 services:
-#  mysql:
-#    container_name: mysql
-#    image: mysql:latest
-#    environment:
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#      MYSQL_USER: ${MYSQL_USER}
-#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#      MYSQL_DATABASE: ${MYSQL_DATABASE}
-#    volumes:
-#      - ./data:/var/lib/mysql
-#    command:
-#      - '--character-set-server=utf8mb4'
-#      - '--collation-server=utf8mb4_unicode_ci'
-#    ports:
-#      - "3307:3306"
-#    networks:
-#      - default_bridge
+  #  mysql:
+  #    container_name: mysql
+  #    image: mysql:latest
+  #    environment:
+  #      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #      MYSQL_USER: ${MYSQL_USER}
+  #      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #      MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #    volumes:
+  #      - ./data:/var/lib/mysql
+  #    command:
+  #      - '--character-set-server=utf8mb4'
+  #      - '--collation-server=utf8mb4_unicode_ci'
+  #    ports:
+  #      - "3307:3306"
+  #    networks:
+  #      - default_bridge
 
   backend:
     container_name: backend
     image: ${SPRING_BOOT_IMAGE}
     ports:
       - "8080:8080"
-#    environment:
-#      SPRING_DATASOURCE_URL: ${MYSQL_URL}
-#      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-#      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-#    depends_on:
-#      - mysql
+    #    environment:
+    #      SPRING_DATASOURCE_URL: ${MYSQL_URL}
+    #      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+    #      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+    #      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    #    depends_on:
+    #      - mysql
     networks:
       default_bridge:
         ipv4_address: 172.16.1.5
 
-#  redis:
-#    container_name: redis
-#    image: redis:latest
-#    ports:
-#      - 6379:6379
-#    volumes:
-#      - ./redis/data:/data
-#    labels:
-#      - "name=redis"
-#      - "mode=standalone"
-#    restart: always
-#    command: redis-server
+  #  redis:
+  #    container_name: redis
+  #    image: redis:latest
+  #    ports:
+  #      - 6379:6379
+  #    volumes:
+  #      - ./redis/data:/data
+  #    labels:
+  #      - "name=redis"
+  #      - "mode=standalone"
+  #    restart: always
+  #    command: redis-server
 
   redis-master-1:
     container_name: redis-master-1
@@ -60,52 +60,61 @@ services:
       - 7101:7101
       - 7102:7102
       - 7103:7103
+    networks:
+      - default_bridge
 
   redis-master-2:
-    network_mode: "service:redis-master-1"
     container_name: redis-master-2
     image: redis
     volumes:
       - ./redis/config/redis-master-2.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-master-3:
-    network_mode: "service:redis-master-1"
     container_name: redis-master-3
     image: redis
     volumes:
       - ./redis/config/redis-master-3.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-slave-1:
-    network_mode: "service:redis-master-1"
     container_name: redis-slave-1
     image: redis
     volumes:
       - ./redis/config/redis-slave-1.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-slave-2:
-    network_mode: "service:redis-master-1"
     container_name: redis-slave-2
     image: redis
     volumes:
       - ./redis/config/redis-slave-2.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-slave-3:
-    network_mode: "service:redis-master-1"
     container_name: redis-slave-3
     image: redis
     volumes:
       - ./redis/config/redis-slave-3.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-cluster-entry:
     network_mode: "service:redis-master-1"
     image: redis
     container_name: redis-cluster
-    command: redis-cli --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7101 127.0.0.1:7102 127.0.0.1:7103 --cluster-replicas 1 --cluster-yes
+    command: redis-cli --cluster create redis-master-1:7001 redis-master-2:7002 redis-master-3:7003 redis-slave-1:7101 redis-slave-2:7102 redis-slave-3:7103 --cluster-replicas 1 --cluster-yes
+    networks:
+      - default_bridge
     depends_on:
       - redis-master-1
       - redis-master-2
