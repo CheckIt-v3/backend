@@ -23,12 +23,18 @@ public class RedisRepositoryConfig {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisClusterConfiguration clusterConfig = new RedisClusterConfiguration();
-        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7001));
-        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7002));
-        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7003));
-        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7101));
-        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7102));
-        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7103));
+        clusterConfig.addClusterNode(new RedisNode("redis-master-1", 7001));
+        clusterConfig.addClusterNode(new RedisNode("redis-master-2", 7002));
+        clusterConfig.addClusterNode(new RedisNode("redis-master-3", 7003));
+        clusterConfig.addClusterNode(new RedisNode("redis-slave-1", 7101));
+        clusterConfig.addClusterNode(new RedisNode("redis-slave-2", 7102));
+        clusterConfig.addClusterNode(new RedisNode("redis-slave-3", 7103));
+//        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7001));
+//        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7002));
+//        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7003));
+//        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7101));
+//        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7102));
+//        clusterConfig.addClusterNode(new RedisNode("127.0.0.1", 7103));
 
         return new LettuceConnectionFactory(clusterConfig);
     }
