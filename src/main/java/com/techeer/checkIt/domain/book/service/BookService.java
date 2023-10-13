@@ -30,7 +30,7 @@ public class BookService {
 
     public List<BookSearchRes> findBookByTitle(String title) {
         List<BookDocument> books = bookSearchRepository.findByTitleContaining(title);
-        return bookMapper.toDtoList(books);
+        return bookMapper.toSearchDtoList(books);
     }
 
     public Page<BookSearchRes> sortedBooksByTime() {

@@ -3,6 +3,7 @@ package com.techeer.checkIt.domain.reading.mapper;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 
+import com.techeer.checkIt.domain.reading.dto.response.ReadingRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
@@ -38,6 +39,7 @@ public class ReadingMapper {
             .build();
     }
 
+    // TODO: int likes, boolean likeStatus 을 안 받기 때문에 값 안 가져옴
     public BookRes toDtoByBook(Book book) {
         return BookRes.builder()
             .id(book.getId())
@@ -50,12 +52,23 @@ public class ReadingMapper {
             .pages(book.getPages())
             .build();
     }
-    public List<BookRes> toDtoList(List<Reading> readings) {
-        return readings.stream().map(this::toDto).collect(Collectors.toList());
+
+    public ReadingRes toReadingList(List<Reading> readings, ReadingStatus status) {
+        List<BookRes> bookInfos = readings.stream().map(this::toDto).collect(Collectors.toList());
+
+        return ReadingRes.builder()
+                .bookInfos(bookInfos)
+                .status(status)
+                .build();
     }
 
-    public List<BookRes> toDtoListByBook(List<Book> books) {
-        return  books.stream().map(this::toDtoByBook).collect(Collectors.toList());
+    public ReadingRes toReadingListByBook(List<Book> books, ReadingStatus status) {
+        List<BookRes> bookInfos = books.stream().map(this::toDtoByBook).collect(Collectors.toList());
+
+        return ReadingRes.builder()
+                .bookInfos(bookInfos)
+                .status(status)
+                .build();
     }
 
     public UpdateReadingAndReadingVolumeRes toUpdateReadingAndReadingVolumeResDto(Reading reading, ReadingVolume readingVolume){

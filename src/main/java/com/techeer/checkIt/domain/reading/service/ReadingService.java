@@ -3,10 +3,12 @@ package com.techeer.checkIt.domain.reading.service;
 import com.techeer.checkIt.domain.book.dao.RedisDao;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.book.mapper.BookMapper;
 import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
+import com.techeer.checkIt.domain.reading.dto.response.ReadingRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.Reading;
@@ -56,7 +58,7 @@ public class ReadingService {
             throw  new ReadingDuplicatedException();
     }
 
-    public List<BookRes> findReadingByStatus(Long userId, ReadingStatus status) {
+    public ReadingRes findReadingByStatus(Long userId, ReadingStatus status) {
         if (status.toString().equals("UNREAD")) {
             List<Book> readings = new ArrayList<>();
             String redisUserKey = "U" + userId.toString();
@@ -64,11 +66,11 @@ public class ReadingService {
                 .map(s -> Long.parseLong(s))
                 .collect(Collectors.toList());
             readings =  bookJpaRepository.findByBookIdIn(likeBook);
-            return readingMapper.toDtoListByBook(readings);
+            return readingMapper.toReadingListByBook(readings, status);
         } else {
             List<Reading> readings = new ArrayList<>();
             readings = readingRepository.findByUserIdAndStatus(userId ,status);
-            return readingMapper.toDtoList(readings);
+            return readingMapper.toReadingList(readings, status);
         }
 
     }
