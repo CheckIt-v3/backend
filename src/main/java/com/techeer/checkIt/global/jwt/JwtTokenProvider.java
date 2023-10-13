@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
     private final CustomUserDetailService customUserDetailService;
     private final Key key;
-    private long accessTokenValidTime = 30 * 60 * 1000L; // 토큰 유효시간 30분
+    private long accessTokenValidTime = 24 * 60 * 60 * 1000L; // 토큰 유효시간 24시
     private long refreshTokenValidTime = 3 * 24 * 60 * 60 * 1000L;  // 3일
 
     // 시크릿키 초기화, secretKey를 Base64로 인코딩한다.
