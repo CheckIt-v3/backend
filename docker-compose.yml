@@ -31,8 +31,7 @@ services:
     #    depends_on:
     #      - mysql
     networks:
-      default_bridge:
-        ipv4_address: 172.16.1.5
+      - default_bridge
 
   #  redis:
   #    container_name: redis
@@ -109,7 +108,6 @@ services:
       - default_bridge
 
   redis-cluster-entry:
-    network_mode: "service:redis-master-1"
     image: redis
     container_name: redis-cluster
     command: redis-cli --cluster create redis-master-1:7001 redis-master-2:7002 redis-master-3:7003 redis-slave-1:7101 redis-slave-2:7102 redis-slave-3:7103 --cluster-replicas 1 --cluster-yes
@@ -124,6 +122,7 @@ services:
       - redis-slave-3
 
   elasticsearch:
+    container_name: elasticsearch
     restart: always
     image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
     ports:
