@@ -2,6 +2,7 @@ package com.techeer.checkIt.domain.chat.mapper;
 
 import com.techeer.checkIt.domain.chat.dto.request.CreateMessageReq;
 import com.techeer.checkIt.domain.chat.dto.response.ChatMessageRes;
+import com.techeer.checkIt.domain.chat.dto.response.ChatRoomRes;
 import com.techeer.checkIt.domain.chat.entity.ChatMessage;
 import com.techeer.checkIt.domain.chat.entity.ChatRoom;
 import com.techeer.checkIt.domain.chat.entity.UserChatRoom;
@@ -42,7 +43,18 @@ public class ChatMapper {
                 .build();
     }
 
+    public ChatRoomRes toChatRoomDto(UserChatRoom userChatRoom) {
+        return ChatRoomRes.builder()
+                .chatRoom(userChatRoom.getChatRoom())
+                .nickname(userChatRoom.getUser().getNickname())
+                .build();
+    }
+
     public List<ChatMessageRes> toChatMessageList(List<ChatMessage> messages) {
         return messages.stream().map(this::toChatMessageDto).collect(Collectors.toList());
+    }
+
+    public List<ChatRoomRes> toChatRoomList(List<UserChatRoom> chatRooms) {
+        return chatRooms.stream().map(this::toChatRoomDto).collect(Collectors.toList());
     }
 }
