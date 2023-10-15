@@ -3,6 +3,7 @@ package com.techeer.checkIt.domain.chat.service;
 
 import com.techeer.checkIt.domain.chat.dto.request.CreateMessageReq;
 import com.techeer.checkIt.domain.chat.dto.response.ChatMessageRes;
+import com.techeer.checkIt.domain.chat.dto.response.ChatRoomRes;
 import com.techeer.checkIt.domain.chat.entity.ChatMessage;
 import com.techeer.checkIt.domain.chat.entity.ChatRoom;
 import com.techeer.checkIt.domain.chat.entity.UserChatRoom;
@@ -47,16 +48,22 @@ public class UserChatRoomService {
         return userChatRoomRepository.existsByUserId(user.getId());
     }
 
-    public void saveMessage(User sender, Long chatId, CreateMessageReq createMessageReq) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatId).orElseThrow(ChatRoomNotFoundException::new);
+    public void saveMessage(User sender, Long chatRoomId, CreateMessageReq createMessageReq) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(ChatRoomNotFoundException::new);
         ChatMessage message = chatMapper.toChatMessage(sender, chatRoom, createMessageReq);
 
         chatMessageRepository.save(message);
     }
 
-    public List<ChatMessageRes> findChatMessage(User user, Long chatId) {
-        List<ChatMessage> chatMessages = chatMessageRepository.findByUserIdAndChatRoomId(user.getId(), chatId);
+    public List<ChatMessageRes> findChatMessage(Long chatRoomId) {
+        List<ChatMessage> chatMessages = chatMessageRepository.findByChatRoomId(chatRoomId);
 
         return chatMapper.toChatMessageList(chatMessages);
+    }
+
+    public List<ChatRoomRes> findChatRoom(User user) {
+        List<UserChatRoom> chatRooms = userChatRoomRepository.findByUserId(user.getId());
+
+        return chatMapper.toChatRoomList(chatRooms);
     }
 }
