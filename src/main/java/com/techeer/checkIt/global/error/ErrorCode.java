@@ -32,8 +32,8 @@ public enum ErrorCode {
     // ReadingVolume 도메인
     READING_VOLUME_NOT_FOUND_ERROR(400, "RV001", "독서추세를 찾을 수 없음"),
 
-    // Review 도메인
-    REVIEW_NOT_FOUND_ERROR(400, "RE001", "리뷰를 찾을 수 없음");
+    // 리뷰 도메인
+    REVIEW_NOT_FOUND_ERROR(400, "RE001", "리뷰를 찾을 수 없음")
     ;
 
     private final int status;
