@@ -3,11 +3,11 @@ package com.techeer.checkIt.domain.reading.entity;
 import com.techeer.checkIt.domain.reading.exception.StatusNotFoundException;
 
 public enum ReadingStatus {
-    UNREAD,READING,READ;
+    LIKE,READING,READ;
     public static ReadingStatus convert(String s) {
         switch (s) {
-            case "UNREAD":
-                return ReadingStatus.UNREAD;
+            case "LIKE":
+                return ReadingStatus.LIKE;
             case "READING":
                 return ReadingStatus.READING;
             case "READ":

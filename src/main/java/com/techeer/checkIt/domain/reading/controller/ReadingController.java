@@ -1,9 +1,9 @@
 package com.techeer.checkIt.domain.reading.controller;
 
-import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
+import com.techeer.checkIt.domain.reading.dto.response.ReadingRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
@@ -22,9 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 @Api(tags = "독서현황 API")
 @RestController
@@ -46,9 +43,9 @@ public class ReadingController {
 
     @ApiOperation(value = "상태 별 책 목록 API")
     @GetMapping("")
-    public ResponseEntity<List<BookRes>> getReadingByStatus(@AuthenticationPrincipal UserDetail userDetail, @RequestParam(defaultValue = "") ReadingStatus status) {
+    public ResponseEntity<ReadingRes> getReadingByStatus(@AuthenticationPrincipal UserDetail userDetail, @RequestParam(defaultValue = "") ReadingStatus status) {
         User user = userService.findUserByUsername(userDetail.getUsername());
-        List<BookRes> readingList = readingService.findReadingByStatus(user.getId(), status);
+        ReadingRes readingList = readingService.findReadingByStatus(user.getId(), status);
         return ResponseEntity.ok(readingList);
     }
 

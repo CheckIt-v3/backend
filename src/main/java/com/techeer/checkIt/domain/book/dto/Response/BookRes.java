@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BookRes {
-    private long id;
+    private Long id;
     private String title;
     private String author;
     private String publisher;

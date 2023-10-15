@@ -1,6 +1,5 @@
 package com.techeer.checkIt.domain.reading.exception;
 
-import com.techeer.checkIt.global.error.ErrorCode;
 import com.techeer.checkIt.global.error.exception.BusinessException;
 
 import static com.techeer.checkIt.global.error.ErrorCode.READING_DUPLICATED_ERROR;

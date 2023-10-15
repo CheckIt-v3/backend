@@ -37,7 +37,7 @@ public class BookMapper {
                 .category(book.getCategory())
                 .build();
     }
-    public List<BookSearchRes> toDtoList(List<BookDocument> books){
+    public List<BookSearchRes> toSearchDtoList(List<BookDocument> books){
         return books.stream()
                 .map(this::toBookSearchDto)
                 .collect(Collectors.toList());

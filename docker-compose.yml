@@ -1,51 +1,12 @@
 version: "3"
 services:
-  #  mysql:
-  #    container_name: mysql
-  #    image: mysql:latest
-  #    environment:
-  #      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-  #      MYSQL_USER: ${MYSQL_USER}
-  #      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-  #      MYSQL_DATABASE: ${MYSQL_DATABASE}
-  #    volumes:
-  #      - ./data:/var/lib/mysql
-  #    command:
-  #      - '--character-set-server=utf8mb4'
-  #      - '--collation-server=utf8mb4_unicode_ci'
-  #    ports:
-  #      - "3307:3306"
-  #    networks:
-  #      - default_bridge
-
   backend:
     container_name: backend
     image: ${SPRING_BOOT_IMAGE}
     ports:
       - "8080:8080"
-    #    environment:
-    #      SPRING_DATASOURCE_URL: ${MYSQL_URL}
-    #      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-    #      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-    #      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    #    depends_on:
-    #      - mysql
     networks:
-      default_bridge:
-        ipv4_address: 172.16.1.5
-
-  #  redis:
-  #    container_name: redis
-  #    image: redis:latest
-  #    ports:
-  #      - 6379:6379
-  #    volumes:
-  #      - ./redis/data:/data
-  #    labels:
-  #      - "name=redis"
-  #      - "mode=standalone"
-  #    restart: always
-  #    command: redis-server
+      - default_bridge
 
   redis-master-1:
     container_name: redis-master-1
@@ -109,7 +70,6 @@ services:
       - default_bridge
 
   redis-cluster-entry:
-    network_mode: "service:redis-master-1"
     image: redis
     container_name: redis-cluster
     command: redis-cli --cluster create redis-master-1:7001 redis-master-2:7002 redis-master-3:7003 redis-slave-1:7101 redis-slave-2:7102 redis-slave-3:7103 --cluster-replicas 1 --cluster-yes
@@ -124,6 +84,7 @@ services:
       - redis-slave-3
 
   elasticsearch:
+    container_name: elasticsearch
     restart: always
     image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
     ports:
