@@ -1,11 +1,14 @@
 package com.techeer.checkIt.domain.chat.controller;
 
 import com.techeer.checkIt.domain.chat.dto.response.ChatMessageRes;
+import com.techeer.checkIt.domain.chat.dto.response.ChatRoomRes;
 import com.techeer.checkIt.domain.chat.entity.ChatRoom;
 import com.techeer.checkIt.domain.chat.entity.UserChatRoom;
 import com.techeer.checkIt.domain.chat.exception.ChatRoomDuplicatedException;
 import com.techeer.checkIt.domain.chat.service.UserChatRoomService;
+import com.techeer.checkIt.domain.user.entity.Role;
 import com.techeer.checkIt.domain.user.entity.UserDetail;
+import com.techeer.checkIt.domain.user.exception.UnAuthorizedAccessException;
 import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
@@ -14,10 +17,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,25 +26,42 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @RequestMapping("api/v1/chat/rooms")
 public class ChatRoomController {
-
     private final UserChatRoomService userChatRoomService;
 
     @ApiOperation(value = "채팅방 생성 API")
     @PostMapping
     public ResponseEntity<ResultResponse> createChatRoom (@AuthenticationPrincipal UserDetail userDetail) {
-        // TODO: 유저 채팅방 중복 예외처리 다시 해야함
-        if (userChatRoomService.duplicatedUserChatRoom(userDetail.getUser())) {
-            throw new ChatRoomDuplicatedException();
+        if (userDetail.getUser().getRole() == Role.USER) { // 사용자는 관리자와의 채팅방 1개만 존재한다.
+            if (userChatRoomService.duplicatedUserChatRoom(userDetail.getUser())) { // 사용자가 이미 채팅방 입장했으면
+                throw new ChatRoomDuplicatedException();
+            }
+            ChatRoom chatRoom = userChatRoomService.createChatRoom();
+            UserChatRoom userChatRoom = userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());
+
+            return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_CREATE_SUCCESS, userChatRoom));
         }
-        ChatRoom chatRoom = userChatRoomService.createChatRoom();
-        UserChatRoom userChatRoom = userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());
-        return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_CREATE_SUCCESS, userChatRoom));
+        // TODO: 관리자가 먼저 채팅하는 경우는 없다는 가정하에 (더 나은 로직 생기면 수정하기)
+        else throw new ChatRoomDuplicatedException();
     }
 
     @ApiOperation(value = "채팅 내역 조회 API")
-    @GetMapping
-    public ResponseEntity<List<ChatMessageRes>> getChatMessage (@AuthenticationPrincipal UserDetail userDetail, Long chatRoomId) {
-        List<ChatMessageRes> chatMessageList = userChatRoomService.findChatMessage(userDetail.getUser(), chatRoomId);
+    @GetMapping("{chatRoomId}/messages")
+    public ResponseEntity<List<ChatMessageRes>> getChatMessage (@AuthenticationPrincipal UserDetail userDetail,
+                                                                @PathVariable Long chatRoomId) {
+        // TODO: 해당하는 유저만 조회할 수 있도록 추가 작성하기
+        List<ChatMessageRes> chatMessageList = userChatRoomService.findChatMessage(chatRoomId);
         return ResponseEntity.ok(chatMessageList);
+    }
+
+    @ApiOperation(value = "채팅방 목록 조회(관리자만) API")
+    @GetMapping("/list")
+    public ResponseEntity<List<ChatRoomRes>> getChatRoomList (@AuthenticationPrincipal UserDetail userDetail) {
+        if (userDetail.getUser().getRole() == Role.ADMIN) {
+            List<ChatRoomRes> chatRoomList = userChatRoomService.findChatRoom(userDetail.getUser());
+
+            return ResponseEntity.ok(chatRoomList);
+        }
+        else
+            throw new UnAuthorizedAccessException();
     }
 }
