@@ -58,7 +58,7 @@ public class ReviewController {
     return ResponseEntity.ok(ResultResponse.of(ResultCode.REVIEW_CREATE_SUCCESS, reviewRes));
   }
 
-  @ApiOperation(value = "리뷰 지우기 API")
+  @ApiOperation(value = "리뷰 삭제 API")
   @DeleteMapping ("{bookId}")
   public ResponseEntity<ResultResponse> deleteReviewUserNameBookId(
       @AuthenticationPrincipal UserDetail userDetail,

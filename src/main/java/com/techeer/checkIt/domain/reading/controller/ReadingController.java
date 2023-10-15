@@ -1,6 +1,5 @@
 package com.techeer.checkIt.domain.reading.controller;
 
-import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingStatusReq;
@@ -23,9 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 @Api(tags = "독서현황 API")
 @RestController
