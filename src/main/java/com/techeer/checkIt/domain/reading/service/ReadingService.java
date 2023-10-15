@@ -1,9 +1,7 @@
 package com.techeer.checkIt.domain.reading.service;
 
 import com.techeer.checkIt.domain.book.dao.RedisDao;
-import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.entity.Book;
-import com.techeer.checkIt.domain.book.mapper.BookMapper;
 import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
 import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVolumeReq;
@@ -59,7 +57,7 @@ public class ReadingService {
     }
 
     public ReadingRes findReadingByStatus(Long userId, ReadingStatus status) {
-        if (status.toString().equals("UNREAD")) {
+        if (status.toString().equals("LIKE")) {
             List<Book> readings = new ArrayList<>();
             String redisUserKey = "U" + userId.toString();
             List<Long> likeBook = redisDao.getValuesList(redisUserKey).stream()
