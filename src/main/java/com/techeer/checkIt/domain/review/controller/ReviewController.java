@@ -12,6 +12,7 @@ import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,15 +36,15 @@ public class ReviewController {
   private final BookService bookService;
 
   @ApiOperation(value = "리뷰 생성 API")
-  @PostMapping()
+  @PostMapping
   public ResponseEntity<ResultResponse> createReview(
       @AuthenticationPrincipal UserDetail userDetail,
-      @RequestBody CreateReviewReq createReviewReq
+      @RequestBody @Valid CreateReviewReq createReviewReq
   ){
     User user = userService.findUserByUsername(userDetail.getUsername());
     Book book = bookService.findById(createReviewReq.getBookId());
     reviewService.createReview(user, book, createReviewReq);
-    ReviewRes reviewRes = reviewService.findReviewByNameIdBookId(user, createReviewReq.getBookId());
+    ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, createReviewReq.getBookId());
     return ResponseEntity.ok(ResultResponse.of(ResultCode.REVIEW_CREATE_SUCCESS, reviewRes));
   }
 
@@ -54,13 +55,13 @@ public class ReviewController {
       @PathVariable Long bookId
   ){
     User user = userService.findUserByUsername(userDetail.getUsername());
-    ReviewRes reviewRes = reviewService.findReviewByNameIdBookId(user, bookId);
+    ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, bookId);
     return ResponseEntity.ok(ResultResponse.of(ResultCode.REVIEW_CREATE_SUCCESS, reviewRes));
   }
 
   @ApiOperation(value = "리뷰 삭제 API")
   @DeleteMapping ("{bookId}")
-  public ResponseEntity<ResultResponse> deleteReviewUserNameBookId(
+  public ResponseEntity<ResultResponse> deleteReviewByUserNameBookId(
       @AuthenticationPrincipal UserDetail userDetail,
       @PathVariable Long bookId
   ){
@@ -70,14 +71,14 @@ public class ReviewController {
   }
 
   @ApiOperation(value = "리뷰 내용 변경 API")
-  @PutMapping()
+  @PutMapping
   public ResponseEntity<ResultResponse> updateReview(
       @AuthenticationPrincipal UserDetail userDetail,
-      @RequestBody CreateReviewReq createReviewReq
+      @RequestBody @Valid CreateReviewReq createReviewReq
   ) {
     User user = userService.findUserByUsername(userDetail.getUsername());
     reviewService.updateReview(user, createReviewReq);
-    ReviewRes reviewRes = reviewService.findReviewByNameIdBookId(user, createReviewReq.getBookId());
+    ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, createReviewReq.getBookId());
     return ResponseEntity.ok(ResultResponse.of(ResultCode.REVIEW_DELETE_SUCCESS, reviewRes));
   }
 
