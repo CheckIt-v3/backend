@@ -56,7 +56,7 @@ public class BookController {
     }
 
     @ApiOperation(value = "책 좋아요 API")
-    @GetMapping("/like/{bookId}")
+    @PostMapping("/like/{bookId}")
     public ResponseEntity<ResultResponse> updateLikeById(
         @AuthenticationPrincipal UserDetail userDetail,
         @PathVariable Long bookId
