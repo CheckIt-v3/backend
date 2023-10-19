@@ -37,6 +37,8 @@ public class Book extends BaseEntity {
     private String category;
     @OneToMany(mappedBy = "book")
     private List<Reading> readingList = new ArrayList<>();
+    @Column(name = "like_count")
+    private Integer likeCount = 0;
     @Builder
     public Book(String title, String author, String publisher, String coverImageUrl, int pages, int height, int width, int thickness, String category) {
         this.title = title;
@@ -49,4 +51,16 @@ public class Book extends BaseEntity {
         this.thickness = thickness;
         this.category = category;
     }
+
+    @PostLoad
+    @PrePersist
+    private void initializeDefaults() {
+        if (likeCount == null) {
+            likeCount = 0; // 기본값을 0으로 설정
+        }
+    }
+    public void updateLike(int like) {
+        this.likeCount = like;
+    }
+    public void setLikeCount(Integer likeCount) { this.likeCount = likeCount; }
 }
