@@ -7,6 +7,7 @@ import com.techeer.checkIt.domain.readingVolume.exception.ReadingVolumeNotFoundE
 import com.techeer.checkIt.domain.readingVolume.mapper.ReadingVolumeMapper;
 import com.techeer.checkIt.domain.readingVolume.repository.ReadingVolumeRepository;
 import com.techeer.checkIt.domain.user.entity.User;
+import java.time.format.DateTimeFormatter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,9 @@ public class ReadingVolumeService {
     private final ReadingVolumeMapper readingVolumeMapper;
 
 
-    public List<SearchReadingVolumesRes> findReadingVolumesByUserAndDateBetween(User user) {
-        LocalDate end = LocalDate.now();
+    public List<SearchReadingVolumesRes> findReadingVolumesByUserAndDateBetween(User user, String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate end = LocalDate.parse(date, formatter);
         LocalDate start = end.minusDays(6);
         List<ReadingVolume> readingVolumes =
                 readingVolumeRepository.findByUserAndDateBetween(user,start,end);

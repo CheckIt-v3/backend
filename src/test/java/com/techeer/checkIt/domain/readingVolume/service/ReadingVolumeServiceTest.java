@@ -36,6 +36,7 @@ class ReadingVolumeServiceTest {
     @Mock
     private ReadingVolumeMapper readingVolumeMapper;
 
+    // TEST_SEARCH_READINGVOLUME_RES 수정 필요 (api에서 원하는 날짜로 요청하도록 수정)
     @Test
     @DisplayName("user의 일주일 치 독서 기록을 반환한다.")
     void findReadingVolumesByUserAndDateBetween() {
@@ -49,7 +50,7 @@ class ReadingVolumeServiceTest {
 
         when(readingVolumeMapper.toDtoList(anyList())).thenReturn(list2);
 
-        List<SearchReadingVolumesRes> newList = readingVolumeService.findReadingVolumesByUserAndDateBetween(TEST_USER);
+        List<SearchReadingVolumesRes> newList = readingVolumeService.findReadingVolumesByUserAndDateBetween(TEST_USER, "2023-10-26");
 
         assertEquals(newList, list2);
 
