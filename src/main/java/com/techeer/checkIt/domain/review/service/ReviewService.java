@@ -25,7 +25,7 @@ public class ReviewService {
     reviewRepository.save(review);
   }
 
-  public ReviewRes findReviewByNameIdBookId (User user, Long bookId) {
+  public ReviewRes findReviewByUserNameIdBookId (User user, Long bookId) {
     Review review = reviewRepository.findByUserNameBookId(user.getNickname(), bookId).orElseThrow(ReviewNotFoundException::new);
     return  reviewMapper.toDto(review);
   }

@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.book.controller;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
+import com.techeer.checkIt.domain.book.dto.Response.BookSearchLikeRes;
 import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.user.entity.User;
@@ -56,7 +57,7 @@ public class BookController {
     }
 
     @ApiOperation(value = "책 좋아요 API")
-    @GetMapping("/like/{bookId}")
+    @PostMapping("/like/{bookId}")
     public ResponseEntity<ResultResponse> updateLikeById(
         @AuthenticationPrincipal UserDetail userDetail,
         @PathVariable Long bookId
@@ -67,4 +68,10 @@ public class BookController {
         return ResponseEntity.ok(ResultResponse.of(UPDATE_BOOK_LIKE_SUCCESS ,bookResponse));
     }
 
+    @ApiOperation(value = "인기 있는 책 조회 API")
+    @GetMapping("/like")
+    public ResponseEntity<ResultResponse> getLikeBooksList() {
+        Page<BookSearchLikeRes> books = bookService.sortedBooksByLike();
+        return ResponseEntity.ok(ResultResponse.of(GET_NEW_BOOK_SUCCESS, books));
+    }
 }

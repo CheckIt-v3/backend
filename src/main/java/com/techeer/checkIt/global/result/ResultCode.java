@@ -36,7 +36,7 @@ public enum ResultCode {
 
     // Review
     REVIEW_CREATE_SUCCESS("RE001", "리뷰 등록 성공"),
-    GET_REVIEW_SUCCESS("RE0012", "리뷰 조회 성공"),
+    GET_REVIEW_SUCCESS("RE002", "리뷰 조회 성공"),
     REVIEW_DELETE_SUCCESS("RE003", "리뷰 삭제 성공"),
     REVIEW_UPDATE_SUCCESS("RE004", "리뷰 갱신 성공"),
     ;

@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.book.mapper;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
+import com.techeer.checkIt.domain.book.dto.Response.BookSearchLikeRes;
 import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.entity.BookDocument;
@@ -37,14 +38,32 @@ public class BookMapper {
                 .category(book.getCategory())
                 .build();
     }
+    public BookSearchLikeRes toBookSearchLikeDto(Book book) {
+        return BookSearchLikeRes.builder()
+            .title(book.getTitle())
+            .author(book.getAuthor())
+            .publisher(book.getPublisher())
+            .coverImageUrl(book.getCoverImageUrl())
+            .pages(book.getPages())
+            .category(book.getCategory())
+            .like(book.getLikeCount())
+            .build();
+    }
     public List<BookSearchRes> toSearchDtoList(List<BookDocument> books){
         return books.stream()
                 .map(this::toBookSearchDto)
                 .collect(Collectors.toList());
     }
+    // toPageDtoList = toBookSearchResDtoPage
     public Page<BookSearchRes> toPageDtoList(Page<BookDocument> books) {
         return new PageImpl<>(books.stream()
                 .map(this::toBookSearchDto)
                 .collect(Collectors.toList()));
+    }
+    // toPageDtoList2 = BookSearchLikeResDtoPage
+    public Page<BookSearchLikeRes> toPageDtoList2(Page<Book> books) {
+        return new PageImpl<>(books.stream()
+            .map(this::toBookSearchLikeDto)
+            .collect(Collectors.toList()));
     }
 }
