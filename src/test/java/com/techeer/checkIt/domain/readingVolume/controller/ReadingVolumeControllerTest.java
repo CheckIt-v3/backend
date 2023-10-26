@@ -59,12 +59,13 @@ class ReadingVolumeControllerTest {
         return objectMapper.writeValueAsString(object);
     }
 
+    // TEST_SEARCH_READINGVOLUME_RES 수정 필요 (api에서 원하는 날짜로 요청하도록 수정)
     @Test
     @DisplayName("일주일동안의 독서량을 보여준다")
     void searchReadingVolumes() throws Exception{
         when(userService.findUserById(1L)).thenReturn(TEST_USER);
         when(userService.findUserById(2L)).thenReturn(TEST_USER2);
-        when(readingVolumeService.findReadingVolumesByUserAndDateBetween(any())).thenReturn(List.of(TEST_SEARCH_READINGVOLUME_RES));
+        when(readingVolumeService.findReadingVolumesByUserAndDateBetween(any(), any())).thenReturn(List.of(TEST_SEARCH_READINGVOLUME_RES));
 
         mockMvc
                 .perform(

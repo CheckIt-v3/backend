@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,10 +29,13 @@ public class ReadingVolumeController {
     private final UserService userService;
 
     @ApiOperation(value = "일주일 독서량 조회 API")
-    @GetMapping("")
-    public ResponseEntity<ResultResponse> searchReadingVolumes(@AuthenticationPrincipal UserDetail userDetail) {
+    @GetMapping("{date}")
+    public ResponseEntity<ResultResponse> searchReadingVolumes(
+            @AuthenticationPrincipal UserDetail userDetail,
+            @PathVariable String date
+    ) {
         User user = userService.findUserByUsername(userDetail.getUsername());
-        List<SearchReadingVolumesRes> readingVolumeList = readingVolumeService.findReadingVolumesByUserAndDateBetween(user);
+        List<SearchReadingVolumesRes> readingVolumeList = readingVolumeService.findReadingVolumesByUserAndDateBetween(user, date);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_READING_VOLUMES_SUCCESS,readingVolumeList));
     }
 }
