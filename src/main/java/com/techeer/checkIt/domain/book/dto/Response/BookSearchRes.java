@@ -12,6 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BookSearchRes {
+    private Long id;
     private String title;
     private String author;
     private String publisher;

@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 import java.util.List;
 
-public interface BookSearchRepository extends ElasticsearchRepository<BookDocument, String> {
+public interface BookSearchRepository extends ElasticsearchRepository<BookDocument, Long> {
     List<BookDocument> findByTitleContaining(String title);
     Page<BookDocument> findAll(Pageable pageable);
 }
