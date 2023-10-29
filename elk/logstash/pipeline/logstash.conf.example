@@ -17,8 +17,10 @@ input {
 filter {
     mutate {
         copy => {"book_id" => "[@metadata][_id]"}
+        copy => {"cover_image_url" => "coverImageUrl"}
+        copy => {"created_at" => "createdAt"}
         remove_field => ["@version", "unix_ts_in_secs",
-        "book_id", "updated_at", "height", "is_deleted", "width", "thickness"]
+        "cover_image_url", "book_id", "updated_at", "height", "is_deleted", "width", "thickness"]
     }
 }
 output {

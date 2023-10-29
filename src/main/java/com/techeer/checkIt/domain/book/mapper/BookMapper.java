@@ -41,6 +41,7 @@ public class BookMapper {
     }
     public BookSearchLikeRes toBookSearchLikeDto(Book book) {
         return BookSearchLikeRes.builder()
+            .id(book.getId())
             .title(book.getTitle())
             .author(book.getAuthor())
             .publisher(book.getPublisher())

@@ -1,12 +1,12 @@
 version: "3"
 services:
-#  backend:
-#    container_name: backend
-#    image: ${SPRING_BOOT_IMAGE}
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - default_bridge
+  backend:
+    container_name: backend
+    image: ${SPRING_BOOT_IMAGE}
+    ports:
+      - "8080:8080"
+    networks:
+      - default_bridge
 
   redis-master-1:
     container_name: redis-master-1
