@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
+
 import javax.persistence.*;
 
 @Document(indexName = "book")
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookDocument extends BaseEntity {
     @Id
-    private String id;
+    private Long id;
     private String title;
     private String author;
     private String publisher;
@@ -22,7 +23,8 @@ public class BookDocument extends BaseEntity {
     private String category;
 
     @Builder
-    public BookDocument(String title, String author, String publisher, String coverImageUrl, int pages, String category) {
+    public BookDocument(Long id, String title, String author, String publisher, String coverImageUrl, int pages, String category) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.publisher = publisher;

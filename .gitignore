@@ -40,5 +40,7 @@ out/
 gradle.properties
 .env
 data
-elasticsearch
+elk/elasticsearch
 mongodb
+config/config.toml
+elk/logstash/pipeline/logstash.conf
