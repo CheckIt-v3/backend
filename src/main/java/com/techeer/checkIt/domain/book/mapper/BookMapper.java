@@ -1,5 +1,6 @@
 package com.techeer.checkIt.domain.book.mapper;
 
+import com.techeer.checkIt.domain.book.dto.Response.BookReadingRes;
 import com.techeer.checkIt.domain.book.dto.Response.BookRes;
 import com.techeer.checkIt.domain.book.dto.Response.BookSearchLikeRes;
 import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
@@ -63,5 +64,18 @@ public class BookMapper {
         return new PageImpl<>(books.stream()
             .map(this::toBookSearchLikeDto)
             .collect(Collectors.toList()));
+    }
+    public BookReadingRes toDtoByBook(Book book) {
+        return BookReadingRes.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .publisher(book.getPublisher())
+                .coverImageUrl(book.getCoverImageUrl())
+                .height(book.getHeight())
+                .width(book.getWidth())
+                .pages(book.getPages())
+                .likes(book.getLikeCount())
+                .build();
     }
 }

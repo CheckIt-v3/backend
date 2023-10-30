@@ -2,6 +2,7 @@ package com.techeer.checkIt.domain.reading.mapper;
 
 import com.techeer.checkIt.domain.book.dto.Response.BookReadingRes;
 import com.techeer.checkIt.domain.book.entity.Book;
+import com.techeer.checkIt.domain.book.mapper.BookMapper;
 import com.techeer.checkIt.domain.reading.dto.response.ReadingRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateLastPageAndPercentageRes;
 import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVolumeRes;
@@ -9,13 +10,18 @@ import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.user.entity.User;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReadingMapper {
+
+    private final BookMapper bookMapper;
 
     public Reading toEntity(User user, Book book, int lastPage, ReadingStatus status) {
         return Reading.builder()
@@ -39,21 +45,6 @@ public class ReadingMapper {
             .build();
     }
 
-    // TODO: int likes, boolean likeStatus 을 안 받기 때문에 값 안 가져옴
-    public BookReadingRes toDtoByBook(Book book) {
-        return BookReadingRes.builder()
-            .id(book.getId())
-            .title(book.getTitle())
-            .author(book.getAuthor())
-            .publisher(book.getPublisher())
-            .coverImageUrl(book.getCoverImageUrl())
-            .height(book.getHeight())
-            .width(book.getWidth())
-            .pages(book.getPages())
-            .likes(book.getLikeCount())
-            .build();
-    }
-
     public ReadingRes toReadingList(List<Reading> readings, ReadingStatus status) {
         List<BookReadingRes> bookInfos = readings.stream().map(this::toDto).collect(Collectors.toList());
 
@@ -64,7 +55,7 @@ public class ReadingMapper {
     }
 
     public ReadingRes toReadingListByBook(List<Book> books, ReadingStatus status) {
-        List<BookReadingRes> bookInfos = books.stream().map(this::toDtoByBook).collect(Collectors.toList());
+        List<BookReadingRes> bookInfos = books.stream().map(bookMapper::toDtoByBook).collect(Collectors.toList());
 
         return ReadingRes.builder()
                 .bookInfos(bookInfos)
