@@ -36,6 +36,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final:osx-aarch_64'		// macOS 면 netty 오류 발생하여 추가
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'

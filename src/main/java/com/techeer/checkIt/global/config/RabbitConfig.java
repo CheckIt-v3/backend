@@ -1,6 +1,5 @@
 package com.techeer.checkIt.global.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.TopicExchange;
@@ -19,7 +18,6 @@ import static com.techeer.checkIt.global.constant.RabbitMQ.*;
 
 @Configuration
 @EnableRabbit
-@RequiredArgsConstructor
 public class RabbitConfig {
     @Value("${spring.rabbitmq.host}")
     private String host;
@@ -48,18 +46,18 @@ public class RabbitConfig {
 
     // Exchange 와 Queue 바인딩
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
-        return  BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+    public Binding binding() {
+        return  BindingBuilder.bind(queue()).to(exchange()).with(ROUTING_KEY);
     }
 
-    /**
+    /*
      * messageConverter를 커스터마이징 하기 위해 Bean 새로 등록
      */
-
     @Bean
     public RabbitTemplate rabbitTemplate(){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        rabbitTemplate.setRoutingKey(ROUTING_KEY);
         return rabbitTemplate;
     }
 
