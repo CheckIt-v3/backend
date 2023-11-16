@@ -56,7 +56,7 @@ public class ReviewController {
   ){
     User user = userService.findUserByUsername(userDetail.getUsername());
     ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, bookId);
-    return ResponseEntity.ok(ResultResponse.of(ResultCode.REVIEW_CREATE_SUCCESS, reviewRes));
+    return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_REVIEW_SUCCESS, reviewRes));
   }
 
   @ApiOperation(value = "리뷰 삭제 API")
@@ -79,7 +79,7 @@ public class ReviewController {
     User user = userService.findUserByUsername(userDetail.getUsername());
     reviewService.updateReview(user, createReviewReq);
     ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, createReviewReq.getBookId());
-    return ResponseEntity.ok(ResultResponse.of(ResultCode.REVIEW_DELETE_SUCCESS, reviewRes));
+    return ResponseEntity.ok(ResultResponse.of(ResultCode.REVIEW_UPDATE_SUCCESS, reviewRes));
   }
 
 }
