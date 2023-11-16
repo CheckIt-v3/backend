@@ -47,4 +47,21 @@ public class ReviewFixtures {
           .grade(4.0)
           .build();
 
+  public static final Review TEST_REVIEW2 =
+      Review.builder()
+          .user(TEST_USER)
+          .book(TEST_BOOK_ENT)
+          .title("title1")
+          .contents("content1")
+          .grade(4.0)
+          .build();
+
+  public static final Review TEST_CHANGE_BEFOR_REVIEW =
+      Review.builder()
+          .user(TEST_USER)
+          .book(TEST_BOOK_ENT)
+          .title("title1")
+          .contents("content1")
+          .grade(4.0)
+          .build();
 }

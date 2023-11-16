@@ -150,7 +150,7 @@ public class ReviewControllerTest {
     when(userService.findUserByUsername(any())).thenReturn(TEST_USER);
     when(reviewRepository.findByUserNameBookId(any(), eq(2L))).thenReturn(
         Optional.ofNullable(TEST_REVIEW));
-    when(reviewService.findReviewByUserNameIdBookId(any(), eq(2L))).thenReturn(TEST_CHANGE_REVIEW_RES);
+    when(reviewService.updateReview(any(), any())).thenReturn(TEST_CHANGE_REVIEW_RES);
 
     //then
     mockMvc
