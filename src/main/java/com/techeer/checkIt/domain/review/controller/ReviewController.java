@@ -77,8 +77,7 @@ public class ReviewController {
       @RequestBody @Valid CreateReviewReq createReviewReq
   ) {
     User user = userService.findUserByUsername(userDetail.getUsername());
-    reviewService.updateReview(user, createReviewReq);
-    ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, createReviewReq.getBookId());
+    ReviewRes reviewRes = reviewService.updateReview(user, createReviewReq);
     return ResponseEntity.ok(ResultResponse.of(ResultCode.REVIEW_UPDATE_SUCCESS, reviewRes));
   }
 

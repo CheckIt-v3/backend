@@ -27,17 +27,17 @@ public class ReviewService {
 
   public ReviewRes findReviewByUserNameIdBookId (User user, Long bookId) {
     Review review = reviewRepository.findByUserNameBookId(user.getNickname(), bookId).orElseThrow(ReviewNotFoundException::new);
-    return  reviewMapper.toDto(review);
+    return reviewMapper.toDto(review);
   }
 
   public void deleteReview (User user, Long bookId) {
     Review review = reviewRepository.findByUserNameBookId(user.getNickname(), bookId).orElseThrow(ReviewNotFoundException::new);
     review.delete();
-    //reviewRepository.save(review);
   }
 
-  public void updateReview (User user, CreateReviewReq createReviewReq) {
+  public ReviewRes updateReview (User user, CreateReviewReq createReviewReq) {
     Review review = reviewRepository.findByUserNameBookId(user.getNickname(), createReviewReq.getBookId()).orElseThrow(ReviewNotFoundException::new);
     review.updateReview(createReviewReq);
+    return reviewMapper.toDto(review);
   }
 }
