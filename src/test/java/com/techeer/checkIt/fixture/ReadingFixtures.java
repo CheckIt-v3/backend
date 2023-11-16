@@ -43,9 +43,10 @@ public class ReadingFixtures {
             UpdateReadingStatusReq.builder()
                     .bookId(1L)
                     .lastPage(0)
-                    .status(UNREAD)
+                    .status(LIKE)
                     .build();
 
+    // UNREAD -> LIKE 수정
     public static final Reading TEST_READING =
             Reading.builder()
                     .user(TEST_USER)
