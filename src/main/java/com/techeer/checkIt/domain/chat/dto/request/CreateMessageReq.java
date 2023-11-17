@@ -10,4 +10,5 @@ import lombok.*;
 @Builder
 public class CreateMessageReq {
     private String content;
+    private String sender;  // username
 }

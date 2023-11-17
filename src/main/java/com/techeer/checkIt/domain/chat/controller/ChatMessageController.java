@@ -35,7 +35,7 @@ public class ChatMessageController {
         UserDetail userDetail = (UserDetail) Objects.requireNonNull(headerAccessor.getSessionAttributes()).get("userDetail");
 
 //        sendingOperations.convertAndSend("/sub/chat/rooms/" + chatRoomId, messageRequest.getContent());
-        rabbitTemplate.convertAndSend(CHAT_EXCHANGE_NAME, "room." + chatRoomId, messageRequest.getContent());
+        rabbitTemplate.convertAndSend(CHAT_EXCHANGE_NAME, "room." + chatRoomId, messageRequest);
         
         userChatRoomService.saveMessage(userDetail.getUser(), chatRoomId, messageRequest);
         log.info("Message [{}] send by user: {} to chatting room: {}", messageRequest.getContent(), userDetail.getUsername(), chatRoomId);
