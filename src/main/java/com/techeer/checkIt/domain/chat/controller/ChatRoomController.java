@@ -3,12 +3,9 @@ package com.techeer.checkIt.domain.chat.controller;
 import com.techeer.checkIt.domain.chat.dto.response.ChatMessageRes;
 import com.techeer.checkIt.domain.chat.dto.response.ChatRoomRes;
 import com.techeer.checkIt.domain.chat.entity.ChatRoom;
-import com.techeer.checkIt.domain.chat.entity.UserChatRoom;
 import com.techeer.checkIt.domain.chat.exception.ChatRoomDuplicatedException;
 import com.techeer.checkIt.domain.chat.service.UserChatRoomService;
-import com.techeer.checkIt.domain.user.entity.Role;
 import com.techeer.checkIt.domain.user.entity.UserDetail;
-import com.techeer.checkIt.domain.user.exception.UnAuthorizedAccessException;
 import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
@@ -36,9 +33,9 @@ public class ChatRoomController {
             throw new ChatRoomDuplicatedException();
         }
         ChatRoom chatRoom = userChatRoomService.createChatRoom();
-        UserChatRoom userChatRoom = userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());
+        userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());
 
-        return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_CREATE_SUCCESS, userChatRoom));
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_CREATE_SUCCESS, chatRoom.getId()));
        // TODO: 관리자가 먼저 채팅하는 경우는 없다는 가정하에 (더 나은 로직 생기면 수정하기)
     }
 
