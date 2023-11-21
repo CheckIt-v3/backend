@@ -40,7 +40,10 @@ public enum ResultCode {
     REVIEW_DELETE_SUCCESS("RE003", "리뷰 삭제 성공"),
     REVIEW_UPDATE_SUCCESS("RE004", "리뷰 갱신 성공"),
     // chat
-    CHATROOM_CREATE_SUCCESS("C001", "채팅방 생성 성공")
+    CHATROOM_CREATE_SUCCESS("C001", "채팅방 생성 성공"),
+    GET_CHAT_SUCCESS("C002", "채팅 내용 조회 성공"),
+    GET_CHATROOM_SUCCESS("C002", "채팅방 목록 조회 성공"),
+
 
 
     ;

@@ -28,40 +28,33 @@ import java.util.List;
 public class ChatRoomController {
     private final UserChatRoomService userChatRoomService;
 
-    @ApiOperation(value = "채팅방 생성 API")
+    @ApiOperation(value = "채팅방 생성(사용자만) API")
     @PostMapping
     public ResponseEntity<ResultResponse> createChatRoom (@AuthenticationPrincipal UserDetail userDetail) {
-        if (userDetail.getUser().getRole() == Role.USER) { // 사용자는 관리자와의 채팅방 1개만 존재한다.
-            if (userChatRoomService.duplicatedUserChatRoom(userDetail.getUser())) { // 사용자가 이미 채팅방 입장했으면
-                throw new ChatRoomDuplicatedException();
-            }
-            ChatRoom chatRoom = userChatRoomService.createChatRoom();
-            UserChatRoom userChatRoom = userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());
-
-            return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_CREATE_SUCCESS, userChatRoom));
+        // 사용자는 관리자와의 채팅방 1개만 존재한다.
+        if (userChatRoomService.duplicatedUserChatRoom(userDetail.getUser())) { // 사용자가 이미 채팅방 입장했으면
+            throw new ChatRoomDuplicatedException();
         }
-        // TODO: 관리자가 먼저 채팅하는 경우는 없다는 가정하에 (더 나은 로직 생기면 수정하기)
-        else throw new ChatRoomDuplicatedException();
+        ChatRoom chatRoom = userChatRoomService.createChatRoom();
+        UserChatRoom userChatRoom = userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());
+
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_CREATE_SUCCESS, userChatRoom));
+       // TODO: 관리자가 먼저 채팅하는 경우는 없다는 가정하에 (더 나은 로직 생기면 수정하기)
     }
 
     @ApiOperation(value = "채팅 내역 조회 API")
     @GetMapping("{chatRoomId}/messages")
-    public ResponseEntity<List<ChatMessageRes>> getChatMessage (@AuthenticationPrincipal UserDetail userDetail,
-                                                                @PathVariable Long chatRoomId) {
+    public ResponseEntity<ResultResponse> getChatMessage (@PathVariable Long chatRoomId) {
         // TODO: 해당하는 유저만 조회할 수 있도록 추가 작성하기
         List<ChatMessageRes> chatMessageList = userChatRoomService.findChatMessage(chatRoomId);
-        return ResponseEntity.ok(chatMessageList);
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_CHAT_SUCCESS, chatMessageList));
     }
 
     @ApiOperation(value = "채팅방 목록 조회(관리자만) API")
     @GetMapping("/list")
-    public ResponseEntity<List<ChatRoomRes>> getChatRoomList (@AuthenticationPrincipal UserDetail userDetail) {
-        if (userDetail.getUser().getRole() == Role.ADMIN) {
-            List<ChatRoomRes> chatRoomList = userChatRoomService.findChatRoom(userDetail.getUser());
+    public ResponseEntity<ResultResponse> getChatRoomList () {
+        List<ChatRoomRes> chatRoomList = userChatRoomService.findChatRoom();
 
-            return ResponseEntity.ok(chatRoomList);
-        }
-        else
-            throw new UnAuthorizedAccessException();
+        return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_CHATROOM_SUCCESS, chatRoomList));
     }
 }
