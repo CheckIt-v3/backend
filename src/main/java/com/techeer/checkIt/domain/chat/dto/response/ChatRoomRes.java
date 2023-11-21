@@ -11,6 +11,6 @@ import lombok.*;
 @NoArgsConstructor(access =  AccessLevel.PRIVATE)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ChatRoomRes {
-    private ChatRoom chatRoom;
+    private Long chatRoomId;
     private String nickname;    // 문의한 회원
 }

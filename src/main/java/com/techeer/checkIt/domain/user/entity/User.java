@@ -1,5 +1,6 @@
 package com.techeer.checkIt.domain.user.entity;
 
+import com.techeer.checkIt.domain.chat.entity.ChatMessage;
 import com.techeer.checkIt.domain.chat.entity.UserChatRoom;
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
@@ -45,6 +46,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<UserChatRoom> userChatRoomList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<ChatMessage> chatMessageList = new ArrayList<>();
 
     @Builder
     private User(String username, String nickname, String password, Role role) {

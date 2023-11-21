@@ -61,8 +61,8 @@ public class UserChatRoomService {
         return chatMapper.toChatMessageList(chatMessages);
     }
 
-    public List<ChatRoomRes> findChatRoom(User user) {
-        List<UserChatRoom> chatRooms = userChatRoomRepository.findByUserId(user.getId());
+    public List<ChatRoomRes> findChatRoom() {
+        List<UserChatRoom> chatRooms = userChatRoomRepository.findAll();
 
         return chatMapper.toChatRoomList(chatRooms);
     }

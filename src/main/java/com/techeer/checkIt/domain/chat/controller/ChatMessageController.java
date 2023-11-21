@@ -38,7 +38,7 @@ public class ChatMessageController {
         rabbitTemplate.convertAndSend(CHAT_EXCHANGE_NAME, "room." + chatRoomId, messageRequest);
         
         userChatRoomService.saveMessage(userDetail.getUser(), chatRoomId, messageRequest);
-        log.info("Message [{}] send by user: {} to chatting room: {}", messageRequest.getContent(), userDetail.getUsername(), chatRoomId);
+        log.info("Message [{}] send by user: {} to chatting room: {}", messageRequest.getContent(), messageRequest.getSender(), chatRoomId);
     }
 
     // 메세지가 큐에 도착할 때 실행
