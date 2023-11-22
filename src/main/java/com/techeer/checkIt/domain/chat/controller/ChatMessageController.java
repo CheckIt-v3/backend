@@ -11,7 +11,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
@@ -23,18 +22,15 @@ import static com.techeer.checkIt.global.constant.RabbitMQ.*;
 @Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatMessageController {
-    //    private final SimpMessageSendingOperations sendingOperations;
     private final UserChatRoomService userChatRoomService;
     private final RabbitTemplate rabbitTemplate;
 
-    //    @MessageMapping("/chat/rooms/{chatRoomId}/message")
     @MessageMapping("chat.message.{chatRoomId}")
     public void chat(StompHeaderAccessor headerAccessor,
                      @DestinationVariable Long chatRoomId,
                      @Payload CreateMessageReq messageRequest) {
         UserDetail userDetail = (UserDetail) Objects.requireNonNull(headerAccessor.getSessionAttributes()).get("userDetail");
 
-//        sendingOperations.convertAndSend("/sub/chat/rooms/" + chatRoomId, messageRequest.getContent());
         rabbitTemplate.convertAndSend(CHAT_EXCHANGE_NAME, "room." + chatRoomId, messageRequest);
         
         userChatRoomService.saveMessage(userDetail.getUser(), chatRoomId, messageRequest);

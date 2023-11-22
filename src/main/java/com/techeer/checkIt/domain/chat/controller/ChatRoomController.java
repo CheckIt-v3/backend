@@ -3,7 +3,7 @@ package com.techeer.checkIt.domain.chat.controller;
 import com.techeer.checkIt.domain.chat.dto.response.ChatMessageRes;
 import com.techeer.checkIt.domain.chat.dto.response.ChatRoomRes;
 import com.techeer.checkIt.domain.chat.entity.ChatRoom;
-import com.techeer.checkIt.domain.chat.exception.ChatRoomDuplicatedException;
+import com.techeer.checkIt.domain.chat.entity.UserChatRoom;
 import com.techeer.checkIt.domain.chat.service.UserChatRoomService;
 import com.techeer.checkIt.domain.user.entity.UserDetail;
 import com.techeer.checkIt.global.result.ResultCode;
@@ -30,7 +30,8 @@ public class ChatRoomController {
     public ResponseEntity<ResultResponse> createChatRoom (@AuthenticationPrincipal UserDetail userDetail) {
         // 사용자는 관리자와의 채팅방 1개만 존재한다.
         if (userChatRoomService.duplicatedUserChatRoom(userDetail.getUser())) { // 사용자가 이미 채팅방 입장했으면
-            throw new ChatRoomDuplicatedException();
+            UserChatRoom userChatRoom = userChatRoomService.findUserChatRoomByUserId(userDetail.getUserId());
+            return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_DUPLICATED_ERROR, userChatRoom.getChatRoom().getId()));
         }
         ChatRoom chatRoom = userChatRoomService.createChatRoom();
         userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());

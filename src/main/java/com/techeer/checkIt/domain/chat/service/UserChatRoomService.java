@@ -36,16 +36,19 @@ public class UserChatRoomService {
     }
 
     @Transactional
-    public UserChatRoom createUserChatRoom(User user, Long chatRoomId) {
+    public void createUserChatRoom(User user, Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(ChatRoomNotFoundException::new);
         UserChatRoom newUserChatRoom = chatMapper.toUserChatRoom(user, chatRoom);
 
         userChatRoomRepository.save(newUserChatRoom);
-        return newUserChatRoom;
     }
 
     public boolean duplicatedUserChatRoom(User user) {
         return userChatRoomRepository.existsByUserId(user.getId());
+    }
+
+    public UserChatRoom findUserChatRoomByUserId(Long userId) {
+        return userChatRoomRepository.findByUserId(userId).orElseThrow(ChatRoomNotFoundException::new); // TODO: 에러처리 수정
     }
 
     public void saveMessage(User sender, Long chatRoomId, CreateMessageReq createMessageReq) {

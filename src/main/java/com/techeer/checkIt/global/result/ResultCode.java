@@ -39,11 +39,12 @@ public enum ResultCode {
     GET_REVIEW_SUCCESS("RE002", "리뷰 조회 성공"),
     REVIEW_DELETE_SUCCESS("RE003", "리뷰 삭제 성공"),
     REVIEW_UPDATE_SUCCESS("RE004", "리뷰 갱신 성공"),
-    // chat
+
+    // Chat
     CHATROOM_CREATE_SUCCESS("C001", "채팅방 생성 성공"),
     GET_CHAT_SUCCESS("C002", "채팅 내용 조회 성공"),
-    GET_CHATROOM_SUCCESS("C002", "채팅방 목록 조회 성공"),
-
+    GET_CHATROOM_SUCCESS("C003", "채팅방 목록 조회 성공"),
+    USER_CHATROOM_DUPLICATED("C004", "이미 채팅방에 입장함"),
 
 
     ;
