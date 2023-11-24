@@ -31,7 +31,7 @@ public class ChatRoomController {
         // 사용자는 관리자와의 채팅방 1개만 존재한다.
         if (userChatRoomService.duplicatedUserChatRoom(userDetail.getUser())) { // 사용자가 이미 채팅방 입장했으면
             UserChatRoom userChatRoom = userChatRoomService.findUserChatRoomByUserId(userDetail.getUserId());
-            return ResponseEntity.ok(ResultResponse.of(ResultCode.CHATROOM_DUPLICATED_ERROR, userChatRoom.getChatRoom().getId()));
+            return ResponseEntity.ok(ResultResponse.of(ResultCode.USER_CHATROOM_DUPLICATED, userChatRoom.getChatRoom().getId()));
         }
         ChatRoom chatRoom = userChatRoomService.createChatRoom();
         userChatRoomService.createUserChatRoom(userDetail.getUser(), chatRoom.getId());
