@@ -14,7 +14,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.*;
 
-/* swagger 접속 url -> http://localhost:8080/swagger-ui/index.html#/
+/* swagger 접속 url -> http://localhost:8081/swagger-ui/index.html#/
     header 에 {accessToken}
  */
 

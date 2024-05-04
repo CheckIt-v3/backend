@@ -4,7 +4,7 @@ services:
     container_name: backend
     image: ${SPRING_BOOT_IMAGE}
     ports:
-      - "8080:8080"
+      - "8081:8081"
     networks:
       - default_bridge
 
