@@ -21,4 +21,7 @@ public class BookReadingRes {
   private int width;
   private int pages;
   private int likes;
+  private int lastPage;
+  private Double percentage;
+  private Double grade;
 }

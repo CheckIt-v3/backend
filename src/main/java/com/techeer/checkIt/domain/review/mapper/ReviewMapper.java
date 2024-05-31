@@ -1,5 +1,6 @@
 package com.techeer.checkIt.domain.review.mapper;
 
+import com.techeer.checkIt.domain.book.dto.Response.BookReadingRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.review.dto.response.ReviewRes;
 import com.techeer.checkIt.domain.review.entity.Review;
@@ -27,4 +28,20 @@ public class ReviewMapper {
         .build();
   }
 
+  public BookReadingRes toDtoByReview(Review review) {
+    return BookReadingRes.builder()
+            .id(review.getBook().getId())
+            .title(review.getBook().getTitle())
+            .author(review.getBook().getAuthor())
+            .publisher(review.getBook().getPublisher())
+            .coverImageUrl(review.getBook().getCoverImageUrl())
+            .height(review.getBook().getHeight())
+            .width(review.getBook().getWidth())
+            .pages(review.getBook().getPages())
+            .likes(review.getBook().getLikeCount())
+            .lastPage(review.getBook().getPages())
+            .percentage(100.0)
+            .grade(review.getGrade())
+            .build();
+  }
 }
