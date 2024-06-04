@@ -62,7 +62,7 @@ public class ReadingService {
     }
 
     public ReadingRes findReadingByStatus(Long userId, ReadingStatus status) {
-        PageRequest pageRequest = PageRequest.of(0, 16, Sort.by(Sort.Order.desc("createdAt")));
+        PageRequest pageRequest = PageRequest.of(0, 18, Sort.by(Sort.Order.desc("updatedAt")));
         if (status.toString().equals("LIKE")) {
             List<Book> readings = new ArrayList<>();
             String redisUserKey = "U" + userId.toString();
