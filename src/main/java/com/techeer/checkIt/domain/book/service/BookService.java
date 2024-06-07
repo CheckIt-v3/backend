@@ -40,6 +40,16 @@ public class BookService {
         Page<BookDocument> newBooks = bookSearchRepository.findAll(pageRequest);
         return bookMapper.toBookSearchResDtoPage(newBooks);
     }
+    public List<BookSearchRes> findBookJpaByTitle(String title) {
+        List<Book> books = bookJpaRepository.findByTitleContaining(title);
+        return bookMapper.toSearchJpaDtoList(books);
+    }
+
+    public Page<BookSearchRes> sortedBooksJpaByTime() {
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Order.desc("createdAt")));
+        Page<Book> newBooks = bookJpaRepository.findAll(pageRequest);
+        return bookMapper.toBookSearchJpaResDtoPage(newBooks);
+    }
 
     public Page<BookSearchLikeRes> sortedBooksByLike() {
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Order.desc("likeCount")));

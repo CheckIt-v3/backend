@@ -62,6 +62,30 @@ public class BookMapper {
                 .map(this::toBookSearchDto)
                 .collect(Collectors.toList()));
     }
+     // JPA로 검색
+    public BookSearchRes toBookSearchJpaDto(Book book) {
+        return BookSearchRes.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .publisher(book.getPublisher())
+                .coverImageUrl(book.getCoverImageUrl())
+                .pages(book.getPages())
+                .category(book.getCategory())
+                .build();
+    }
+    public List<BookSearchRes> toSearchJpaDtoList(List<Book> books){
+        return books.stream()
+                .map(this::toBookSearchJpaDto)
+                .collect(Collectors.toList());
+    }
+    public Page<BookSearchRes> toBookSearchJpaResDtoPage(Page<Book> books) {
+        return new PageImpl<>(books.stream()
+                .map(this::toBookSearchJpaDto)
+                .collect(Collectors.toList()));
+    }
+    // --
+
     public Page<BookSearchLikeRes> BookSearchLikeResDtoPage(Page<Book> books) {
         return new PageImpl<>(books.stream()
             .map(this::toBookSearchLikeDto)

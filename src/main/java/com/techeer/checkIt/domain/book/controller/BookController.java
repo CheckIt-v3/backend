@@ -7,6 +7,7 @@ import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.domain.user.entity.UserDetail;
 import com.techeer.checkIt.domain.user.service.UserService;
+import com.techeer.checkIt.global.aop.TimeTrace;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,16 +27,24 @@ import static com.techeer.checkIt.global.result.ResultCode.GET_ONE_BOOK_SUCCESS;
 
 @Api(tags = "책 API")
 @RequestMapping("/api/v1/books")
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @RestController
 public class BookController {
     private final BookService bookService;
     private final UserService userService;
 
+    @TimeTrace
     @ApiOperation(value = "책 검색 API")
     @GetMapping("/search")
     public ResponseEntity<List<BookSearchRes>> searchTitle(@RequestParam(defaultValue = "") String title) {
         List<BookSearchRes> bookList = bookService.findBookByTitle(title);
+        return ResponseEntity.ok(bookList);
+    }
+    @TimeTrace
+    @ApiOperation(value = "책 검색 API(JPA)")
+    @GetMapping("/search/jpa")
+    public ResponseEntity<List<BookSearchRes>> searchJpaTitle(@RequestParam(defaultValue = "") String title) {
+        List<BookSearchRes> bookList = bookService.findBookJpaByTitle(title);
         return ResponseEntity.ok(bookList);
     }
 
@@ -54,6 +63,12 @@ public class BookController {
     @GetMapping("/new")
     public ResponseEntity<ResultResponse> getNewBooksList() {
         Page<BookSearchRes> books = bookService.sortedBooksByTime();
+        return ResponseEntity.ok(ResultResponse.of(GET_NEW_BOOK_SUCCESS, books));
+    }
+    @ApiOperation(value = "신규 도서 조회 API(JPA)")
+    @GetMapping("/new/jpa")
+    public ResponseEntity<ResultResponse> getNewBooksJpaList() {
+        Page<BookSearchRes> books = bookService.sortedBooksJpaByTime();
         return ResponseEntity.ok(ResultResponse.of(GET_NEW_BOOK_SUCCESS, books));
     }
 
