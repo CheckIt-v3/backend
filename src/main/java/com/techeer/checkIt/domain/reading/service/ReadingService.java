@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.reading.service;
 
 import com.techeer.checkIt.domain.book.dao.RedisDao;
+import com.techeer.checkIt.domain.book.dto.Response.BookReadingRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
@@ -19,7 +20,6 @@ import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.readingVolume.mapper.ReadingVolumeMapper;
 import com.techeer.checkIt.domain.readingVolume.service.ReadingVolumeService;
-import com.techeer.checkIt.domain.review.entity.Review;
 import com.techeer.checkIt.domain.review.repository.ReviewRepository;
 import com.techeer.checkIt.domain.user.entity.User;
 import java.util.ArrayList;
@@ -44,7 +44,6 @@ public class ReadingService {
     private final ReadingVolumeMapper readingVolumeMapper;
     private final RedisDao redisDao;
     private final BookJpaRepository bookJpaRepository;
-    private final ReviewRepository reviewRepository;
 
     public int registerReading(User user, Book book, CreateReadingReq createRequest){
         ReadingStatus status = ReadingStatus.convert(createRequest.getStatus().toUpperCase());
@@ -76,11 +75,10 @@ public class ReadingService {
             readings = readingRepository.findByUserIdAndStatus(userId ,status);
             return readingMapper.toReadingList(readings, status, pageRequest);
         } else {
-            List<Review> readings = new ArrayList<>();
-            readings = reviewRepository.findByUserId(userId);
+            List<BookReadingRes> readings = new ArrayList<>();
+            readings = readingRepository.findReadingsByUserIdAndStatus(userId, status);
             return readingMapper.toReadingListByReview(readings, status, pageRequest);
         }
-
     }
 
     public void updateReadingStatus(Long userId, Long bookId, ReadingStatus status, UpdateReadingStatusReq updateStatus) {

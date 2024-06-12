@@ -80,10 +80,8 @@ public class ReadingMapper {
                 .build();
     }
 
-    public ReadingRes toReadingListByReview(List<Review> reviews, ReadingStatus status, Pageable pageable) {
-        Page<BookReadingRes> bookInfos = new PageImpl<>(reviews.stream()
-                                                                .map(reviewMapper::toDtoByReview)
-                                                                .collect(Collectors.toList()), pageable, reviews.size());
+    public ReadingRes toReadingListByReview(List<BookReadingRes> BookReading, ReadingStatus status, Pageable pageable) {
+        Page<BookReadingRes> bookInfos = new PageImpl<>(BookReading, pageable, BookReading.size());
 
         return ReadingRes.builder()
                 .bookInfos(bookInfos)

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReviewMapper {
 
-  public Review toEntity(User user, Book book, String title, String contents, Double grade) {
+  public Review toEntity(User user, Book book, String title, String contents, int grade) {
     return Review.builder()
         .user(user)
         .book(book)
@@ -26,22 +26,5 @@ public class ReviewMapper {
         .content(review.getContents())
         .grade(review.getGrade())
         .build();
-  }
-
-  public BookReadingRes toDtoByReview(Review review) {
-    return BookReadingRes.builder()
-            .id(review.getBook().getId())
-            .title(review.getBook().getTitle())
-            .author(review.getBook().getAuthor())
-            .publisher(review.getBook().getPublisher())
-            .coverImageUrl(review.getBook().getCoverImageUrl())
-            .height(review.getBook().getHeight())
-            .width(review.getBook().getWidth())
-            .pages(review.getBook().getPages())
-            .likes(review.getBook().getLikeCount())
-            .lastPage(review.getBook().getPages())
-            .percentage(100.0)
-            .grade(review.getGrade())
-            .build();
   }
 }

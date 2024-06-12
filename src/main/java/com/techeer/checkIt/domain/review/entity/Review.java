@@ -31,11 +31,11 @@ public class Review extends BaseEntity {
   @Column(nullable = false, length = 255)
   private String contents;
 
-  @Column(columnDefinition = "double default 0")
-  private Double grade;
+  @Column(columnDefinition = "int default 0")
+  private int grade;
 
   @Builder
-  public Review(User user, Book book, String title, String contents, Double grade, Boolean isDeleted) {
+  public Review(User user, Book book, String title, String contents, int grade) {
     this.user = user;
     this.book = book;
     this.title = title;
