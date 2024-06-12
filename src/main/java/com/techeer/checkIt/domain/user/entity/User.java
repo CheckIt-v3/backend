@@ -37,10 +37,10 @@ public class User extends BaseEntity {
     private boolean isActive = true; // 활성 여부
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reading> readingList = new ArrayList<>();
+    private List<Reading> readings = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReadingVolume> readingVolumeList = new ArrayList<>();
+    private List<ReadingVolume> readingVolumes = new ArrayList<>();
 
     @Builder
     private User(String username, String nickname, String password, Role role) {

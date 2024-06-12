@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.book.entity;
 
 import com.techeer.checkIt.domain.reading.entity.Reading;
+import com.techeer.checkIt.domain.review.entity.Review;
 import com.techeer.checkIt.entity.BaseEntity;
 import lombok.*;
 
@@ -36,7 +37,9 @@ public class Book extends BaseEntity {
     @Column(name = "category", length = 512)
     private String category;
     @OneToMany(mappedBy = "book")
-    private List<Reading> readingList = new ArrayList<>();
+    private List<Reading> readings = new ArrayList<>();
+    @OneToMany(mappedBy = "book")
+    private List<Review> reviews = new ArrayList<>();
     @Column(name = "like_count")
     private Integer likeCount = 0;
     @Builder

@@ -1,6 +1,7 @@
 package com.techeer.checkIt.domain.reading.service;
 
 import com.techeer.checkIt.domain.book.dao.RedisDao;
+import com.techeer.checkIt.domain.book.dto.Response.BookReadingRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.book.repository.BookJpaRepository;
 import com.techeer.checkIt.domain.reading.dto.request.CreateReadingReq;
@@ -19,11 +20,14 @@ import com.techeer.checkIt.domain.reading.repository.ReadingRepository;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
 import com.techeer.checkIt.domain.readingVolume.mapper.ReadingVolumeMapper;
 import com.techeer.checkIt.domain.readingVolume.service.ReadingVolumeService;
+import com.techeer.checkIt.domain.review.repository.ReviewRepository;
 import com.techeer.checkIt.domain.user.entity.User;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -57,6 +61,7 @@ public class ReadingService {
     }
 
     public ReadingRes findReadingByStatus(Long userId, ReadingStatus status) {
+        PageRequest pageRequest = PageRequest.of(0, 18, Sort.by(Sort.Order.desc("updatedAt")));
         if (status.toString().equals("LIKE")) {
             List<Book> readings = new ArrayList<>();
             String redisUserKey = "U" + userId.toString();
@@ -64,13 +69,16 @@ public class ReadingService {
                 .map(s -> Long.parseLong(s))
                 .collect(Collectors.toList());
             readings =  bookJpaRepository.findByBookIdIn(likeBook);
-            return readingMapper.toReadingListByBook(readings, status);
-        } else {
+            return readingMapper.toReadingListByBook(readings, status, pageRequest);
+        } else if (status.toString().equals("READING")) {
             List<Reading> readings = new ArrayList<>();
             readings = readingRepository.findByUserIdAndStatus(userId ,status);
-            return readingMapper.toReadingList(readings, status);
+            return readingMapper.toReadingList(readings, status, pageRequest);
+        } else {
+            List<BookReadingRes> readings = new ArrayList<>();
+            readings = readingRepository.findReadingsByUserIdAndStatus(userId, status);
+            return readingMapper.toReadingListByReview(readings, status, pageRequest);
         }
-
     }
 
     public void updateReadingStatus(Long userId, Long bookId, ReadingStatus status, UpdateReadingStatusReq updateStatus) {

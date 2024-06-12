@@ -17,5 +17,5 @@ public class CreateReviewReq {
   private long bookId;
   private String title;
   private String content;
-  private Double grade;
+  private int grade;
 }

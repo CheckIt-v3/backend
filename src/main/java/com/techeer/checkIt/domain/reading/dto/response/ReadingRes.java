@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadingRes {
-    private List<BookReadingRes> bookInfos;
+    private Page<BookReadingRes> bookInfos;
     private ReadingStatus status;
 }

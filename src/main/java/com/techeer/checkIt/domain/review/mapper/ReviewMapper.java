@@ -1,5 +1,6 @@
 package com.techeer.checkIt.domain.review.mapper;
 
+import com.techeer.checkIt.domain.book.dto.Response.BookReadingRes;
 import com.techeer.checkIt.domain.book.entity.Book;
 import com.techeer.checkIt.domain.review.dto.response.ReviewRes;
 import com.techeer.checkIt.domain.review.entity.Review;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReviewMapper {
 
-  public Review toEntity(User user, Book book, String title, String contents, Double grade) {
+  public Review toEntity(User user, Book book, String title, String contents, int grade) {
     return Review.builder()
         .user(user)
         .book(book)
@@ -26,5 +27,4 @@ public class ReviewMapper {
         .grade(review.getGrade())
         .build();
   }
-
 }
