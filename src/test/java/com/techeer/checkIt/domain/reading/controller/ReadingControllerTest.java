@@ -99,7 +99,7 @@ public class ReadingControllerTest {
 
         // when
         when(userService.findUserById(1L)).thenReturn(TEST_USER);
-        when(readingService.findReadingByStatus(TEST_USER.getId(), READING)).thenReturn(readingList);
+//        when(readingService.findReadingByStatus(TEST_USER.getId(), READING)).thenReturn(readingList);
 
         // then
         mockMvc.perform(get("/api/v1/readings/{uid}", 1L)

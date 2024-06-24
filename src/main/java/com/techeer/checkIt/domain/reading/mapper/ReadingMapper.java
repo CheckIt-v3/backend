@@ -9,17 +9,14 @@ import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVo
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
-import com.techeer.checkIt.domain.review.entity.Review;
 import com.techeer.checkIt.domain.review.mapper.ReviewMapper;
 import com.techeer.checkIt.domain.user.entity.User;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -58,10 +55,10 @@ public class ReadingMapper {
         return builder.build();
     }
 
-    public ReadingRes toReadingList(List<Reading> readings, ReadingStatus status, Pageable pageable) {
+    public ReadingRes toReadingList(Page<Reading> readings, ReadingStatus status) {
         Page<BookReadingRes> bookInfos = new PageImpl<>(readings.stream()
                                                                 .map(this::toDto)
-                                                                .collect(Collectors.toList()), pageable, readings.size());
+                                                                .collect(Collectors.toList()), readings.getPageable(), readings.getTotalElements());
 
         return ReadingRes.builder()
                 .bookInfos(bookInfos)
@@ -69,10 +66,10 @@ public class ReadingMapper {
                 .build();
     }
 
-    public ReadingRes toReadingListByBook(List<Book> books, ReadingStatus status, Pageable pageable) {
+    public ReadingRes toReadingListByBook(Page<Book> books, ReadingStatus status) {
         Page<BookReadingRes> bookInfos = new PageImpl<>(books.stream()
                                                                 .map(bookMapper::toDtoByBook)
-                                                                .collect(Collectors.toList()), pageable, books.size());
+                                                                .collect(Collectors.toList()), books.getPageable(), books.getTotalElements());
 
         return ReadingRes.builder()
                 .bookInfos(bookInfos)
@@ -80,11 +77,9 @@ public class ReadingMapper {
                 .build();
     }
 
-    public ReadingRes toReadingListByReview(List<BookReadingRes> BookReading, ReadingStatus status, Pageable pageable) {
-        Page<BookReadingRes> bookInfos = new PageImpl<>(BookReading, pageable, BookReading.size());
-
+    public ReadingRes toReadingListByReview(Page<BookReadingRes> bookReading, ReadingStatus status) {
         return ReadingRes.builder()
-                .bookInfos(bookInfos)
+                .bookInfos(bookReading)
                 .status(status)
                 .build();
     }
