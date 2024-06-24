@@ -8,9 +8,7 @@ import com.techeer.checkIt.domain.reading.entity.QReading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.review.entity.QReview;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 
@@ -19,9 +17,9 @@ public class ReadingRepositoryImpl implements ReadingRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<BookReadingRes> findReadingsByUserIdAndStatus(Long userId, ReadingStatus status, Pageable pageable) {
-        List<BookReadingRes> content = findReadingListByUserIdAndStatus(userId, status, pageable);
-        return new PageImpl<>(content, pageable, content.size());
+    public Slice<BookReadingRes> findReadingsByUserIdAndStatus(Long userId, ReadingStatus status, Pageable pageable) {
+        List<BookReadingRes> contents = findReadingListByUserIdAndStatus(userId, status, pageable);
+        return new SliceImpl<>(contents, pageable, hasNextPage(contents, pageable.getPageSize()));
     }
 
     private List<BookReadingRes> findReadingListByUserIdAndStatus(Long userId, ReadingStatus status, Pageable pageable) {
@@ -39,7 +37,15 @@ public class ReadingRepositoryImpl implements ReadingRepositoryCustom {
                 .where(qReading.user.id.eq(userId)
                         .and(qReading.status.eq(status)))
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
+    }
+
+    private boolean hasNextPage(List<BookReadingRes> contents, int pageSize) {
+        if (contents.size() > pageSize) {
+            contents.remove(pageSize);
+            return true;
+        }
+        return false;
     }
 }

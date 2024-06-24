@@ -9,14 +9,14 @@ import com.techeer.checkIt.domain.reading.dto.response.UpdateReadingAndReadingVo
 import com.techeer.checkIt.domain.reading.entity.Reading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.readingVolume.entity.ReadingVolume;
-import com.techeer.checkIt.domain.review.mapper.ReviewMapper;
 import com.techeer.checkIt.domain.user.entity.User;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class ReadingMapper {
 
     private final BookMapper bookMapper;
-    private final ReviewMapper reviewMapper;
 
     public Reading toEntity(User user, Book book, int lastPage, ReadingStatus status) {
         return Reading.builder()
@@ -55,10 +54,12 @@ public class ReadingMapper {
         return builder.build();
     }
 
-    public ReadingRes toReadingList(Page<Reading> readings, ReadingStatus status) {
-        Page<BookReadingRes> bookInfos = new PageImpl<>(readings.stream()
-                                                                .map(this::toDto)
-                                                                .collect(Collectors.toList()), readings.getPageable(), readings.getTotalElements());
+    public ReadingRes toReadingList(Slice<Reading> readings, ReadingStatus status) {
+        List<BookReadingRes> bookReadingResList = readings.getContent().stream()
+                                                                    .map(this::toDto)
+                                                                    .collect(Collectors.toList());
+        boolean hasNext = readings.hasNext();
+        Slice<BookReadingRes> bookInfos = new SliceImpl<>(bookReadingResList, readings.getPageable(), hasNext);
 
         return ReadingRes.builder()
                 .bookInfos(bookInfos)
@@ -66,10 +67,12 @@ public class ReadingMapper {
                 .build();
     }
 
-    public ReadingRes toReadingListByBook(Page<Book> books, ReadingStatus status) {
-        Page<BookReadingRes> bookInfos = new PageImpl<>(books.stream()
-                                                                .map(bookMapper::toDtoByBook)
-                                                                .collect(Collectors.toList()), books.getPageable(), books.getTotalElements());
+    public ReadingRes toReadingListByBook(Slice<Book> books, ReadingStatus status) {
+        List<BookReadingRes> bookReadingResList = books.getContent().stream()
+                                                                    .map(bookMapper::toDtoByBook)
+                                                                    .collect(Collectors.toList());
+        boolean hasNext = books.hasNext();
+        Slice<BookReadingRes> bookInfos = new SliceImpl<>(bookReadingResList, books.getPageable(), hasNext);
 
         return ReadingRes.builder()
                 .bookInfos(bookInfos)
@@ -77,7 +80,7 @@ public class ReadingMapper {
                 .build();
     }
 
-    public ReadingRes toReadingListByReview(Page<BookReadingRes> bookReading, ReadingStatus status) {
+    public ReadingRes toReadingListByReview(Slice<BookReadingRes> bookReading, ReadingStatus status) {
         return ReadingRes.builder()
                 .bookInfos(bookReading)
                 .status(status)

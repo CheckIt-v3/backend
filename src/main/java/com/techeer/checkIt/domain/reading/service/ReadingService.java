@@ -63,13 +63,13 @@ public class ReadingService {
             List<Long> likeBook = redisDao.getValuesList(redisUserKey).stream()
                 .map(s -> Long.parseLong(s))
                 .collect(Collectors.toList());
-            Page<Book> readings = bookJpaRepository.findByBookIdIn(likeBook, pageable);
+            Slice<Book> readings = bookJpaRepository.findByBookIdIn(likeBook, pageable);
             return readingMapper.toReadingListByBook(readings, status);
         } else if (status.toString().equals("READING")) {
-            Page<Reading> readings = readingRepository.findByUserIdAndStatus(userId, status, pageable);
+            Slice<Reading> readings = readingRepository.findByUserIdAndStatus(userId, status, pageable);
             return readingMapper.toReadingList(readings, status);
         } else {
-            Page<BookReadingRes> readings = readingRepository.findReadingsByUserIdAndStatus(userId, status, pageable);
+            Slice<BookReadingRes> readings = readingRepository.findReadingsByUserIdAndStatus(userId, status, pageable);
             return readingMapper.toReadingListByReview(readings, status);
         }
     }
