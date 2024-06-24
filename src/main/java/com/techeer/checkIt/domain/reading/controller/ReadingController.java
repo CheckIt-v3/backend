@@ -19,6 +19,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -43,9 +46,11 @@ public class ReadingController {
 
     @ApiOperation(value = "상태 별 책 목록 API")
     @GetMapping("")
-    public ResponseEntity<ReadingRes> getReadingByStatus(@AuthenticationPrincipal UserDetail userDetail, @RequestParam(defaultValue = "") ReadingStatus status) {
+    public ResponseEntity<ReadingRes> getReadingByStatus(@AuthenticationPrincipal UserDetail userDetail,
+                                                         @PageableDefault(page = 0, size = 18, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable,
+                                                         @RequestParam ReadingStatus status) {
         User user = userService.findUserByUsername(userDetail.getUsername());
-        ReadingRes readingList = readingService.findReadingByStatus(user.getId(), status);
+        ReadingRes readingList = readingService.findReadingByStatus(user.getId(), status, pageable);
         return ResponseEntity.ok(readingList);
     }
 

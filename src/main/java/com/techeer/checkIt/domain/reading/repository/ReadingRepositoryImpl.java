@@ -8,6 +8,9 @@ import com.techeer.checkIt.domain.reading.entity.QReading;
 import com.techeer.checkIt.domain.reading.entity.ReadingStatus;
 import com.techeer.checkIt.domain.review.entity.QReview;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,7 +19,12 @@ public class ReadingRepositoryImpl implements ReadingRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<BookReadingRes> findReadingsByUserIdAndStatus(Long userId, ReadingStatus status) {
+    public Page<BookReadingRes> findReadingsByUserIdAndStatus(Long userId, ReadingStatus status, Pageable pageable) {
+        List<BookReadingRes> content = findReadingListByUserIdAndStatus(userId, status, pageable);
+        return new PageImpl<>(content, pageable, content.size());
+    }
+
+    private List<BookReadingRes> findReadingListByUserIdAndStatus(Long userId, ReadingStatus status, Pageable pageable) {
         QReading qReading = QReading.reading;
         QBook qBook = QBook.book;
         QReview qReview = QReview.review;
@@ -30,6 +38,8 @@ public class ReadingRepositoryImpl implements ReadingRepositoryCustom {
                 .leftJoin(qBook.reviews, qReview)
                 .where(qReading.user.id.eq(userId)
                         .and(qReading.status.eq(status)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 }
