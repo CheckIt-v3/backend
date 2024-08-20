@@ -1,24 +1,15 @@
 package com.techeer.checkIt.domain.user.service;
 
 import com.techeer.checkIt.domain.user.dto.request.UserTokenReq;
-import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.domain.user.exception.InValidAccessException;
-import com.techeer.checkIt.domain.user.exception.InValidPasswordException;
 import com.techeer.checkIt.domain.user.exception.UnAuthorizedAccessException;
-import com.techeer.checkIt.domain.user.exception.UserNotFoundException;
-import com.techeer.checkIt.domain.user.repository.UserRepository;
 import com.techeer.checkIt.global.jwt.JwtToken;
 import com.techeer.checkIt.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import javax.transaction.Transactional;
@@ -30,27 +21,16 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final AuthenticationManager authenticationManager;
 
     public JwtToken login(String username, String password) {
-        User user = userRepository.findUserByUsername(username)
-                .orElseThrow(UserNotFoundException::new);
-
-        if (!passwordEncoder.matches(password, user.getPassword())){
-            throw new InValidPasswordException();
-
-        }
-
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         JwtToken jwt = jwtTokenProvider.generateToken(authentication);
 
         //redis 에 username 을 key 로 저장, refresh 토큰을 value 값으로 저장
-        redisTemplate.opsForValue().set("RT:" + user.getUsername(), jwt.getRefreshToken(), jwt.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set("RT:" + username, jwt.getRefreshToken(), jwt.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
         return jwt;
     }
