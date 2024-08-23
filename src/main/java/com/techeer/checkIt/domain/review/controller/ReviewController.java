@@ -7,7 +7,6 @@ import com.techeer.checkIt.domain.review.dto.response.ReviewRes;
 import com.techeer.checkIt.domain.review.service.ReviewService;
 import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.domain.user.entity.UserDetail;
-import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +35,6 @@ import static com.techeer.checkIt.global.result.ResultCode.REVIEW_UPDATE_SUCCESS
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
   private  final ReviewService reviewService;
-  private final UserService userService;
   private final BookService bookService;
 
   @ApiOperation(value = "리뷰 생성 API")
@@ -45,7 +43,7 @@ public class ReviewController {
       @AuthenticationPrincipal UserDetail userDetail,
       @RequestBody @Valid CreateReviewReq createReviewReq
   ){
-    User user = userService.findUserByUsername(userDetail.getUsername());
+    User user = userDetail.getUser();
     Book book = bookService.findById(createReviewReq.getBookId());
     reviewService.createReview(user, book, createReviewReq);
     ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, createReviewReq.getBookId());
@@ -58,7 +56,7 @@ public class ReviewController {
       @AuthenticationPrincipal UserDetail userDetail,
       @PathVariable Long bookId
   ){
-    User user = userService.findUserByUsername(userDetail.getUsername());
+    User user = userDetail.getUser();
     ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, bookId);
     return ResponseEntity.ok(ResultResponse.of(GET_REVIEW_SUCCESS, reviewRes));
   }
@@ -69,7 +67,7 @@ public class ReviewController {
       @AuthenticationPrincipal UserDetail userDetail,
       @PathVariable Long bookId
   ){
-    User user = userService.findUserByUsername(userDetail.getUsername());
+    User user = userDetail.getUser();
     reviewService.deleteReview(user, bookId);
     return ResponseEntity.ok(ResultResponse.of(REVIEW_DELETE_SUCCESS));
   }
@@ -80,7 +78,7 @@ public class ReviewController {
       @AuthenticationPrincipal UserDetail userDetail,
       @RequestBody @Valid CreateReviewReq createReviewReq
   ) {
-    User user = userService.findUserByUsername(userDetail.getUsername());
+    User user = userDetail.getUser();
     reviewService.updateReview(user, createReviewReq);
     ReviewRes reviewRes = reviewService.findReviewByUserNameIdBookId(user, createReviewReq.getBookId());
     return ResponseEntity.ok(ResultResponse.of(REVIEW_UPDATE_SUCCESS, reviewRes));

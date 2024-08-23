@@ -6,7 +6,6 @@ import com.techeer.checkIt.domain.book.dto.Response.BookSearchRes;
 import com.techeer.checkIt.domain.book.service.BookService;
 import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.domain.user.entity.UserDetail;
-import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +29,6 @@ import static com.techeer.checkIt.global.result.ResultCode.GET_ONE_BOOK_SUCCESS;
 @RestController
 public class BookController {
     private final BookService bookService;
-    private final UserService userService;
 
     @ApiOperation(value = "책 검색 API")
     @GetMapping("/search")
@@ -45,7 +43,7 @@ public class BookController {
         @AuthenticationPrincipal UserDetail userDetail,
         @PathVariable Long bookId
     ){
-        User user = userService.findUserByUsername(userDetail.getUsername());
+        User user = userDetail.getUser();
         BookRes bookResponse = bookService.findBookById(user.getId(), bookId);
         return ResponseEntity.ok(ResultResponse.of(GET_ONE_BOOK_SUCCESS, bookResponse));
     }
@@ -63,7 +61,7 @@ public class BookController {
         @AuthenticationPrincipal UserDetail userDetail,
         @PathVariable Long bookId
     ){
-        User user = userService.findUserByUsername(userDetail.getUsername());
+        User user = userDetail.getUser();
         bookService.updateLike(user.getId(), bookId);
         BookRes bookResponse = bookService.findBookById(user.getId(), bookId);
         return ResponseEntity.ok(ResultResponse.of(UPDATE_BOOK_LIKE_SUCCESS ,bookResponse));

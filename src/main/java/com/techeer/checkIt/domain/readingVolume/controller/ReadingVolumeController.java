@@ -4,7 +4,6 @@ import com.techeer.checkIt.domain.readingVolume.dto.response.SearchReadingVolume
 import com.techeer.checkIt.domain.readingVolume.service.ReadingVolumeService;
 import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.domain.user.entity.UserDetail;
-import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
@@ -26,7 +25,6 @@ import java.util.List;
 @RequestMapping("/api/v1/readingvolumes")
 public class ReadingVolumeController {
     private final ReadingVolumeService readingVolumeService;
-    private final UserService userService;
 
     @ApiOperation(value = "일주일 독서량 조회 API")
     @GetMapping("{date}")
@@ -34,7 +32,7 @@ public class ReadingVolumeController {
             @AuthenticationPrincipal UserDetail userDetail,
             @PathVariable String date
     ) {
-        User user = userService.findUserByUsername(userDetail.getUsername());
+        User user = userDetail.getUser();
         List<SearchReadingVolumesRes> readingVolumeList = readingVolumeService.findReadingVolumesByUserAndDateBetween(user, date);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.GET_READING_VOLUMES_SUCCESS,readingVolumeList));
     }

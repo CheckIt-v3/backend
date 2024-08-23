@@ -12,7 +12,6 @@ import com.techeer.checkIt.domain.reading.dto.request.UpdateReadingAndReadingVol
 import com.techeer.checkIt.domain.reading.service.ReadingService;
 import com.techeer.checkIt.domain.user.entity.User;
 import com.techeer.checkIt.domain.user.entity.UserDetail;
-import com.techeer.checkIt.domain.user.service.UserService;
 import com.techeer.checkIt.global.result.ResultCode;
 import com.techeer.checkIt.global.result.ResultResponse;
 import io.swagger.annotations.Api;
@@ -32,13 +31,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/readings")
 public class ReadingController {
     private final ReadingService readingService;
-    private final UserService userService;
     private final BookService bookService;
 
     @ApiOperation(value = "내 서재 책 등록 API")
     @PostMapping("")
     public ResponseEntity<ResultResponse> createReading(@AuthenticationPrincipal UserDetail userDetail, @RequestBody CreateReadingReq createRequest) {
-        User user = userService.findUserByUsername(userDetail.getUsername());
+        User user = userDetail.getUser();
         Book book = bookService.findById(createRequest.getBookId());
         readingService.registerReading(user, book, createRequest);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_CREATE_SUCCESS));
@@ -49,7 +47,7 @@ public class ReadingController {
     public ResponseEntity<ReadingRes> getReadingByStatus(@AuthenticationPrincipal UserDetail userDetail,
                                                          @PageableDefault(page = 0, size = 18, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable,
                                                          @RequestParam ReadingStatus status) {
-        User user = userService.findUserByUsername(userDetail.getUsername());
+        User user = userDetail.getUser();
         ReadingRes readingList = readingService.findReadingByStatus(user.getId(), status, pageable);
         return ResponseEntity.ok(readingList);
     }
@@ -57,7 +55,7 @@ public class ReadingController {
     @ApiOperation(value = "마지막 페이지 갱신 API")
     @PutMapping("")
     public ResponseEntity<ResultResponse> updateReadingAndReadingVolume(@AuthenticationPrincipal UserDetail userDetail, @RequestBody UpdateReadingAndReadingVolumeReq body) {
-        User user = userService.findUserByUsername(userDetail.getUsername());
+        User user = userDetail.getUser();
         Book book = bookService.findById(body.getBookId());
         UpdateReadingAndReadingVolumeRes updateReadingAndReadingVolumeRes = readingService.updateReadingAndReadingVolume(user,book,body);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_UPDATE_SUCCESS, updateReadingAndReadingVolumeRes));
@@ -66,7 +64,7 @@ public class ReadingController {
     @ApiOperation(value = "독서 상태 변경 API")
     @PutMapping("/status")
     public ResponseEntity<ResultResponse> updateReadingStatus(@AuthenticationPrincipal UserDetail userDetail, @RequestParam(defaultValue = "") ReadingStatus status, @RequestBody UpdateReadingStatusReq updateStatus) {
-        User user = userService.findUserByUsername(userDetail.getUsername());
+        User user = userDetail.getUser();
         Book book = bookService.findById(updateStatus.getBookId());
         readingService.updateReadingStatus(user.getId(), book.getId(), status, updateStatus);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_STATUS_UPDATE_SUCCESS));
@@ -75,7 +73,7 @@ public class ReadingController {
     @ApiOperation(value = "읽은 퍼센트 API")
     @GetMapping("/percentages")
     public ResponseEntity<ResultResponse> getPercentage(@AuthenticationPrincipal UserDetail userDetail, @RequestParam(defaultValue = "") Long bid) {
-        User user = userService.findUserByUsername(userDetail.getUsername());
+        User user = userDetail.getUser();
         Book book = bookService.findById(bid);
         UpdateLastPageAndPercentageRes updateLastPageAndPercentageRes = readingService.findReadingByUserAndBook(user, book);
         return ResponseEntity.ok(ResultResponse.of(ResultCode.READING_PERCENTAGE_SUCCESS, updateLastPageAndPercentageRes));
