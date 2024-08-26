@@ -61,6 +61,7 @@ public class JwtTokenProvider {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .refreshTokenExpirationTime(refreshTokenValidTime)
+                .username(authentication.getName())
                 .build();
     }
 

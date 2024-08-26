@@ -14,4 +14,5 @@ public class JwtToken {
     private String accessToken;
     private String refreshToken;
     private long refreshTokenExpirationTime;
+    private String username;
 }
