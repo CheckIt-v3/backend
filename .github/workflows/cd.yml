@@ -4,6 +4,8 @@ on: # Event
     types:
       - closed
     branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
   workflow_dispatch:
 
 jobs: # Job
