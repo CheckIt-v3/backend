@@ -55,6 +55,7 @@ jobs: # Job
           script: |
             cd backend
             git pull
+            echo "${{ secrets.LOGSTASH_CONF }}" > ./elk/logstash/pipeline/logstash.conf
             sudo docker-compose -f docker-compose.yml down
             sudo docker rmi ${{ secrets.DOCKER_IMAGE_NAME }}:latest || true
             sudo docker-compose -f docker-compose.yml pull
