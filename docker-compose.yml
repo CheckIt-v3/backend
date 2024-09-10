@@ -110,7 +110,6 @@ services:
 
   logstash:
     container_name: logstash
-    image: docker.elastic.co/logstash/logstash:8.8.1
     build:
       context: ./elk
     volumes:
