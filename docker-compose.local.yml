@@ -103,6 +103,47 @@ services:
     networks:
       - default_bridge
 
+#  kibana:
+#    restart: always
+#    image: docker.elastic.co/kibana/kibana:8.8.1
+#    expose:
+#      - 5601
+#    ports:
+#      - 5601:5601
+#    depends_on:
+#      - elasticsearch
+#    environment:
+#      - SERVER_PORT=5601
+#      - SERVER_NAME=kibana.example.org
+#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+#    networks:
+#      - default_bridge
+
+#  filebeat:
+#    container_name: filebeat
+#    image: docker.elastic.co/beats/filebeat:8.8.1
+#    volumes:
+#      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+#    depends_on:
+#      - logstash
+#    networks:
+#      - default_bridge
+
+#  monstache:
+#    restart: always
+#    image: rwynn/monstache:rel6
+#    command: -f ./config.toml &
+#    volumes:
+#      - ./config/config.toml:/config.toml
+#    depends_on:
+#      - elasticsearch
+#    links:
+#      - elasticsearch
+#    ports:
+#      - "8081:8081"
+#    networks:
+#      - default_bridge
+
 networks:
   default_bridge:
     ipam:

@@ -3,10 +3,13 @@ services:
   backend:
     container_name: backend
     image: ${SPRING_BOOT_IMAGE}
+    restart: on-failure
     ports:
       - "8081:8081"
-    networks:
-      - default_bridge
+    healthcheck:
+      interval: 5s
+      timeout: 1s
+      retries: 2
 
   redis-master-1:
     container_name: redis-master-1
@@ -21,8 +24,6 @@ services:
       - 7101:7101
       - 7102:7102
       - 7103:7103
-    networks:
-      - default_bridge
 
   redis-master-2:
     container_name: redis-master-2
@@ -30,8 +31,6 @@ services:
     volumes:
       - ./redis/config/redis-master-2.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
-    networks:
-      - default_bridge
 
   redis-master-3:
     container_name: redis-master-3
@@ -39,8 +38,6 @@ services:
     volumes:
       - ./redis/config/redis-master-3.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
-    networks:
-      - default_bridge
 
   redis-slave-1:
     container_name: redis-slave-1
@@ -48,8 +45,6 @@ services:
     volumes:
       - ./redis/config/redis-slave-1.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
-    networks:
-      - default_bridge
 
   redis-slave-2:
     container_name: redis-slave-2
@@ -57,8 +52,6 @@ services:
     volumes:
       - ./redis/config/redis-slave-2.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
-    networks:
-      - default_bridge
 
   redis-slave-3:
     container_name: redis-slave-3
@@ -66,15 +59,11 @@ services:
     volumes:
       - ./redis/config/redis-slave-3.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
-    networks:
-      - default_bridge
 
   redis-cluster-entry:
     image: redis
     container_name: redis-cluster
     command: redis-cli --cluster create redis-master-1:7001 redis-master-2:7002 redis-master-3:7003 redis-slave-1:7101 redis-slave-2:7102 redis-slave-3:7103 --cluster-replicas 1 --cluster-yes
-    networks:
-      - default_bridge
     depends_on:
       - redis-master-1
       - redis-master-2
@@ -100,34 +89,6 @@ services:
         hard: -1
     volumes:
       - ./elk/elasticsearch/data:/usr/share/elasticsearch/data
-    networks:
-      - default_bridge
-
-  #  kibana:
-  #    restart: always
-  #    image: docker.elastic.co/kibana/kibana:8.8.1
-  #    expose:
-  #      - 5601
-  #    ports:
-  #      - 5601:5601
-  #    depends_on:
-  #      - elasticsearch
-  #    environment:
-  #      - SERVER_PORT=5601
-  #      - SERVER_NAME=kibana.example.org
-  #      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-  #    networks:
-  #      - default_bridge
-
-#  filebeat:
-#    container_name: filebeat
-#    image: docker.elastic.co/beats/filebeat:8.8.1
-#    volumes:
-#      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
-#    depends_on:
-#      - logstash
-#    networks:
-#      - default_bridge
 
   logstash:
     container_name: logstash
@@ -142,27 +103,3 @@ services:
       - "xpack.monitoring.enabled=false"
     depends_on:
       - elasticsearch
-    networks:
-      - default_bridge
-
-#  monstache:
-#    restart: always
-#    image: rwynn/monstache:rel6
-#    command: -f ./config.toml &
-#    volumes:
-#      - ./config/config.toml:/config.toml
-#    depends_on:
-#      - elasticsearch
-#    links:
-#      - elasticsearch
-#    ports:
-#      - "8081:8081"
-#    networks:
-#      - default_bridge
-
-networks:
-  default_bridge:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.16.1.0/24
