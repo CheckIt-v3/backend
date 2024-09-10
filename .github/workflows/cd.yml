@@ -25,12 +25,12 @@ jobs: # Job
       # 이미지 빌드를 위해 gradle.properties 생성
       - name: Setting gradle.properties
         run: |
-          echo "${{ secrets.GRADLE_PROPERTIES }}" >> gradle.properties
+          echo "${{ secrets.GRADLE_PROPERTIES }}" > gradle.properties
           cat gradle.properties
       # secrets에 base64로 인코딩 되어 있는 application을 디코딩하여 yml파일 생성
       - name : Setting application.yml
         run: |
-          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode >> ./src/main/resources/security/application.yml
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > ./src/main/resources/security/application.yml
 
       # 도커 허브 사용을 위해 도커에 로그인
       - name: Login to DockerHub
@@ -44,16 +44,16 @@ jobs: # Job
         run: |
           ./gradlew jib
 
-      # ssh를 통해 EC2에 접속, 접속한 후에 실행할 스크립트 작성
-      - name: Connect to EC2 using SSH
+      # ssh를 통해 서버 접속, 접속한 후에 실행할 스크립트 작성 (일단 백엔드)
+      - name: Connect to server using SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{secrets.AWS_HOST}}
-          username: ${{secrets.AWS_USERNAME}}
-          key: ${{ secrets.AWS_KEY_PEM }}
+          host: ${{secrets.NCP_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.REMOTE_SSH_KEY}}
           envs: GITHUB_SHA
           script: |
-            cd Checkit
+            cd backend
             git pull
             sudo docker-compose -f docker-compose.yml down
             sudo docker-compose -f docker-compose.yml pull
