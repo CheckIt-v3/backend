@@ -1,4 +1,4 @@
-name: 'CI'
+name: 'Checkit Backend CI'
 
 on:
   push:

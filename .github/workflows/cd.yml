@@ -1,4 +1,5 @@
 name: Checkit Backend CD  # workflow 이름
+
 on: # Event
   pull_request:
     types:
@@ -10,7 +11,7 @@ on: # Event
 
 jobs: # Job
   cd: # Job 이름
-    if: github.event.pull_request.merged == true # Job 실행 조건
+    if: github.event.pull_request.merged == true || github.event_name == 'push' # Job 실행 조건
 
     runs-on: ubuntu-latest # Runner
 
