@@ -10,6 +10,8 @@ services:
       interval: 5s
       timeout: 1s
       retries: 2
+    networks:
+      - default_bridge
 
   redis-master-1:
     container_name: redis-master-1
@@ -24,6 +26,8 @@ services:
       - 7101:7101
       - 7102:7102
       - 7103:7103
+    networks:
+      - default_bridge
 
   redis-master-2:
     container_name: redis-master-2
@@ -31,6 +35,8 @@ services:
     volumes:
       - ./redis/config/redis-master-2.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-master-3:
     container_name: redis-master-3
@@ -38,6 +44,8 @@ services:
     volumes:
       - ./redis/config/redis-master-3.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-slave-1:
     container_name: redis-slave-1
@@ -45,6 +53,8 @@ services:
     volumes:
       - ./redis/config/redis-slave-1.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-slave-2:
     container_name: redis-slave-2
@@ -52,6 +62,8 @@ services:
     volumes:
       - ./redis/config/redis-slave-2.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-slave-3:
     container_name: redis-slave-3
@@ -59,11 +71,15 @@ services:
     volumes:
       - ./redis/config/redis-slave-3.conf:/etc/redis.conf
     command: redis-server /etc/redis.conf
+    networks:
+      - default_bridge
 
   redis-cluster-entry:
     image: redis
     container_name: redis-cluster
     command: redis-cli --cluster create redis-master-1:7001 redis-master-2:7002 redis-master-3:7003 redis-slave-1:7101 redis-slave-2:7102 redis-slave-3:7103 --cluster-replicas 1 --cluster-yes
+    networks:
+      - default_bridge
     depends_on:
       - redis-master-1
       - redis-master-2
@@ -89,6 +105,8 @@ services:
         hard: -1
     volumes:
       - ./elk/elasticsearch/data:/usr/share/elasticsearch/data
+    networks:
+      - default_bridge
 
   logstash:
     container_name: logstash
@@ -101,5 +119,9 @@ services:
       - "5044:5044"
     environment:
       - "xpack.monitoring.enabled=false"
-    depends_on:
-      - elasticsearch
+    networks:
+      - default_bridge
+
+networks:
+  default_bridge:
+    driver: bridge
