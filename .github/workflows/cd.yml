@@ -50,11 +50,12 @@ jobs: # Job
         with:
           host: ${{secrets.NCP_HOST}}
           username: ${{secrets.SSH_USERNAME}}
-          key: ${{secrets.REMOTE_SSH_KEY}}
+          key: ${{secrets.SSH_KEY_PEM}}
           envs: GITHUB_SHA
           script: |
             cd backend
             git pull
             sudo docker-compose -f docker-compose.yml down
+            sudo docker rmi ${{ secrets.DOCKER_IMAGE_NAME }}:latest || true
             sudo docker-compose -f docker-compose.yml pull
             sudo docker-compose -f docker-compose.yml up -d
