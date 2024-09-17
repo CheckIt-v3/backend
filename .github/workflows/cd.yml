@@ -19,7 +19,7 @@ jobs: # Job
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: JDK 11을 설치
+      - name: JDK 11 설치
         uses: actions/setup-java@v3
         with:
           java-version: '11'
@@ -47,7 +47,7 @@ jobs: # Job
         run: |
           ./gradlew jib
 
-      # ssh를 통해 서버 접속, 접속한 후에 실행할 스크립트 작성 (일단 백엔드)
+      # ssh를 통해 서버 접속, 접속한 후에 실행할 스크립트 작성
       - name: Connect to server using SSH
         uses: appleboy/ssh-action@master
         with:
