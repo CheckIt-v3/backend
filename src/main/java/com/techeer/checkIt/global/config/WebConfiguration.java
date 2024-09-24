@@ -9,7 +9,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173", "https://check-it.shop", "https://d1gntbefjuz72k.cloudfront.net")
+                .allowedOrigins("http://localhost:5173", "https://check-it.shop", "https://d1gntbefjuz72k.cloudfront.net", "https://cloudfront.check-it.shop", "http://cloudfront.check-it.shop")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true);
     }
