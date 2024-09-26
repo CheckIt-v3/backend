@@ -9,7 +9,11 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173", "https://check-it.shop", "https://d1gntbefjuz72k.cloudfront.net", "https://cloudfront.check-it.shop", "http://cloudfront.check-it.shop")
+                .allowedOrigins(
+                        "http://localhost:5173",                    // 프론트 로컬
+                        "https://api.check-it.shop",                // 서버 배포 주소
+                        "https://www.check-it.shop"                 // 프론트 배포 주소
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true);
     }
