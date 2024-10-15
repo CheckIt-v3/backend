@@ -20,4 +20,5 @@ public class BookRes {
     private int pages;
     private int likes;
     private boolean likeStatus;
+    private String description;
 }

@@ -29,6 +29,7 @@ public class BookService {
     private final BookSearchRepository bookSearchRepository;
     private final BookMapper bookMapper;
     private final RedisDao redisDao;
+    private final BookSearchService bookSearchService;
 
     public List<BookSearchRes> findBookByTitle(String title) {
         List<BookDocument> books = bookSearchRepository.findByTitleContaining(title);
@@ -55,7 +56,11 @@ public class BookService {
         String values = (redisDao.getValues(redisKey) == null) ? redisDao.setValues(redisKey,"0") : redisDao.getValues(redisKey);
         int likes = Integer.parseInt(values);
         boolean likeStatus = !redisDao.getValuesList(redisUserKey).contains(redisKey.substring(1)) ? false : true;
-        return bookMapper.toDto(book, likes, likeStatus);
+
+        // 네이버 책 검색 API 통해 description 가져오기
+        String description = bookSearchService.getBookDescriptionByTitle(book.getTitle());
+
+        return bookMapper.toDto(book, likes, likeStatus, description);
     }
     // 책 판별용
     public Book findById(Long id) {

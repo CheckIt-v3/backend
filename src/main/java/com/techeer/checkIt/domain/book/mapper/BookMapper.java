@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class BookMapper {
-    public BookRes toDto(Book book, int likes, boolean likeStatus) {
+    public BookRes toDto(Book book, int likes, boolean likeStatus, String description) {
         return BookRes.builder()
             .id(book.getId())
             .title(book.getTitle())
@@ -27,6 +27,7 @@ public class BookMapper {
             .pages(book.getPages())
             .likes(likes)
             .likeStatus(likeStatus)
+            .description(description)
             .build();
     }
     public BookSearchRes toBookSearchDto(BookDocument book) {
