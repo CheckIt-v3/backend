@@ -33,8 +33,8 @@ public class SecurityConfig {
 
         http.csrf().disable().cors().and()
             .exceptionHandling()
-            .authenticationEntryPoint(jwtAuthenticationEntryPoint)  // 403 (권한이 없는 사용자)
-            .accessDeniedHandler(jwtAccessDeniedHandler)            // 401 (인증되지 않은 사용자)
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)  // 401 (인증되지 않은 사용자)
+            .accessDeniedHandler(jwtAccessDeniedHandler)            // 403 (권한이 없는 사용자)
             .and()
             .httpBasic().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)     // Security는 기본적으로 세션 사용하지만, jwt 사용할 것이기 때문에 STATELESS 로 설정
